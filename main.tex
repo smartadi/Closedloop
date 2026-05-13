@@ -1,0 +1,94 @@
+\documentclass[10pt]{article}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{amsmath, amssymb,amsthm}
+\usepackage{authblk}
+\usepackage{natbib}
+\usepackage{times}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\usepackage[left]{lineno}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}{Corollary}
+\newtheorem{conj}{Conjecture}[section]
+% \newtheorem{as}[thm]{Assumption}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{exmp}{Example}[section]
+\newtheorem{rem}{Remark}
+% \theoremstyle{definition}
+\newtheorem{problem}{Problem}
+% \newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\usepackage[
+  left =0.5in,
+  right=0.5in,
+  top=0.5in,
+  bottom=0.5in
+]{geometry}
+\usepackage[percent]{overpic}
+% \renewcommand\thesubfigure{\Alph{subfigure}} % A, B, C...
+% \captionsetup[subfigure]{
+%   labelformat=simple,
+%   labelsep=none,
+%   font=bf,
+%   justification=raggedright,
+%   singlelinecheck=false
+% }
+
+% \makeatletter
+% \renewcommand\thm@headpunct{} % removes the period
+% \makeatother
+
+\newtheorem{assumption}{Assumption}
+\newcommand{\assref}[1]{\hyperref[#1]{\nameref*{#1}}}
+
+\theoremstyle{remark}
+\newtheorem{note}{Note}
+
+\newcommand{\aditya}[1]{\textcolor{blue}{\textbf{[aditya:} #1\textbf{]}}}
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[NOTE:} #1\textbf{]}}}
+
+\doublespacing
+
+\title{\textbf{Feedback Control Analysis for Cortical Dynamics in Mice }}
+
+\author[1]{First Author}
+\author[1]{Second Author}
+\author[2]{Third Author}
+
+\affil[1]{Department of , University of Washington, Seattle, WA, USA}
+\affil[2]{Department of , University of Washington, Seattle, WA, USA}
+
+\date{}
+
+\begin{document}
+\maketitle
+\linenumbers
+
+\begin{abstract}
+Dynamics of brain activity at the mesoscopic scale have been implicated in a host of perceptual, cognitive, and motor phenomena. However, establishing causal links between mesoscale dynamics and behavioral outcomes remains challenging.  In this work, we demonstrate that closed-loop optogenetic manipulation can be used to manipulate cortical activity in real time based on ongoing neural dynamics, allowing for feedback-based evaluation and manipulation of cortical dynamics.
+We observe that the trial-averaged responses of a cortical region to optogenetic stimulation exhibit approximately linear, time-invariant behavior. For this setting, we design a linear output-feedback controller to modulate cortical activity using output from a cortical region to accurately track a desired reference state. We observe that this controller outperforms reference tracking, compared to an open loop stimulation across all sessions for trial-averaged responses. Moreover, we observe that trial-to-trial variability is reduced under closed loop control across all sessions, demonstrating a qualitative disturbance rejection phenomenon. Collectively, these results establish that stationary and linear averaged-dynamics can be used for modeling and controlling regional cortical activity.  
+\end{abstract}
+
+
+\section*{Significance Statement}
+Our study introduces a closed-loop control framework for manipulating cortical activity toward a desired reference trajectory. Using wide-field calcium imaging, we extract regional cortical activity in real time and use this information to drive targeted optogenetic stimulation of neighboring areas. We demonstrate that closed-loop stimulation improves reference tracking performance in trial-averaged responses compared to open-loop stimulation. Moreover, trial-to-trial variability is significantly reduced under closed-loop control across multiple sessions and animals. Finally, we show that even during spontaneous, unstimulated activity, the underlying neuronal dynamics can be accurately approximated using linear models, supporting the feasibility of model-based closed-loop manipulation. 
+
+\section*{Introduction}
+\aditya{separately editing}
+% \input{introduction}   
+\input{results_edit}
+\input{discussion}
+\input{methods_edit}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{apalike}
+\bibliography{refs}
+
+\end{document}

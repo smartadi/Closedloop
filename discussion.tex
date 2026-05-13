@@ -1,0 +1,86 @@
+\section*{Discussion}
+
+In this study, we demonstrate that closed-loop optogenetic stimulation driven by real-time wide-field calcium imaging can regulate mesoscale cortical population activity more reliably than open-loop stimulation. By dynamically adjusting optogenetic input using the PI feedback controller (Equation~\ref{eq:controller}), cortical population activity was driven toward a predefined reference trajectory across experimental sessions and animals. Closed-loop feedback improved tracking
+accuracy, reduced mean-squared error as measured by $\hat{J}(K)$ (Equation~\ref{eq:emp_cost}), and reduced trial-to-trial variability. Collectively, these results demonstrate that the approximately linear, stationary structure of trial-averaged cortical dynamics captured by Assumption~\ref{sec:assumption1} can be exploited to design simple but effective output-feedback controllers for mesoscale neural regulation.
+
+\subsection*{Linear approximation of mesoscale cortical dynamics enables controller design}
+
+A central result enabling our framework was the empirical demonstration that trial-averaged cortical responses to optogenetic stimulation are well approximated by a linear input--output map. The theoretical basis for this is the LPV model (Equations~\ref{eq:lpv_state}--\ref{eq:lpv_output}), in which the parameter $\rho$ varies across trials due to spontaneous fluctuations in arousal, behavioral state, and network dynamics. Under \textbf{trial-averaging} Assumption~\ref{sec:assumption1}, taking expectations over $\rho$ and $d$ yields the nominal LTI system $(\bar{A}, \bar{B}, C) = (\mathbb{E}_\rho[A(\rho)],\, \mathbb{E}_\rho[B(\rho)],\, C)$, whose input--output behavior corresponds to the observed trial-averaged dynamics. This averaging framework explains why linearity is observed in expectation even when individual trials reflect the richer dynamics of
+Equations~\eqref{eq:nl_state}--\eqref{eq:nl_output}: the contributions of $\rho_t$ and $d_t$ cancel in the mean when drawn from stationary, zero-mean distributions. 
+
+This finding is consistent with a broader literature demonstrating that complex nonlinear neural population dynamics often admit locally low-dimensional or approximately linear representations when viewed through population-level measurements~\citep{Churchland2012, Cunningham2014, Stringer2019}. Identifying this structure at the mesoscale, using trial averaging to suppress the influence of spontaneous variability, provides a tractable basis for controller design without requiring explicit system identification. Crucially, inaccuracies in the feedforward gain $K_r$ (Equation~\ref{eq:Kr}) arising from session-to-session differences in opsin expression, spatial alignment, external stimulus, or brain state are compensated online by the integral term of Equation~\eqref{eq:controller}, making the approach robust to moderate model mismatch.
+
+The trial-averaged step responses did not converge to a definitively to a steady state within the 3-second trial window, varying across sessions in overshoot and offset. But the traces remain within an invariant set around the activity mean. We interpret this as a property of marginally stable dynamics of biologically bounded cortical circuits, in which activity remains close to a stationary mean rather than decaying to a fixed equilibrium~\citep{hespanha2018linear}, rather than as evidence against linearity. 
+
+%Consistent with the brain-state analysis in the Results, trials recorded during desynchronized, low-power epochs~\citep{Harris2011} exhibited more predictable and monotonic input--output responses, whereas synchronized states yielded less reliable behavior. These observations highlight the importance of monitoring arousal state in future closed-loop experiments and suggest that adaptive mechanisms for detecting and responding to brain-state transitions could substantially improve controller robustness.
+
+\subsection*{Disturbance rejection underlies variability reduction}
+
+The reduction in trial-to-trial variability observed under closed-loop stimulation has a natural interpretation within the LPV framework (Equations~\ref{eq:lpv_state}--\ref{eq:lpv_output}). Under Assumption~\ref{sec:assumption1}, individual
+trial responses are perturbations of the nominal trajectory $\bar{\Sigma}_{\bar{x}_0}$ driven by the disturbance $d_t$
+and parameter variation $\rho_t - \bar{\rho}$. These perturbations are zero-mean in expectation but nonzero on
+individual trials, and they constitute the primary source of cross-trial variance under open-loop conditions. The PI
+controller (Equation~\ref{eq:controller}) suppresses these deviations through two complementary mechanisms: the
+proportional term $K_p(y_{\mathrm{ref}} - y_t)$ provides immediate timestep-level correction, while the integral term
+accumulates error across time to eliminate persistent offsets arising from bias in $K_r$ or slow drift in the latent
+state. Together, these terms implement active disturbance rejection within the augmented closed-loop system
+(Equations~\ref{eq:aug_state}--\ref{eq:aug_output}).
+
+From a control-theoretic standpoint, this mechanism does not require knowledge of the disturbance structure---only that
+the input--output relationship is approximately monotonic in expectation~\citep{Astrom1995}, which the impulse response
+characterization confirmed. The convergence $\hat{J}(K) \to J(K)$ guaranteed by Trial-averaging Assumption~\ref{sec:assumption1}
+further implies that variance reduction will be most reliable when brain state is approximately stationary across the
+session, consistent with the empirical observations and with the variance convergence in Figure~\ref{fig:variance_batch}.
+
+\subsection*{Relation to prior closed-loop neural control work}
+
+These results contribute to a growing literature demonstrating the feasibility of closed-loop optogenetic control for manipulating neural circuit dynamics. \citep{Newman2015} introduced a PI ``optoclamp'' that locked single-neuron firing rates to stationary targets in cultured networks and the anesthetized rat thalamus, establishing the feasibility of the PI control structure used here. \citep{bolus2021state} demonstrated state-space optimal feedback control of single-neuron firing rates in awake mice using linear-quadratic (LQ) design strategies requiring explicit system identification~\citep{van2012subspace} and disturbance identification. Our approach differs in that the underlying system is not identified step-by-step; instead, Assumption~\ref{sec:assumption1} is exploited to bypass full identification, and the integral term of Equation~\eqref{eq:controller} compensates for model inaccuracies online. This makes the framework accessible in settings where the non-stationarity and parameter dependence of the cortical response render classical identification methods infeasible within the given experimental time-frame.
+
+At the network level, closed-loop optogenetic stimulation has been used to modulate oscillatory dynamics in brain slices and non-human primates~\citep{Zaaimi2022}, and \citet{Clancy2014} demonstrated that activity-dependent feedback could shape motor cortex dynamics in behaving mice. Our work differes from this literature on the mesoscale, by using population-level $\Delta F/F$ as the feedback signal rather than electro-physiological recordings. Unlike many brain--computer interface (BCI) paradigms that regulate neural activity indirectly via behavioral outputs, the present framework directly targets cortical population dynamics, enabling closed-loop manipulation of the trajectories most relevant to distributed cortical computation~\citep{Grosenick2015, OShea2018}.
+
+
+\subsection*{Sources of variability and experimental limitations}
+
+Several factors shaped and limited closed-loop performance. First, the empirical cost estimate $\hat{J}(K)$
+(Equation~\ref{eq:emp_cost}) approximates $J(K)$ (Equation~\ref{eq:expected_cost}) with the regret $R(N, K)$
+(Equation~\ref{eq:regret}), which decreases only if trials are independently drawn from a stationary brain-state
+distribution. In practice, if cortical state drifts during evaluation of one candidate controller and shifts during
+evaluation of another, the resulting estimates of $\hat{J}(K)$ can be biased in opposite directions, inflating the
+apparent performance difference between controllers. This risk was mitigated by randomly interleaving open-loop and
+closed-loop trials, but cannot be eliminated entirely given the non-stationarity of awake, behaving animals. Episodes
+of sustained locomotion or drowsiness represent the most likely sources of such bias, as they correspond to brain-state
+regimes in which Assumption~\ref{sec:assumption1} is least likely to hold.
+
+Second, the actuator saturation enforced at 36\,mW (5\,V; see Section~\ref{sec:pi_controller}) constrained the
+controller's ability to track $y_{\mathrm{ref}}$ during epochs of high spontaneous activity that demanded large
+corrective inputs. Future implementations could benefit from adaptive reference trajectories that adjust
+$y_{\mathrm{ref}}$ based on the estimated current cortical state, or from optogenetic actuators with a wider dynamic
+range.
+
+Third, the 80\,ms control-loop latency (Figure~\ref{fig:system}A) spans approximately three 35\,Hz timesteps and
+limits the bandwidth of disturbance rejection for fast spontaneous fluctuations. Optimization of onboard computation
+and hardware communication could reduce this latency and extend the effective control bandwidth, particularly for
+rejecting high-frequency cortical oscillations.
+
+\subsection*{Future directions}
+
+We proposed a low-level control algorithm for regulating local cortical activity. The controller was a good regulator of local dynamics. The implications of this work are that such controllers can be used to drive the dynamics precisely to a specific target trajectory. The direct implication of this work is that we can extend this work to be paired with a model-predictive control, where a this internal PI control can reliably track the high level dynamics. We propose that the=is controller can be paired with latent dynamics prediction setup, to reliably track behavior inducing activity. 
+
+% The model-free zeroth-order gain optimization (Algorithm~\ref{alg:zeroth_order}) demonstrated that a well-performing
+% gain region is reachable within a physiologically feasible number of trials. This algorithm can be further optimized by using approximate gradient which can be computed from data, to exploit 'momentum' update direction. Using offline model information can further aid in approximating update direction.  
+% Pairing the present framework with
+% model predictive control (MPC) or online adaptive strategies that estimate the latent state $x_t$ in real time would
+% enable tracking of time-varying reference trajectories, explicit handling of actuator constraints within a receding
+% horizon, and principled adaptation to brain-state transitions that currently violate Assumption~\ref{sec:assumption1}.
+
+More broadly, closed-loop regulation of mesoscale cortical activity opens several experimental and translational
+avenues. Feedback-based perturbation paradigms can be used to test causal dynamical systems hypotheses about cortical
+computation---for example, by driving activity along specific reference trajectories and measuring downstream behavioral
+or circuit-level consequences~\citep{OShea2018}. The disturbance rejection capability of the PI
+controller~\eqref{eq:controller} may also prove useful for stabilizing pathological patterns of cortical dynamics, such
+as the abnormal synchrony associated with epilepsy or neuropsychiatric disorders. Combining mesoscale closed-loop
+control with simultaneous electrophysiology could further bridge the gap between the population-level feedback signals
+used here and the single-neuron mechanisms that give rise to them.
+
+The existing PI controller can also be further enhanced by implementing a parameter dependent multi-modal design. The existing controller relies heavily on the trial-averaging assumption, and assumes that brain states are not being identified. If the stimulation has significant difference in effect with respect to brain states, then a gain scheduled controller can be employed such that the controller switches to states specific gains.
+Another avenue for improvement of regulation would be consideration of a data-driven model for controller design where, using data from a finite horizon in the past, a controller strategy is devised so that the 
