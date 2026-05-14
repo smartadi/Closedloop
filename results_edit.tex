@@ -34,7 +34,7 @@ The control system as depicted in Figure~\ref{fig:figure1}E, treats the kernel a
 \subsection*{Trial-averaged cortical dynamics are approximated by a linear system}
 % ------------------------------------------------------------
 Trial-averaged cortical responses were well approximated by a linear, stationary input--output map across both impulse and step stimulus types.
-We delivered impulse-based inputs at varying amplitudes with randomized inter-trial intervals, and found that trial-averaged peak inhibition energy scaled monotonically with stimulation power across three independent sessions (Fig.~\ref{fig:figure1}A. The inhibition energy which is quantified as the output had a linear relation with the input impulse amplitude with MSE of $R^{2} =  \mathbf{[0.91,0.85,0.93]}$ and slope $= \mathbf{[-0.28,-0.50,-0.64]}$ across the three sessions. This prompts to the fact that a linear map well approximates the open loop behavior, and therefore a open loop controller of the form \ref{eq:ff} can be designed. We also observe that a linear dynamical system can satisfactorily explain the behavior of input-output dynamics by fitting a transfer function to the impulse data.[\aditya{add the figure as supplimentary}]
+We delivered impulse-based inputs at varying amplitudes with randomized inter-trial intervals, and found that trial-averaged peak inhibition energy scaled monotonically with stimulation power across three independent sessions (Fig.~\ref{fig:figure1}A. The inhibition energy which is quantified as the output had a linear relation with the input impulse amplitude with MSE of $R^{2} =  \mathbf{[0.91,0.85,0.93]}$ and slope $= \mathbf{[-0.28,-0.50,-0.64]}$ across the three sessions. This suggests that a linear map well approximates the open-loop behavior, and therefore an open-loop controller of the form \ref{eq:ff} can be designed. We also observe that a linear dynamical system can satisfactorily explain the behavior of input-output dynamics by fitting a transfer function to the impulse data.\todo{add transfer function fit figure as supplementary}
 
 \begin{figure}
     \centering
@@ -51,8 +51,8 @@ We delivered impulse-based inputs at varying amplitudes with randomized inter-tr
     \label{fig:figure2}
 \end{figure}
 
-Step inputs applied over 3-second trial windows produced trial-averaged trajectories that remained within a bounded set around the session mean (Fig.~\ref{fig:figure1}D), consistent with marginally stable oscillatory dynamics in biologically bounded cortical circuits.
-Stimulation onset did not measurably alter trial-to-trial variance (Fig.~\ref{fig:figure1}D), indicating that optogenetic input did not destabilize the system.
+Step inputs applied over 3-second trial windows produced trial-averaged trajectories that remained within a bounded set around the session mean (Fig.~\ref{fig:figure2}C), consistent with marginally stable oscillatory dynamics in biologically bounded cortical circuits.
+Stimulation onset did not measurably alter trial-to-trial variance (Fig.~\ref{fig:figure2}C), indicating that optogenetic input did not destabilize the system.
 Session-to-session offset bias in the step response informed inclusion of the integral term in the PI controller (see Materials and Methods).
 Batch-mean $\Delta F/F$ variance during spontaneous activity decreased monotonically with trial count, stabilizing beyond approximately 50 trials per session (Fig.~\ref{fig:S1}), consistent with the trial-averaging assumption (see Materials and Methods).
 Convergence rates differed across sessions recorded from the same region, consistent with session-to-session differences in brain state.
@@ -77,8 +77,8 @@ Under closed-loop control, the proportional term corrected instantaneous deviati
     \textbf{D:} Comparison of variance across trials as a function of time for both control scenarios.\\
     \textbf{E:} Comparison of distribution of tracking MSE per trial for the control scenarios shown using violin plot.\\ 
     \textbf{F:} Variance averaged across sessions.\\
+    \textbf{G:} Per-trial MSE distributions across sessions.\\
     \textbf{H:} Average of tracking error per unit time for each controller across experiments. The trace in bold shows average across all experiments.
-    \textbf{G:} Per-trial MSE distributions across sessions.
     }}
     \label{fig:figure3}
 \end{figure}

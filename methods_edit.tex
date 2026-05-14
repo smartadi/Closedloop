@@ -107,7 +107,7 @@ commands---to disk for offline analysis.
 
 The complete control loop, from camera exposure trigger to stimulation
 command delivery, had a measured end-to-end latency of approximately
-80\,ms (Fig.~\ref{fig:2}C), arising from image transfer (${\sim}15$\,ms),
+80\,ms (Fig.~\ref{fig:figure1}F), arising from image transfer (${\sim}15$\,ms),
 $\Delta F/F$ computation (${\sim}30$\,ms), and digital-to-analog
 conversion and stimulator settling (${\sim}35$\,ms).
 
@@ -444,14 +444,14 @@ gradients cannot be computed analytically without an explicit system
 model, and because the number of trials required to estimate $J(K)$
 accurately is limited by experimental constraints. Instead, we mapped
 the empirical cost landscape over a grid of candidate gains $K \in
-[0,\,0.3] \times [0,\,0.1]$ (Fig.~\ref{fig:4}A), then refined using
+[0,\,0.3] \times [0,\,0.1]$ (\todo{fig ref: gain grid figure}), then refined using
 the model-free zeroth-order search described in
 Algorithm~\ref{alg:zo}.
 
 The algorithm accepts a new gain vector only when it strictly reduces
 $\hat{J}$; otherwise the current gain is retained and the search radius
 is halved. We initialized the optimization with $K_{0}$ set to the
-best-performing gain from the grid sweep (Fig.~\ref{fig:4}B). We
+best-performing gain from the grid sweep (\todo{fig ref: gain grid figure}). We
 considered a controller acceptable if $\hat{J}(K) \leq \hat{J}(0)$,
 where $\hat{J}(0)$ is the empirical cost of the open-loop
 (feedforward-only) controller, ensuring that feedback control improved
