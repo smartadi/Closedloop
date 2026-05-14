@@ -1,0 +1,74 @@
+\section{Introduction}
+
+Neural activity at the mesoscopic scale---the coordinated fluctuations of local populations of neurons spanning multiple cortical
+regions---plays a central role in sensory processing, motor control, and cognition~\citep{Churchland2012, Musall2019, Stringer2019}.
+These dynamics unfold over spatial scales of hundreds of microns to millimeters and temporal scales of tens to hundreds of milliseconds,
+an intermediate regime between the activity of single neurons and the global patterns observed in whole-brain imaging such as fMRI.
+Understanding how mesoscale cortical dynamics give rise to behavior remains a fundamental challenge in systems neuroscience.
+
+Wide-field calcium imaging has emerged as a powerful tool for monitoring mesoscale cortical activity in behaving
+mice~\citep{Wekselblatt2016, Allen2017, Makino2017}. By combining genetically encoded calcium indicators such as GCaMP with chronic
+cranial windows, wide-field imaging enables simultaneous recording of population-level fluorescence signals across the entire dorsal
+cortex at frame rates sufficient to resolve behaviorally relevant dynamics~\citep{Ren2021, Ghanbari2019}. Studies using this approach
+have revealed cortex-wide patterns of activation during sensorimotor tasks~\citep{Musall2019, Pinto2019}, the emergence of coordinated
+cortical sequences during motor learning~\citep{Makino2017}, and the spatiotemporal structure of spontaneous cortical
+activity~\citep{Mohajerani2013, Vanni2014}. Collectively, these observations suggest that the spatiotemporal dynamics of mesoscale
+cortical activity carry rich information about the computational state of the brain.
+
+A complementary line of work has sought to formalize neural population activity in terms of dynamical systems, in which the trajectory
+of population-level activity evolves according to mathematically tractable rules. Seminal studies in motor cortex demonstrated that
+neural population dynamics during reaching could be captured by low-dimensional, approximately linear
+models~\citep{Churchland2012, Cunningham2014}. This dynamical systems perspective has since been applied across many brain areas and
+behavioral contexts, revealing that complex single-neuron responses often reflect the projection of simpler population-level dynamics
+onto individual cells~\citep{Vyas2020, Saxena2019}. Crucially, when viewed through population-level measurements, high-dimensional
+nonlinear neural systems often admit locally low-dimensional or approximately linear representations---an observation that opens the
+door to control-theoretic approaches for manipulating neural activity.
+
+While observation of mesoscale dynamics has advanced rapidly, establishing causal links between these dynamics and behavioral outcomes
+remains challenging. Optogenetics has transformed the study of neural circuits by enabling temporally precise, cell-type-specific
+manipulation of neural activity~\citep{Deisseroth2011, Fenno2011}. Most optogenetic experiments employ open-loop stimulation, in which
+predetermined patterns of light are delivered irrespective of the ongoing neural state. Although open-loop approaches have yielded
+fundamental insights into circuit function, they are inherently limited in their ability to account for the variability and
+state-dependence of neural responses~\citep{Grosenick2015}. Cortical activity fluctuates substantially from trial to trial due to
+ongoing spontaneous dynamics, arousal, and behavioral state~\citep{Harris2011}, meaning that the same open-loop stimulus can produce
+widely varying neural and behavioral effects depending on the brain state at the time of stimulation.
+
+Closed-loop paradigms, in which stimulation is continuously adjusted based on real-time measurements of neural activity, offer a
+principled framework for overcoming these limitations. From a control-theoretic perspective, feedback enables a system to compensate
+for unmodeled disturbances and maintain a desired output despite variability in the underlying activity state or
+dynamics~\citep{Astrom1995}. In the context of neural manipulation, closing the loop provides two key advantages: it allows
+stimulation to adapt to the current brain state, improving the precision of neural modulation; and it enables the experimenter to
+drive neural activity toward specific target trajectories, creating opportunities for causal tests that are not possible with
+open-loop stimulation alone~\citep{OShea2018}.
+
+Several groups have demonstrated the feasibility and utility of closed-loop optogenetic control at the level of single neurons and
+local field potentials. \citet{Newman2015} introduced the ``optoclamp,'' a proportional--integral (PI) controller that locked the
+firing rate of individual neurons to stationary targets in cultured networks and in the anesthetized rat thalamus.
+\citet{Bolus2018} developed model-based design strategies for dynamic closed-loop optogenetic neural control in vivo, and subsequently
+demonstrated state-space optimal feedback control of single-neuron firing rates in awake, head-fixed mice using linear-quadratic
+optimal control~\citep{Bolus2021}. At the network level, closed-loop optogenetic stimulation has been used to modulate oscillatory
+dynamics in brain slices and in non-human primates~\citep{Nicholson2018, Cagnan2023}. \citet{Clancy2014} showed that closed-loop
+optogenetic feedback could train mice to modulate neural activity in motor cortex, establishing that neural circuits can be shaped
+through activity-dependent stimulation. A comprehensive review by \citet{Grosenick2015} outlined the theoretical and practical
+foundations for closed-loop optogenetic control, emphasizing its potential for causal circuit dissection.
+
+Despite these advances, most prior closed-loop optogenetic studies have operated at the level of single neurons or local field
+potentials, using electrophysiological recordings as the feedback signal. The application of closed-loop control to mesoscale cortical
+population dynamics---using wide-field calcium imaging as the readout---remains largely unexplored. This gap is significant because
+mesoscale dynamics reflect the integrated activity of large neuronal populations and are directly relevant to the kinds of distributed
+cortical computations that underlie perception and behavior. Moreover, recent technical developments have made it possible to perform
+simultaneous wide-field calcium imaging and spatially targeted optogenetic stimulation across the dorsal cortex of awake
+mice~\citep{Matveev2024}, providing the experimental infrastructure needed for real-time, mesoscale closed-loop control.
+
+Here, we demonstrate a closed-loop optogenetic control framework for regulating mesoscale cortical population activity in head-fixed
+mice. Using wide-field calcium imaging, we extract a real-time readout of regional cortical activity ($\Delta F/F$) and use this
+signal to drive a proportional--integral (PI) feedback controller that modulates targeted optogenetic stimulation of a neighboring
+cortical region. We first characterize the input--output relationship between optogenetic stimulation and trial-averaged cortical
+responses, showing that this relationship is well approximated by a linear mapping---a finding that enables principled, model-based
+controller design. We then implement a PI controller with feedforward compensation and demonstrate that closed-loop stimulation
+improves reference tracking accuracy and reduces trial-to-trial variability compared to open-loop stimulation across multiple
+experimental sessions and animals. The reduction in variability is interpreted as an active disturbance rejection phenomenon,
+wherein feedback suppresses the influence of spontaneous cortical fluctuations on the driven response. Collectively, these results
+establish that stationary, approximately linear trial-averaged dynamics can be exploited for modeling and controlling regional
+cortical activity, and demonstrate the potential of feedback-based perturbation paradigms for causally investigating cortical
+population dynamics.
