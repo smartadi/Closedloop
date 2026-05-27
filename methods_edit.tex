@@ -282,11 +282,10 @@ relationship, we delivered impulse-like optogenetic inputs at varying
 amplitudes sampled from a discrete set (0, 0.8, 1.6, 2.4, 2.7\,V),
 interleaved with randomized inter-trial intervals and delivered in
 pseudo-random amplitude order. We quantified the response to each
-amplitude level as the mean peak \%\,$\Delta F/F$ suppression across
-trials, where we determined peak timing from the trial-averaged waveform
-at the highest stimulus amplitude. We used a linear regression of peak
-suppression on stimulus amplitude to assess input--output linearity and
-to estimate the feedforward gain $K_{r}$ (see
+amplitude level as the mean inhibition energy across trials
+(see Section~\ref{sec:inhib_energy}). We used a linear regression of
+inhibition energy on stimulus amplitude to assess input--output
+linearity and to estimate the feedforward gain $K_{r}$ (see
 Section~\ref{sec:ff_gain}). We required a minimum of 20 trials per
 amplitude level for inclusion in the linear fit.
 
@@ -300,6 +299,46 @@ within-window mean as a proxy for steady-state output. We also computed
 variance across trials as a function of time to assess the stability of
 the response and the validity of Assumption~\ref{assm:trial_avg} across
 sessions.
+
+\subsubsection*{Inhibition energy quantification}
+\label{sec:inhib_energy}
+
+We quantified the cortical response to each impulse stimulus as the
+inhibition energy: the mean $\Delta F/F$ over the 200\,ms window
+immediately following stimulation onset,
+%
+\begin{equation}
+    E_{j} = \frac{1}{T_w}\sum_{t=t_{\mathrm{on}}}^{t_{\mathrm{on}}+T_w}
+            y_{j,t},
+    \label{eq:inhib_energy}
+\end{equation}
+%
+where $j$ indexes trials, $t_{\mathrm{on}}$ is the frame of stimulation
+onset, and $T_w$ corresponds to 200\,ms (7 frames at 35\,Hz). We adopted
+this integral-based metric rather than the instantaneous trough because
+it is more robust to single-frame noise and captures the cumulative
+suppressive effect of short-duration inputs. We computed $E_j$ for each
+trial and summarised each amplitude level by its median with 2.5th--97.5th
+percentile bounds (median-referenced figures) or mean $\pm$ SEM
+(mean-referenced figures).
+
+\subsubsection*{Transfer function fitting}
+\label{sec:tf_fitting}
+
+To characterize the linear dynamics of the trial-averaged impulse
+response, we fit a continuous-time transfer function model using the
+\textsc{tfest} function (MATLAB System Identification Toolbox). We swept
+candidate model orders of 1--3 poles, 0--2 zeros, and 0--5 frames of
+pure delay (0--143\,ms at 35\,Hz). At each order we selected the
+best-fitting model and compared across orders using the Akaike
+Information Criterion (AIC) to penalize complexity. We validated the
+selected model using leave-one-amplitude-out (LOAO) cross-validation: we
+fit the model to trial-averaged responses at all amplitude levels except
+one and evaluated the normalized root-mean-square prediction error at the
+held-out amplitude. We report the cross-validated $R^2$ as the primary
+goodness-of-fit metric. Fitting was performed on a single primary session
+(AL\_0033, 2025-01-29) and verified by comparing fitted poles and time
+constants across all three impulse sessions.
 
 % ------------------------------------------------------------
 \subsection*{Controller design}
@@ -437,6 +476,10 @@ Under Assumption~\ref{assm:trial_avg}, $\hat{J}(K) \to J(K)$ as $N \to
 which decreases at rate $\mathcal{O}(1/\sqrt{N})$ for independent,
 identically distributed trials. In practice, $R(N,K)$ can be inflated
 by brain-state non-stationarity across the session (see Discussion).
+For cross-session performance comparisons we evaluated the windowed
+tracking cost over $t = +1\,\text{s}$ to $+3\,\text{s}$ post-laser onset
+rather than the full trial window, to exclude the early inhibitory
+transient that precedes the controller's settling phase.
 
 \subsubsection*{Zeroth-order gain search}
 
@@ -459,13 +502,77 @@ where $\hat{J}(0)$ is the empirical cost of the open-loop
 upon the open-loop baseline before the validation block commenced.
 
 % ------------------------------------------------------------
+\subsection*{Offline data analysis}
+% ------------------------------------------------------------
+
+\subsubsection*{Cross-session pooling}
+
+We analysed controller performance across 13 sessions (mice AL\_0033
+and AL\_0039, with confirmed Chrimson expression). Within each session
+we interleaved open-loop and closed-loop trials pseudorandomly so that
+both conditions sampled the same distribution of brain states. For
+cross-session figures we pooled per-trial MSE arrays, cross-trial
+variance time-courses, and power spectral estimates. Sessions were
+included if the opsin expression was confirmed and at least 40 valid
+trials were obtained per condition after motion exclusion.
+
+\subsubsection*{Motion exclusion}
+
+We computed a frame-level motion energy signal as the squared pixel-norm
+of the frame-difference image between consecutive wide-field frames, then
+z-scored within each session. We excluded trials in which peak motion
+energy exceeded $1.5$ standard deviations above the session mean
+(\texttt{motThresh} = 1.5). Motion-excluded results are shown alongside
+full-dataset results to confirm that performance improvements are not
+attributable to motion-state confounds.
+
+\subsubsection*{Power spectral analysis}
+
+We estimated the power spectral density of the $\Delta F/F$ output
+signal for each trial using Welch's method and expressed results in
+absolute units of $(\Delta F/F)^{2}\,\text{Hz}^{-1}$. We applied no
+z-scoring or relative normalisation at any stage, so that differences in
+absolute power between conditions are preserved. We averaged spectra
+across trials within each session and then across sessions for
+cross-session comparisons.
+
+\subsubsection*{Pre-stimulus state analysis}
+
+To assess whether pre-trial brain state predicted controller performance,
+we computed the cross-trial variance of $\Delta F/F$ over a 3\,s window
+immediately preceding laser onset for each trial. We regressed per-trial
+tracking MSE (windowed, $t = +1$--$+3\,\text{s}$) on this pre-stimulus
+variance separately for open-loop and closed-loop conditions and compared
+the resulting regression slopes across sessions. A positive slope
+indicates dependence of tracking error on initial brain state; a
+near-zero closed-loop slope indicates that feedback control decouples
+performance from pre-trial state.
+
+\subsubsection*{Widebrain ARX model}
+
+To quantify how much of the ipsilateral output activity can be explained
+by contralateral cortical dynamics and the optogenetic input, we fit a
+linear autoregressive model with exogenous inputs (ARX) to widefield
+imaging data from spontaneous (no-stimulation) blocks. The model
+regressed the ipsilateral output-kernel $\Delta F/F$ time series on
+lagged $\Delta F/F$ from contralateral pixels selected by a spatial
+cross-correlation criterion. We evaluated model fit using $R^2$ on a
+held-out 20\% test set and required $R^2 > 0.3$ on spontaneous data for
+a session to be included in subsequent prediction layers. We compared
+predictions from three nested model layers: (i) contralateral pixels
+only (spontaneous dynamics); (ii) contralateral pixels plus the
+session-averaged open-loop impulse response; and (iii) contralateral
+pixels plus the per-trial laser command sequence convolved with the
+fitted transfer function (Section~\ref{sec:tf_fitting}).
+
+% ------------------------------------------------------------
 \subsection*{Statistical analysis}
 % ------------------------------------------------------------
 
 No formal statistical tests were pre-registered for this study. We
 compared open-loop and closed-loop conditions using the empirical
 per-trial cost $\hat{J}(K)$ defined in \eqref{eq:emp_cost}.
-Session-averaged performance was summarized as mean and standard
+Session-averaged performance was summarised as mean and standard
 deviation across trials. We computed variance in cortical activity as
 the sample variance of $y_{t}$ across trials at each timestep within
 the stimulation window. We assessed batch-size convergence
