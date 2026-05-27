@@ -110,6 +110,7 @@ command delivery, had a measured end-to-end latency of approximately
 80\,ms (Fig.~\ref{fig:figure1}F), arising from image transfer (${\sim}15$\,ms),
 $\Delta F/F$ computation (${\sim}30$\,ms), and digital-to-analog
 conversion and stimulator settling (${\sim}35$\,ms).
+\todo{LATENCY CONSISTENCY: (1) Results text says 47\,ms maximum and 80\,ms end-to-end — confirm both numbers are correct and do not contradict each other. (2) ``60 frames = 1\,s'' appears elsewhere in the analysis but at 35\,Hz, 60 frames $= 1.71$\,s — find and fix all frame-count-to-time conversions. (3) The staircase pattern in the latency histogram is attributed to a beat between trial-interval timing and the 35\,Hz frame clock — verify this numerically (expected beat frequency = $|1/T_{\mathrm{trial}} - 35|$\,Hz) before writing it into the manuscript (MEETINGS 2026-04-27).}
 
 \subsubsection*{Online signal processing}
 
@@ -300,6 +301,8 @@ variance across trials as a function of time to assess the stability of
 the response and the validity of Assumption~\ref{assm:trial_avg} across
 sessions.
 
+\todo{MISSING SUPPLEMENTARY PANEL: generate spatial-spread figure — inhibition area ($\Delta F/F$ suppression footprint) vs.\ laser power across amplitude levels. Cite Nuoli/Svoboda for spatial spread of Chrimson activation. Add as supplementary figure with caption. Use \texttt{impulse-analysis/spatial\_spread.m}.}
+
 \subsubsection*{Inhibition energy quantification}
 \label{sec:inhib_energy}
 
@@ -339,6 +342,7 @@ held-out amplitude. We report the cross-validated $R^2$ as the primary
 goodness-of-fit metric. Fitting was performed on a single primary session
 (AL\_0033, 2025-01-29) and verified by comparing fitted poles and time
 constants across all three impulse sessions.
+\todo{TF FIT — TWO OPEN ITEMS: (1) MODEL ORDER INCONSISTENCY: meeting notes flag that the model order was described inconsistently as ``1-0-2'' in one place and ``3 poles, 1 zero'' in another — check \texttt{tf\_fit.m} output and fix to one canonical description (poles / zeros / delay) before reporting $R^2$. (2) HELD-OUT VALIDATION: relax the delay parameter $\tau$ (currently fixed?) and report $R^2$ on a held-out 20\% test set — Nick's explicit request 2026-05-08. Run TF fit across all 3 impulse sessions and add a comparison table of poles/time constants.}
 
 % ------------------------------------------------------------
 \subsection*{Controller design}
@@ -500,6 +504,7 @@ considered a controller acceptable if $\hat{J}(K) \leq \hat{J}(0)$,
 where $\hat{J}(0)$ is the empirical cost of the open-loop
 (feedforward-only) controller, ensuring that feedback control improved
 upon the open-loop baseline before the validation block commenced.
+\todo{MISSING: port the zeroth-order gain-search algorithm pseudocode from \texttt{methods.tex} into this file as an \texttt{algorithm} block with label \texttt{alg:zo}. Also add the gain-grid figure reference (\texttt{fig ref: gain grid figure}) in the two \texttt{todo}s above once the figure is finalized.}
 
 % ------------------------------------------------------------
 \subsection*{Offline data analysis}
@@ -507,6 +512,7 @@ upon the open-loop baseline before the validation block commenced.
 
 \subsubsection*{Cross-session pooling}
 
+\todo{VERIFY BEFORE SUBMISSION: (1) confirm all violin/MSE figures were regenerated using the $t=+1$\,s to $+3$\,s window (fields \texttt{er\_ncDfk\_w}/\texttt{er\_wcDfk\_w} in \texttt{controllerData.m}), not the full $t=0$\,s to $+3$\,s window; (2) add motion vs.\ MSE cross-session scatter panel (OL and CL) to the manuscript — requested MEETINGS 2026-05-08, not yet generated; use \texttt{controller-analysis/motion\_analysis.m}; (3) resolve mouse count: AL\_0033 (8 sessions) + AL\_0039 (3 sessions) = 11 sessions from 2 mice — where do the remaining 2 sessions (to reach 13) come from? Identify the mouse and update this text.}
 We analysed controller performance across 13 sessions (mice AL\_0033
 and AL\_0039, with confirmed Chrimson expression). Within each session
 we interleaved open-loop and closed-loop trials pseudorandomly so that
