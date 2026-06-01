@@ -109,11 +109,6 @@ We computed the real-time feedback signal as the mean $\Delta F/F$ within a squa
 %
 where $F_{t}$ is the kernel-averaged fluorescence at frame $t$ and $\bar{F}$ is the running-window mean computed over a preceding baseline window of fixed duration(40 seconds).
 
-\subsubsection*{System Characterization}
-For input-output mapping we designed experiments where impulse reponse data was collected for three session in two different mice.
-We defined inhibition energy as $\sum_{t=0}^{T} y_t^2$, where $T = 200ms$ was the determined as the settling time of the trial-averaged response for any input amplitude.
-
-
 \subsubsection*{Trial structure and experimental design}
 
 We delivered optogenetic stimulation in discrete trials of 3\,s
@@ -475,19 +470,59 @@ gradients cannot be computed analytically without an explicit system
 model, and because the number of trials required to estimate $J(K)$
 accurately is limited by experimental constraints. Instead, we mapped
 the empirical cost landscape over a grid of candidate gains $K \in
-[0,\,0.3] \times [0,\,0.1]$ (\todo{fig ref: gain grid figure}), then refined using
-the model-free zeroth-order search described in
-Algorithm~\ref{alg:zo}. \todo{algorithm block with label alg:zo not yet ported to methods\_edit}
+[0,\,0.3] \times [0,\,0.1]$ (Fig.~\ref{fig:cost_landscape}A), then
+refined using the model-free zeroth-order search described in
+Algorithm~\ref{alg:zo}.
+
+\begin{figure}[!ht]
+    \centering
+    \begin{subfigure}[t]{0.6\linewidth}
+        \includegraphics[width=\linewidth]{images/jval_controllers2503051.png}
+        \caption*{\textbf{A}}
+    \end{subfigure}
+    \begin{subfigure}[t]{\linewidth}
+        \includegraphics[width=\linewidth]{images/opt.png}
+        \caption*{\textbf{B}}
+    \end{subfigure}
+    \caption{\textbf{Controller gain optimization.}
+        \textbf{A:} Empirical cost landscape $\hat{J}(K)$ over the gain
+        grid $K \in [0,\,0.3]\times[0,\,0.1]$, used to initialise the
+        zeroth-order search for a representative session.
+        \textbf{B:} Trajectory of candidate gain vectors during the
+        zeroth-order search; each point shows $\hat{J}(K)$ for one
+        candidate, illustrating convergence toward a low-cost gain.}
+    \label{fig:cost_landscape}
+\end{figure}
+
+\begin{algorithm}[h]
+\caption{Zeroth-order controller gain search}
+\label{alg:zo}
+\begin{algorithmic}[1]
+\State \textbf{Initialize:} gain $K_0 = [K_p^{(0)},\,K_i^{(0)}]$, step size $r$
+\For{$i = 1$ \textbf{to} $I$}
+    \State Sample $\mathbf{v}$ uniformly from the unit 2-sphere
+    \State Propose $K_i \leftarrow K_{i-1} + r\,\mathbf{v}$
+    \For{$j = 1$ \textbf{to} $N$}
+        \State Run one trial of length $T$ under controller $K_i$
+        \State Compute $C_j = \sum_{t=0}^{T}\|z_j(t)\|^2$
+    \EndFor
+    \State Compute $\hat{J}(K_i) = \frac{1}{N}\sum_{j=1}^{N} C_j$
+    \If{$\hat{J}(K_i) \geq \hat{J}(K_{i-1})$}
+        \State $K_i \leftarrow K_{i-1}$ \Comment{Reject update}
+        \State $r \leftarrow r/2$     \Comment{Shrink step size}
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 
 The algorithm accepts a new gain vector only when it strictly reduces
 $\hat{J}$; otherwise the current gain is retained and the search radius
 is halved. We initialized the optimization with $K_{0}$ set to the
-best-performing gain from the grid sweep (\todo{fig ref: gain grid figure}). We
-considered a controller acceptable if $\hat{J}(K) \leq \hat{J}(0)$,
+best-performing gain from the grid sweep (Fig.~\ref{fig:cost_landscape}A).
+We considered a controller acceptable if $\hat{J}(K) \leq \hat{J}(0)$,
 where $\hat{J}(0)$ is the empirical cost of the open-loop
 (feedforward-only) controller, ensuring that feedback control improved
 upon the open-loop baseline before the validation block commenced.
-\todo{MISSING: port the zeroth-order gain-search algorithm pseudocode from \texttt{methods.tex} into this file as an \texttt{algorithm} block with label \texttt{alg:zo}. Also add the gain-grid figure reference (\texttt{fig ref: gain grid figure}) in the two \texttt{todo}s above once the figure is finalized.}
 
 % ------------------------------------------------------------
 \subsection*{Offline data analysis}
