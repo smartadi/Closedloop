@@ -1,0 +1,133 @@
+% =====================================================================
+%  RESULTS — revised draft (language + structural edits)
+%  Reviewer-style rewrite. Unresolved factual inconsistencies are marked
+%  with \todo{...} and MUST be resolved by the authors against records.
+%  Requires in preamble:  \usepackage{xcolor}
+%  \newcommand{\todo}[1]{\textcolor{red}{[\textbf{AUTHOR CHECK:} #1]}}
+% =====================================================================
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Results}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We developed a real-time, closed-loop optogenetic system to regulate population activity within a targeted cortical region monitored by wide-field calcium imaging. Trial-averaged cortical responses to optogenetic stimulation were well described by a stationary linear input--output map, providing the empirical foundation for controller design.
+
+% ------------------------------------------------------------
+\subsection*{Experimental setup and closed-loop control architecture}
+% ------------------------------------------------------------
+Closed-loop experiments were performed in head-fixed transgenic mice co-expressing GCaMP and an inhibitory opsin, positioned in a behavioral chamber \citep{Matveev2024}. The forelimbs of each mouse rested on a freely moving wheel, and a blank screen was present in front of the animal. Neural activity was recorded at 35\,Hz using wide-field calcium imaging (Fig.~\ref{fig:figure1}A), and spatially resolved optogenetic stimulation was delivered to a cortical region adjacent to the $\Delta F/F$ output zone (Fig.~\ref{fig:figure1}B). The stimulation region was chosen to overlap closely with the output kernel (Fig.~\ref{fig:figure1}C) so as to directly suppress activity within that region. In a subset of experiments, the motion energy is captured using face video. The motion energy is given by quantifying total pixel to pixel displacement for the face video.  
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/Figure1.pdf}
+    \caption{\textbf{Experimental setup and closed-loop control architecture.}\\
+    \small{
+    \textbf{A:} Schematic of the wide-field microscope optical path. Blue (470\,nm) and violet (405\,nm) LEDs illuminate the dorsal cortex; emitted green photons are collected by the camera via two dichroics. A red (638\,nm) galvanometer-steered laser passes through both dichroics to deliver spatially targeted optogenetic stimulation.\\
+    \textbf{B:} Dorsal-cortex schematic showing the spatial relationship between the optogenetic stimulation target (red) and the $\Delta F/F$ output region (blue box).\\
+    \textbf{C:} Representative wide-field frame showing the stimulation spot (red) and the spatial kernel used as the closed-loop feedback output (blue box).\\
+    \textbf{D:} Signal-flow diagram of the closed-loop pipeline. A hardware trigger initiates frame acquisition; the imaging API streams frames to the control server, which computes $\Delta F/F$ and evaluates the controller; the resulting command drives the optogenetic stimulator via a microcontroller.\\
+    \textbf{E:} Block diagram of the closed-loop control architecture. The spatial-kernel $\Delta F/F$ average provides the output $y_t$; the PI controller computes a corrective input from the tracking error and sums it with the feedforward term; the combined signal drives the laser, subject to a maximum end-to-end latency of 47ms.\\
+    \textbf{F:} Distribution of measured end-to-end control-loop latency, which is defined as the time from camera trigger to laser-activation command, encompassing image transfer, $\Delta F/F$ computation, and digital-to-analog conversion.
+    }}
+    \label{fig:figure1}
+\end{figure}
+
+We designed a hardware and software architecture for signal processing and fast closed-loop control of this mesoscale activity (Fig.~\ref{fig:figure1}D). The software layer implemented the framework required to compute the control signal from real-time feedback. Specifically, we implemented a proportional--integral (PI) feedback controller with open-loop (feedforward) compensation to drive cortical activity toward a reference $\Delta F/F$ value (Fig.~\ref{fig:figure1}E). The feedforward component supplied the nominal stimulus required to reach the reference state, computed from the calibrated controller gains, while the PI feedback component provided real-time error correction, compensating for bias arising from inaccurate feedforward gains, residual nonlinearities, and spontaneous trial-to-trial fluctuations.
+
+In this architecture (Fig.~\ref{fig:figure1}E), the kernel-averaged wide-field measurement serves as the system output; the controller computes an optogenetic stimulus from the error between the measured output and the reference, and this input drives the plant subject to a combined processing and physiological delay that closes the loop (Fig.~\ref{fig:figure1}F).
+
+% ------------------------------------------------------------
+\subsection*{Trial-averaged cortical dynamics are well approximated by a linear system}
+% ------------------------------------------------------------
+Trial-averaged cortical responses to optogenetic stimulation followed a linear input--output map, and a low-dimensional linear time-invariant (LTI) system closely approximated both impulse and step responses. We delivered optogenetic impulse inputs at discrete amplitudes spanning 0--1.8\,mW, randomly interleaved across trials within each session. Figure~\ref{fig:figure2}A shows the trial-averaged impulse responses for one session, from which we estimated a settling time of $\sim$200\,ms.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/Figure2_extra.pdf}
+    \caption{\textbf{Input--output characterization of local cortical dynamics.}\\
+    \small{
+    \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses across five stimulation amplitudes (0--1.8\,mW; $\sim$90 trials per amplitude). Traces are aligned to stimulation onset (red line); shading shows $\pm$1\,SD across trials. Amplitude was randomly sampled on each trial.\\
+    \textbf{B:} Total inhibition energy (suppression integrated over 0--200\,ms) versus stimulation amplitude for three sessions. Points show mean $\pm$ SD across trials ($\sim$50 trials per amplitude); lines show the fitted linear input--output relationship (see Materials and Methods).\\
+    \textbf{C:} Predicted trial-averaged traces for three representative impulse responses. Bold traces show the trial-averaged response; dashed traces show the LTI-system fit to the trial-averaged data ($N = 90$ trials).\\
+    \textbf{D:} Predicted trial-averaged traces for three representative step responses. Bold traces show the trial-averaged response; dashed traces show the LTI-system fit to the trial-averaged data ($N = 50$ trials).\\
+    \textbf{E:} Across-trial variance over the trial for one representative session. Variance traces for 13 sessions are shown across the 3\,s stimulation window (gray), together with 3\,s pre- and post-stimulation windows. The bold trace is the mean across sessions; dashed lines show the linear approximation of the mean variance trace, with the fitted slope reported for the pre-, during-, and post-stimulation windows.
+    }}
+    \label{fig:figure2}
+\end{figure}
+
+The mean total inhibition energy per trial (see Materials and Methods) increased monotonically with stimulation amplitude and was well approximated by a linear relationship across three sessions (Fig.~\ref{fig:figure2}B; with $R^2 = 0.99, 0.51, 0.94$ and slopes $-0.36,0.57,0.58$ for three sessions). This monotonic relationship between stimulation amplitude and inhibition energy supports the design of a feedforward controller calibrated from impulse-response data \citep{astrom1995pid}. 
+
+Step inputs applied over 3\,s trial windows produced trial-averaged trajectories that were closely approximated by an LTI system. We fit LTI systems to trial-averaged step-response data from three sessions (Fig.~\ref{fig:figure2}D) with $R^2= 0.22, 0.77,0.89$. The fitted models were low-order transfer functions consistent with the marginally stable, weakly oscillatory dynamics expected of biologically bounded cortical circuits. Session-to-session offset bias in the step response motivated the inclusion of the integral term in the PI controller (see Materials and Methods). The open-loop step stimulation also had a slight effect, reducing across-trial variance during stimulation as the stimulation period increased. This is captured by computing the slope of variance across trials for stim-onset period as $-0.57$ compared to a near-zero pre- and post-onset slope of $-0.04, 0.13$ across $n = 13$ sessions Fig.~\ref{fig:figure2}E). This did not change the variance significantly, indicating that the optogenetic input did not destabilize the system. Closed-loop feedback produced a further and more consistent reduction (quantified below).
+
+Batch-mean $\Delta F/F$ variance during spontaneous activity decreased with trial count and stabilized beyond approximately 50 trials per session (Fig.~\ref{fig:S1}), consistent with the trial-averaging assumption (see Materials and Methods). \todo{The variance-convergence result alone does not establish the zero-mean disturbance assumption on which the closed-loop variance-reduction argument rests: variance convergence (a central-limit effect) holds for any finite-variance process, including one with a slowly drifting mean. Either (i) demonstrate that the batch \emph{mean} is stationary across the session, or (ii) soften the downstream claim to ``consistent with'' rather than ``establishes.''} Convergence rates differed across sessions recorded from the same region, consistent with session-to-session differences in brain state.
+
+% ------------------------------------------------------------
+\subsection*{Pre-stimulus brain state shapes predictability}
+% ------------------------------------------------------------
+Pre-stimulus activity affects predictability of impulse response.
+
+\todo{SECTION TO BE WRITTEN. Key result (prestim\_variance.m): under open-loop control, the regression slope of pre-stimulus variance against per-trial MSE is positive (higher pre-stimulus variance $\rightarrow$ higher tracking error); under closed-loop control, the slope is near-flat, indicating that feedback decouples tracking performance from initial brain state. Add the corresponding figure reference. Then implement the Curto et al.\ (2009)-style trial-sorting analysis: split trials by pre-stimulus ($\sim$1\,s) variance into synchronized vs.\ desynchronized groups; within each group, sort trials by $|\Delta F/F|$ at $t = 0$; display $\Delta F/F$ heatmaps for open- and closed-loop conditions. NOTE: cite as Curto, Sakata, Marguet, Itskov \& Harris (2009), J.~Neurosci.\ 29(34):10600--10612 --- there is NO ``Bhatt'' or ``Issa'' author. Consider a 500\,ms or sliding pre-stimulus window, since a 1\,s window may conflate state transitions.}
+
+
+
+% ------------------------------------------------------------
+\subsection*{Closed-loop control improves reference-tracking accuracy}
+% ------------------------------------------------------------
+Across 13 sessions from 2 mice, with confirmed opsin expression, closed-loop feedback consistently improved tracking of a reference target activity relative to open-loop stimulation (Fig.~\ref{fig:figure3}). Under open-loop conditions, the feedforward term produced responses that systematically deviated from the reference, reflecting the inability of a fixed input to compensate for ongoing spontaneous fluctuations or for inaccuracies in the estimated open-loop controller. Under closed-loop control, the proportional term corrected instantaneous deviations, while the integral term accumulated and eliminated persistent offset, yielding substantially improved alignment with the target reference at the single-trial level (Fig.~\ref{fig:figure3}A).
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/Figure3_extra.pdf}
+    \caption{\textbf{Closed-loop versus open-loop cortical activity control} (2 mice, 13 sessions).\\
+    \small{
+    \textbf{A:} Single-trial example of open-loop (red) and closed-loop (green) $\Delta F/F$ responses. Gray shading marks the 3\,s stimulation window; the dashed line indicates the target $-5\%\,\Delta F/F$. Bottom traces show the corresponding optogenetic input signals.\\
+    \textbf{B:} Trial-averaged $\Delta F/F$ responses under open-loop (red) and closed-loop (green) control for a representative session. Bold lines show the trial mean; thin lines show individual trials.\\
+    \textbf{C:} Trial-averaged optogenetic input signals for open-loop (pink) and closed-loop (blue) conditions. Bold lines show the mean input; thin lines show individual trials.\\
+    \textbf{D:} Cross-trial variance of $\Delta F/F$ as a function of time for open-loop and closed-loop conditions in a representative session. Gray shading marks the stimulation window.\\
+    \textbf{E:} Distribution of per-trial tracking MSE (mean squared error over the 3\,s stimulation window) for open-loop and closed-loop conditions, shown as violin plots. Points indicate individual trials.\\
+    \textbf{F:} Cross-trial variance during the stimulation window, averaged across all 13 sessions, for open-loop and closed-loop conditions.\\
+    \textbf{G:} Per-trial MSE distributions pooled across all 13 sessions, shown as violin plots.\\
+    \textbf{H:} Mean absolute tracking error per unit time as a function of time within the trial, averaged across all sessions (bold) with individual session traces (thin lines).\\
+    \textbf{I:} Ratio of across-trial variance (open-loop / closed-loop) for each session, computed separately for the pre-stimulation window (3\,s before stimulus onset), the stimulation window, and the post-stimulation window (3\,s after stimulus offset). Gray lines show individual sessions; the bold line shows the across-session mean.\\
+    \textbf{J:} Disturbance-rejection effect, shown by splitting each trial into a 0--1\,s (settling) regime and a 1--3\,s (steady-state) regime. The $y$-axis shows the ratio of open-loop to closed-loop tracking-error RMS for each session. Gray lines show individual sessions; the bold line shows the across-session mean.\\
+    }}
+    \label{fig:figure3}
+\end{figure}
+
+Trial-averaged responses confirmed that closed-loop activity tracked the reference closely throughout the stimulation window, whereas open-loop responses showed a systematic positive bias (Fig.~\ref{fig:figure3}B). The difference in mean input between conditions (Fig.~\ref{fig:figure3}C) reflects the additional corrective signal contributed by real-time feedback. Per-trial tracking costs shifted toward lower values and showed reduced spread under closed-loop control (Fig.~\ref{fig:figure3}E), indicating both improved mean performance and greater reliability of neural modulation across trials. These improvements held across all recorded sessions (Fig.~\ref{fig:figure3}G) and required only small controller gains; for the session shown in Fig.~\ref{fig:figure3}A--E we used $K_{r} = 0.1$, $K_{p} = 0.07$, and $K_{i} = 0.1$. The sufficiency of such small gains suggests that the approximately linear, stationary input--output structure identified empirically was adequate to support stable PI feedback.
+
+% ------------------------------------------------------------
+\subsection*{Closed-loop control reduces trial-to-trial variability}
+% ------------------------------------------------------------
+Beyond improving mean tracking accuracy, closed-loop feedback substantially reduced trial-to-trial variability in cortical activity during the stimulation window (Fig.~\ref{fig:figure3}D--F). This follows from the structure of the PI controller: individual trial trajectories can be viewed as perturbations of the nominal averaged response, driven by approximately zero-mean neural disturbances and trial-to-trial brain-state fluctuations, which the controller actively steers back toward the reference, thereby compressing the cross-trial distribution of responses.
+
+Under open-loop stimulation, response variance decreased only modestly relative to the pre-stimulation baseline (post-onset slope $-0.57 \pm 0.24\,(\Delta F/F)^2$/s; Fig.~\ref{fig:figure2}E), reflecting the limited ability of the fixed feedforward term to counteract spontaneous fluctuations. Under closed-loop control, variance decreased substantially more during the stimulation window, consistent with active disturbance rejection. This reduction persisted across sessions, as confirmed by pooled within-session variance traces (Fig.~\ref{fig:figure3}D--F) and by the cross-session distribution of per-trial MSE (Fig.~\ref{fig:figure3}G).
+
+The validity of these results depends on the trial-averaging assumption holding across the session; the empirical variance convergence in Fig.~\ref{fig:S1} is consistent with this assumption over the validation period (\todo{state the exact number of trials, previously given as ``100-trial validation period''}). Performance varied across animals and sessions, likely reflecting residual non-stationarity in arousal and behavioral state, differences in opsin expression, and session-to-session variation in the spatial overlap between the stimulation and output regions. Despite this variability, the direction of improvement---in both tracking accuracy and trial-to-trial variance---was consistent across all experiments.
+
+% ------------------------------------------------------------
+\subsection*{Disturbance attribution: spectral and motion analysis}
+% ------------------------------------------------------------
+\todo{SECTION TO BE WRITTEN. Confirm absolute power spectra ($(\Delta F/F)^2$/Hz) are complete; finalize the narrative linking motion and spectral content to trial outcome. Quantify what fraction of high-error closed-loop trials are attributable to 2--4\,Hz spontaneous fluctuations versus motion. Add a motion-vs-MSE scatter panel (closed- vs.\ open-loop, across sessions) and representative good/bad-trial spectral examples.}
+
+% ------------------------------------------------------------
+\subsection*{Contralateral cortex predicts ipsilateral activity}
+% ------------------------------------------------------------
+\todo{SECTION TO BE WRITTEN. Three-stage contralateral-prediction model: (1) predict the ipsilateral ROI from contralateral pixels in spontaneous (no-opto) data; (2) add the average open-loop impulse response; (3) add the per-trial laser sequence via the transfer-function model and validate against closed-loop traces. Add motion energy as a co-predictor. If the full model validates, compute the post-hoc optimal laser sequence for representative trials, quantify the gap relative to the implemented controller, and frame this as motivation for model-predictive control.}
+
+% ------------------------------------------------------------
+\subsection*{Feedforward control for variable reference tracking}
+% ------------------------------------------------------------
+We designed a feedforward controller to track a sinusoidal reference trajectory. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/Figure5.pdf}
+    \caption{\textbf{Closed-loop versus open-loop cortical activity control for sinusoidal reference} .\\
+    \small{
+    \textbf{A:} Feedforward controller design where a preview block changes the reference control command sent to the PID.\\
+    }}
+    \label{fig:figure5}
+\end{figure}
+
+

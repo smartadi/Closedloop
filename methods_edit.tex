@@ -90,46 +90,29 @@ measurable cross-talk was observed.
 
 \subsubsection*{Hardware and software architecture}
 
-We implemented the real-time experimental system in Python on a
-dedicated control server (CS). We acquired wide-field images using the
-Pylon image-capture API and streamed them directly to the CS at 70\,Hz.
-Only blue-channel frames (35\,Hz effective rate) were used for real-time
-computation; we discarded violet frames during online processing. The CS
-displayed real-time images, $\Delta F/F$ traces, and experimental
-parameters via a graphical user interface (GUI). A dedicated computation
-thread processed incoming frames, computed the feedback signal,
-evaluated the controller, and transmitted stimulation commands to a
-microcontroller unit (MCU). The MCU performed digital-to-analog
-conversion and drove the optogenetic stimulation hardware. A separate
-logging thread recorded all event timestamps---including image
-acquisition triggers, controller outputs, and stimulation
-commands---to disk for offline analysis.
-
-The complete control loop, from camera exposure trigger to stimulation
-command delivery, had a measured end-to-end latency of approximately
-80\,ms (Fig.~\ref{fig:figure1}F), arising from image transfer (${\sim}15$\,ms),
-$\Delta F/F$ computation (${\sim}30$\,ms), and digital-to-analog
-conversion and stimulator settling (${\sim}35$\,ms).
-\todo{LATENCY CONSISTENCY: (1) Results text says 47\,ms maximum and 80\,ms end-to-end — confirm both numbers are correct and do not contradict each other. (2) ``60 frames = 1\,s'' appears elsewhere in the analysis but at 35\,Hz, 60 frames $= 1.71$\,s — find and fix all frame-count-to-time conversions. (3) The staircase pattern in the latency histogram is attributed to a beat between trial-interval timing and the 35\,Hz frame clock — verify this numerically (expected beat frequency = $|1/T_{\mathrm{trial}} - 35|$\,Hz) before writing it into the manuscript (MEETINGS 2026-04-27).}
+We implemented the real-time experimental system in Python on a dedicated control server.
+We acquired wide-field images using the Pylon image-capture API and streamed them directly to the CS at 70\,Hz.
+The image capture alternate between blue and violet light exposures, as the violet exposed frames can be used for Hemodynamic correction in post processing. But in this application the processing is done in real time so we skip the violet frames and only blue exposed frames are used. Therefore the effective measurement frequency is $35$Hz with exposure. 
+The server displayed real-time images, $\Delta F/F$ traces, and experimental parameters via a graphical user interface (GUI). 
+A dedicated computation thread processed incoming frames, computed the feedback signal, evaluated the controller, and transmitted stimulation commands to a microcontroller unit (MCU). 
+The MCU performed digital-to-analog conversion and drove the optogenetic stimulation hardware. 
+A separate logging thread recorded all event timestamps---including image acquisition triggers, controller outputs, and stimulation commands---to disk for offline analysis.
+The complete control loop, from camera exposure trigger to stimulation command delivery, had a measured end-to-end  maximum latency of 47\,ms (Fig.~\ref{fig:figure1}F), arising from image transfer, $\Delta F/F$ computation and stimulation delivery.
 
 \subsubsection*{Online signal processing}
-
-We computed the real-time feedback signal as the mean $\Delta F/F$
-within a circular kernel centered on the designated output region in
-somatosensory cortex. The $\Delta F/F$ signal was defined as
+We computed the real-time feedback signal as the mean $\Delta F/F$ within a square kernel($21$ by $21$ pixel as seen in ~Fig.\ref{fig:figure1}C), centered on the designated output region primarily in the somatosensory cortex. The $\Delta F/F$ signal was defined as the output $y_t$ given by:
 %
 \begin{equation}
     y_{t} = \frac{F_{t} - \bar{F}}{|\bar{F}|},
     \label{eq:dff}
 \end{equation}
 %
-where $F_{t}$ is the kernel-averaged fluorescence at frame $t$ and
-$\bar{F}$ is the running-window mean computed over a preceding baseline
-window of fixed duration. The sign convention in the denominator ensures
-that $y_{t}$ correctly represents fractional change even when $\bar{F}$
-is negative, which can occur due to hemodynamic artifacts in uncorrected
-signals. We computed and visualized the $\Delta F/F$ trace continuously
-on the GUI throughout the session.
+where $F_{t}$ is the kernel-averaged fluorescence at frame $t$ and $\bar{F}$ is the running-window mean computed over a preceding baseline window of fixed duration(40 seconds).
+
+\subsubsection*{System Characterization}
+For input-output mapping we designed experiments where impulse reponse data was collected for three session in two different mice.
+We defined inhibition energy as $\sum_{t=0}^{T} y_t^2$, where $T = 200ms$ was the determined as the settling time of the trial-averaged response for any input amplitude.
+
 
 \subsubsection*{Trial structure and experimental design}
 
