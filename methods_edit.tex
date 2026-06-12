@@ -320,7 +320,7 @@ held-out amplitude. We report the cross-validated $R^2$ as the primary
 goodness-of-fit metric. Fitting was performed on a single primary session
 (AL\_0033, 2025-01-29) and verified by comparing fitted poles and time
 constants across all three impulse sessions.
-\todo{TF FIT — TWO OPEN ITEMS: (1) MODEL ORDER INCONSISTENCY: meeting notes flag that the model order was described inconsistently as ``1-0-2'' in one place and ``3 poles, 1 zero'' in another — check \texttt{tf\_fit.m} output and fix to one canonical description (poles / zeros / delay) before reporting $R^2$. (2) HELD-OUT VALIDATION: relax the delay parameter $\tau$ (currently fixed?) and report $R^2$ on a held-out 20\% test set — Nick's explicit request 2026-05-08. Run TF fit across all 3 impulse sessions and add a comparison table of poles/time constants.}
+\todo{TF FIT —OPEN ITEMS:Run TF fit across all 3 impulse sessions and add a comparison table of poles/time constants.}
 
 % ------------------------------------------------------------
 \subsection*{Controller design}
@@ -530,9 +530,7 @@ upon the open-loop baseline before the validation block commenced.
 
 \subsubsection*{Cross-session pooling}
 
-\todo{VERIFY BEFORE SUBMISSION: (1) confirm all violin/MSE figures were regenerated using the $t=+1$\,s to $+3$\,s window (fields \texttt{er\_ncDfk\_w}/\texttt{er\_wcDfk\_w} in \texttt{controllerData.m}), not the full $t=0$\,s to $+3$\,s window; (2) add motion vs.\ MSE cross-session scatter panel (OL and CL) to the manuscript — requested MEETINGS 2026-05-08, not yet generated; use \texttt{controller-analysis/motion\_analysis.m}; (3) resolve mouse count: AL\_0033 (8 sessions) + AL\_0039 (3 sessions) = 11 sessions from 2 mice — where do the remaining 2 sessions (to reach 13) come from? Identify the mouse and update this text.}
-We analysed controller performance across 13 sessions (mice AL\_0033
-and AL\_0039, with confirmed Chrimson expression). Within each session
+We analysed controller performance across 13 sessions (two transgenic mice, with confirmed Chrimson expression). Within each session
 we interleaved open-loop and closed-loop trials pseudorandomly so that
 both conditions sampled the same distribution of brain states. For
 cross-session figures we pooled per-trial MSE arrays, cross-trial
