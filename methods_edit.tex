@@ -279,7 +279,39 @@ variance across trials as a function of time to assess the stability of
 the response and the validity of Assumption~\ref{assm:trial_avg} across
 sessions.
 
-\todo{MISSING SUPPLEMENTARY PANEL: generate spatial-spread figure — inhibition area ($\Delta F/F$ suppression footprint) vs.\ laser power across amplitude levels. Cite Nuoli/Svoboda for spatial spread of Chrimson activation. Add as supplementary figure with caption. Use \texttt{impulse-analysis/spatial\_spread.m}.}
+To characterize the spatial footprint of the optogenetic suppression, we
+mapped the trial-averaged response ($\Delta F/F$ relative to baseline) across
+the imaged cortex at each stimulation amplitude and quantified the inhibition
+area as the number of pixels whose background-subtracted response fell below a
+fixed threshold (50\% of the strongest-amplitude local median), converted to
+mm$^2$ (0.173\,mm per pixel). The background offset was estimated per amplitude
+from an annulus 6--9\,mm from the response peak to remove the global
+hemodynamic component. The suppression remained spatially focal at the
+stimulation site and grew monotonically with laser power
+(Fig.~\ref{fig:spatial_spread}), consistent with the graded spatial recruitment
+of Chrimson reported previously \todo{add citation: Nuoli / Svoboda for spatial spread of Chrimson activation --- insert correct \texttt{.bib} keys}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.46\linewidth]{images/spatial_spread.pdf}
+    \caption{\textbf{Spatial spread of optogenetic inhibition with laser power}
+    (AL\_0033, 2025-01-29). Inhibition area (thresholded $\Delta F/F$
+    suppression footprint, mm$^2$) versus stimulation amplitude. The
+    suppression is focal at low power and expands with increasing amplitude.
+    Per-amplitude response maps are shown in
+    Fig.~\ref{fig:spatial_maps}.}
+    \label{fig:spatial_spread}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{images/spatial_maps.png}
+    \caption{\textbf{Mean response maps across stimulation amplitudes}
+    (AL\_0033, 2025-01-29). Trial-averaged $\Delta F/F$ (\%) maps at each
+    amplitude; the white cross marks the response peak from the strongest
+    amplitude. A focal suppression (blue) deepens and widens with laser power.}
+    \label{fig:spatial_maps}
+\end{figure}
 
 \subsubsection*{Inhibition energy quantification}
 \label{sec:inhib_energy}
@@ -319,8 +351,34 @@ one and evaluated the normalized root-mean-square prediction error at the
 held-out amplitude. We report the cross-validated $R^2$ as the primary
 goodness-of-fit metric. Fitting was performed on a single primary session
 (AL\_0033, 2025-01-29) and verified by comparing fitted poles and time
-constants across all three impulse sessions.
-\todo{TF FIT —OPEN ITEMS:Run TF fit across all 3 impulse sessions and add a comparison table of poles/time constants.}
+constants across all three impulse sessions (Table~\ref{tab:tf_sessions}). Two
+of the three sessions yielded closely matching low-order fits, with dominant
+time constants of 271\,ms and 196\,ms and a weakly damped resonance near
+2--3\,Hz (pooled $R^2 = 0.80$ and $0.74$), consistent with the $\sim$200\,ms
+settling time reported in the impulse responses. The remaining session was
+low signal-to-noise and its fit degenerated to a slow drift ($R^2 = 0.48$); it
+was therefore excluded from time-constant estimation. The agreement of the
+dominant time constants across the two well-fit sessions supports the
+stationary linear time-invariant approximation used for controller design.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{lcccc}
+        \hline
+        Session & Order (poles/zeros) & Dominant $\tau$ (ms) & Damped freq.\ (Hz) & Pooled $R^2$ \\
+        \hline
+        AL\_0033 2025-01-29       & 2 / 0 & 271          & 2.2 & 0.80 \\
+        AL\_0041 2025-12-02 (i)   & 3 / 1 & 196          & 2.8 & 0.74 \\
+        AL\_0041 2025-12-02 (ii)  & 2 / 1 & \emph{(low SNR)} & 1.8 & 0.48 \\
+        \hline
+    \end{tabular}
+    \caption{Transfer-function fits across the three impulse sessions
+        (AIC-selected order; continuous-time poles). Dominant time constant
+        $\tau = -1/\mathrm{Re}(\text{pole})$. The two high-$R^2$ sessions agree
+        on a $\sim$200--270\,ms dominant constant and a 2--3\,Hz weakly damped
+        mode; the low-SNR session is excluded from time-constant estimation.}
+    \label{tab:tf_sessions}
+\end{table}
 
 % ------------------------------------------------------------
 \subsection*{Controller design}
@@ -419,8 +477,10 @@ empirically \citep{Astrom1995}.
 
 \subsubsection*{Performance metric}
 
-We quantified controller performance using the mean-squared tracking
-error accumulated over each trial. The per-trial tracking cost for an
+We quantified controller performance using the squared tracking error
+accumulated over each trial (the per-trial tracking cost); in figures this
+cost is reported normalized by the number of samples in the evaluation window
+as a per-trial mean-squared error (MSE). The per-trial tracking cost for an
 experiment initiated at latent state $x_{0}$ under gain $K$ is:
 %
 \begin{equation}
@@ -458,10 +518,13 @@ Under Assumption~\ref{assm:trial_avg}, $\hat{J}(K) \to J(K)$ as $N \to
 which decreases at rate $\mathcal{O}(1/\sqrt{N})$ for independent,
 identically distributed trials. In practice, $R(N,K)$ can be inflated
 by brain-state non-stationarity across the session (see Discussion).
-For cross-session performance comparisons we evaluated the windowed
-tracking cost over $t = +1\,\text{s}$ to $+3\,\text{s}$ post-laser onset
-rather than the full trial window, to exclude the early inhibitory
-transient that precedes the controller's settling phase.
+We evaluated the per-trial tracking cost over two windows: the full
+stimulation window ($t = 0$ to $+3\,\text{s}$), used for the per-trial and
+cross-session MSE distributions (\texttt{er\_ncDfk}/\texttt{er\_wcDfk}), and a
+settled window ($t = +1\,\text{s}$ to $+3\,\text{s}$), used only for the
+disturbance-rejection comparison (\texttt{er\_ncDfk\_w}/\texttt{er\_wcDfk\_w})
+to exclude the early inhibitory transient that precedes the controller's
+settling phase.
 
 \subsubsection*{Zeroth-order gain search}
 
@@ -530,7 +593,7 @@ upon the open-loop baseline before the validation block commenced.
 
 \subsubsection*{Cross-session pooling}
 
-We analysed controller performance across 13 sessions (two transgenic mice, with confirmed Chrimson expression). Within each session
+We analysed controller performance across 13 sessions from two transgenic mice (AL\_0033, 9 sessions; AL\_0039, 4 sessions), all with confirmed Chrimson expression. Within each session
 we interleaved open-loop and closed-loop trials pseudorandomly so that
 both conditions sampled the same distribution of brain states. For
 cross-session figures we pooled per-trial MSE arrays, cross-trial
@@ -570,6 +633,22 @@ indicates dependence of tracking error on initial brain state; a
 near-zero closed-loop slope indicates that feedback control decouples
 performance from pre-trial state.
 
+\subsubsection*{Motion-disturbance analysis}
+
+To test whether closed-loop feedback rejects movement-driven disturbance, we
+related per-trial tracking MSE to concurrent motion energy. For each session
+with face-video motion capture, we averaged the z-scored motion energy over the
+stimulation window of each trial and z-scored the per-trial MSE within session
+using the pooled open- and closed-loop distribution (preserving the
+between-condition level difference while removing session-to-session scale
+differences). We regressed within-session normalized MSE on motion energy
+separately for open- and closed-loop trials, yielding one slope per condition
+per session, and compared open- versus closed-loop slopes across sessions with
+a Wilcoxon signed-rank test (the motion~$\times$~condition interaction). As a
+companion analysis, we pooled trials across sessions, binned them by motion
+quartile, and compared open- versus closed-loop MSE within the highest motion
+quartile with a rank-sum test.
+
 \subsubsection*{Widebrain ARX model}
 
 To quantify how much of the ipsilateral output activity can be explained
@@ -602,10 +681,37 @@ the stimulation window. We assessed batch-size convergence
 $\mathrm{Var}(y_{t})$ as a function of increasing batch size $N$,
 averaged over five independent subsamples per batch size.
 
+Paired across-session comparisons (open-loop vs.\ closed-loop variance and
+MSE ratios per window) used the two-sided Wilcoxon signed-rank test;
+unpaired comparisons of pooled trial distributions (e.g.\ open- vs.\
+closed-loop MSE within a motion quartile) used the Wilcoxon rank-sum test.
+Trend and dependence relationships (per-trial mean vs.\ acquisition order;
+MSE vs.\ pre-stimulus variance; MSE vs.\ motion energy) were quantified by
+ordinary least-squares regression slopes with their $t$-test $p$-values, and
+corroborated by the non-parametric Spearman rank correlation. Where multiple
+sessions were tested in parallel (batch-mean stationarity), we report
+Bonferroni-corrected significance. The direction balance of per-session slopes
+was assessed with a two-sided sign test. Significance was taken at
+$\alpha = 0.05$ unless a corrected threshold is stated.
+
 
 \begin{figure}
     \centering
     \includegraphics[width=0.5\linewidth]{images/spont_variance.png}
     \caption{Convergence of trial-averaged $\Delta F/F$ variance with batch size, supporting the trial-averaging assumption. Mean total variance $\mathrm{Var}(y_t)$, averaged across the spontaneous-activity window and over five independent random subsamples per batch size, plotted as a function of the number of trials $N$ included in the average. Each line is one session. Variance stabilizes beyond approximately 50 trials per session, indicating that the 100-trial validation blocks provide a reliable estimate of the trial-averaged response.}
     \label{fig:S1}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\linewidth]{images/batch_mean_stationarity.png}
+    \caption{Stationarity of the spontaneous batch mean across acquisition
+    order. For each session, the per-trial mean spontaneous $\Delta F/F$ (gray
+    points) is plotted against trial index, with an ordinary least-squares fit
+    (red). No session shows a significant trend (all $p > 0.24$; per-panel
+    $p$-values shown), confirming that the spontaneous mean does not drift over
+    the session and that variance convergence (Fig.~\ref{fig:S1}) reflects a
+    stationary, approximately zero-mean disturbance rather than an averaging
+    artefact of a drifting mean.}
+    \label{fig:S2}
 \end{figure}
