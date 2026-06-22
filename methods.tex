@@ -395,6 +395,42 @@ grid sweep (Figure~\ref{fig:cost_landscape}B). A controller was considered accep
 where $\hat{J}(\mathbf{0})$ is the empirical cost of the open-loop (feedforward-only) controller, ensuring that feedback
 control was validated to improve upon the open-loop baseline before the validation block commenced.
 
+\subsection*{Disturbance attribution analysis}
+\label{sec:disturbance}
+
+To identify the sources of residual trial-to-trial tracking error, we related the per-trial open- and
+closed-loop tracking error to concurrent movement and to pre-stimulus cortical state.
+
+\subsubsection*{Per-trial tracking error}
+
+For each trial, tracking error was quantified as the root-mean-squared deviation of the output $y_t$ from the
+reference $y_{\mathrm{ref}}$ over the window $t = +1$ to $+3$\,s relative to laser onset; the initial
+$0$--$1$\,s interval was excluded so that the metric captured steady-state regulation rather than the
+inhibitory onset transient. Per-trial error was z-scored within each session to permit pooling across
+sessions, and high-error trials were defined as the top quartile of the within-session error distribution.
+
+\subsubsection*{Movement disturbance}
+
+Concurrent movement was quantified from a simultaneously acquired behavioral video as a per-trial
+motion-energy scalar, averaged over the trial window and z-scored within session. For each session with
+simultaneous motion capture ($n = 9$), z-scored per-trial motion energy was regressed on z-scored tracking
+error separately for open- and closed-loop trials, and the resulting slopes were compared between conditions
+using the Wilcoxon signed-rank test. Trials with z-scored motion energy exceeding $1.5$ were classified as
+high-motion and excluded from the spectral analysis below.
+
+\subsubsection*{Low-frequency spontaneous fluctuations}
+
+To isolate the contribution of spontaneous cortical activity from movement, the spectral analysis was
+restricted to motion-clean trials (z-scored motion energy $\leq 1.5$). For each retained trial, the power
+spectrum of the $\Delta F/F$ output was estimated in $0.5$\,Hz bins spanning $0$--$10$\,Hz, and the
+\emph{low-frequency power} was defined as the integrated absolute power in the $1$--$4$\,Hz band over the
+pre-stimulus interval preceding laser onset. Absolute power ($(\Delta F/F)^2\,\mathrm{Hz}^{-1}$) was used
+throughout, without normalization or z-scoring of the spectra. We then quantified the fraction of high-error
+closed-loop trials (top error quartile) that coincided with elevated pre-stimulus low-frequency power, to
+estimate the share of residual closed-loop tracking error attributable to low-frequency spontaneous
+fluctuations rather than to movement. Representative low- and high-error single-trial spectra are reported as
+a supplementary figure (Figure~S\ref{fig:lowfreq_examples}).
+
 \section*{Supplementary Data}
 
 \subsection*{Statistical analysis}
@@ -416,4 +452,17 @@ of increasing batch size $N$, averaged over five independent subsamples per batc
     \includegraphics[width=0.5\linewidth]{images/spont_variance.png}
     \caption{Total variance as a function of trial batch size across experiment sessions}
     \label{fig:variance_batch}
+\end{figure}
+
+% PLACEHOLDER -- representative low-frequency spectral examples (AL to select trials/sessions).
+% Drop the chosen good-/bad-trial spectra into images/lowfreq_examples.* and remove the TODO note.
+\begin{figure}
+    \centering
+    % \includegraphics[width=0.7\linewidth]{images/lowfreq_examples.pdf}
+    \todo{Representative single-trial spectra: a low-error and a high-error motion-clean closed-loop trial,
+    showing pre-stimulus $\Delta F/F$ power $(\Delta F/F)^2$/Hz with the $1$--$4$\,Hz low-frequency band
+    highlighted. Example trials to be selected by AL.}
+    \caption{Representative pre-stimulus power spectra for a low-error and a high-error motion-clean
+    closed-loop trial. Low-frequency ($1$--$4$\,Hz) power is elevated on the high-error trial.}
+    \label{fig:lowfreq_examples}
 \end{figure}
