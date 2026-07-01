@@ -19,7 +19,7 @@ The reduction in trial-to-trial variability observed under closed-loop stimulati
 trial responses are perturbations of the nominal trajectory $\bar{\Sigma}_{\bar{x}_0}$ driven by the disturbance $d_t$
 and parameter variation $\rho_t - \bar{\rho}$. These perturbations are zero-mean in expectation but nonzero on
 individual trials, and they constitute the primary source of cross-trial variance under open-loop conditions. The PI
-controller (Equation~\ref{eq:controller}) suppresses these deviations through two complementary mechanisms: the
+controller (Equation~\ref{eq:pi}) suppresses these deviations through two complementary mechanisms: the
 proportional term $K_p(y_{\mathrm{ref}} - y_t)$ provides immediate timestep-level correction, while the integral term
 accumulates error across time to eliminate persistent offsets arising from bias in $K_r$ or slow drift in the latent
 state. Together, these terms implement active disturbance rejection within the augmented closed-loop system
