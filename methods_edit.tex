@@ -526,34 +526,70 @@ disturbance-rejection comparison (\texttt{er\_ncDfk\_w}/\texttt{er\_wcDfk\_w})
 to exclude the early inhibitory transient that precedes the controller's
 settling phase.
 
-\subsubsection*{Zeroth-order gain search}
+\subsubsection*{Gain-grid sweep and zeroth-order auto-tuning}
 
+We selected the controller gains with two complementary, model-free
+procedures: an offline grid sweep that maps the cost surface, and an
+online zeroth-order search in which the controller tunes its own gains.
 Direct gradient-based optimization of $J(K)$ is infeasible because
-gradients cannot be computed analytically without an explicit system
-model, and because the number of trials required to estimate $J(K)$
-accurately is limited by experimental constraints. Instead, we mapped
-the empirical cost landscape over a grid of candidate gains $K \in
-[0,\,0.3] \times [0,\,0.1]$ (Fig.~\ref{fig:cost_landscape}A), then
-refined using the model-free zeroth-order search described in
-Algorithm~\ref{alg:zo}.
+gradients cannot be computed without an explicit system model and because
+the number of trials required to estimate $J(K)$ accurately is limited by
+experimental constraints. For both procedures we scored each gain by the
+trial-averaged root-mean-square tracking deviation,
+%
+\begin{equation}
+    \hat{J}_{\mathrm{rms}}(K) = \frac{1}{N}\sum_{i=1}^{N}
+        \big\| y_i - y_{\mathrm{ref}} \big\|_2 ,
+    \label{eq:rms_cost}
+\end{equation}
+%
+evaluated over the stimulation window ($t = 0$ to $+3\,\text{s}$; $0$ to
+$+4\,\text{s}$ for the one session that used a $4\,\text{s}$ stimulus).
+This is the square root of the per-trial squared cost $c(x_0;K)$ in
+\eqref{eq:trial_cost} and shares the same minimizer, so the location of
+the cost-surface minimum is identical whether scored as RMS deviation or
+mean-squared error.
+
+In the grid sessions, a single session cycled through a fixed set of PI
+controllers with $K=(K_p,K_i)$ spanning $[0,\,0.3]\times[0,\,0.1]$,
+grouping trials by controller to estimate $\hat{J}_{\mathrm{rms}}(K)$ at
+each node (Fig.~\ref{fig:cost_landscape}A). The resulting surface
+exhibited a single low-cost basin, which replicated across mice: an
+independent grid in a second mouse (AL\_0034, scored over its
+$4\,\text{s}$ window) recovered the same low-cost region
+(Fig.~\ref{fig:cost_landscape}B). In separate auto-tuning sessions the
+controller adjusted its own gains online using the model-free,
+zeroth-order search of Algorithm~\ref{alg:zo}.
 
 \begin{figure}[!ht]
     \centering
-    \begin{subfigure}[t]{0.6\linewidth}
-        \includegraphics[width=\linewidth]{images/jval_controllers2503051.png}
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width=\linewidth]{images/tuning/grid_cost_surface_AL_0033_0305.pdf}
         \caption*{\textbf{A}}
     \end{subfigure}
-    \begin{subfigure}[t]{\linewidth}
-        \includegraphics[width=\linewidth]{images/opt.png}
+    \hfill
+    \begin{subfigure}[t]{0.49\linewidth}
+        \includegraphics[width=\linewidth]{images/tuning/grid_cost_surface_AL_0034_1017.pdf}
         \caption*{\textbf{B}}
     \end{subfigure}
-    \caption{\textbf{Controller gain optimization.}
-        \textbf{A:} Empirical cost landscape $\hat{J}(K)$ over the gain
-        grid $K \in [0,\,0.3]\times[0,\,0.1]$, used to initialise the
-        zeroth-order search for a representative session.
-        \textbf{B:} Trajectory of candidate gain vectors during the
-        zeroth-order search; each point shows $\hat{J}(K)$ for one
-        candidate, illustrating convergence toward a low-cost gain.}
+    \\[0.5em]
+    \begin{subfigure}[t]{\linewidth}
+        \centering
+        \includegraphics[width=0.92\linewidth]{images/tuning/autotune_convergence_both.pdf}
+        \caption*{\textbf{C}}
+    \end{subfigure}
+    \caption{\textbf{Controller gain tuning.}
+        \textbf{A:} Empirical cost surface $\hat{J}_{\mathrm{rms}}(K)$ over a
+        grid of fixed PI gains for a representative session (AL\_0033),
+        showing a single low-cost basin (minimum marked).
+        \textbf{B:} Independent grid in a second mouse (AL\_0034, scored
+        over its $4\,\text{s}$ stimulation window) recovering the same
+        low-cost basin (cross-mouse replication).
+        \textbf{C:} Online zeroth-order auto-tuning in both mice: the
+        accepted gain trajectory $(K_p,K_i)$ and the running cost
+        $\hat{J}_{\mathrm{rms}}$ versus iteration. Cost descends
+        monotonically in each mouse, and in AL\_0033 the auto-tuned gains
+        settle within the grid-identified basin of panel~A.}
     \label{fig:cost_landscape}
 \end{figure}
 
@@ -561,31 +597,36 @@ Algorithm~\ref{alg:zo}.
 \caption{Zeroth-order controller gain search}
 \label{alg:zo}
 \begin{algorithmic}[1]
-\State \textbf{Initialize:} gain $K_0 = [K_p^{(0)},\,K_i^{(0)}]$, step size $r$
+\State \textbf{Initialize:} gains $K_{\text{best}} = [K_p^{(0)},\,K_i^{(0)}]$;
+       per-axis step $\mathbf{r} = [r_p,\,r_i]$; anneal factor $\gamma \in (0,1)$
 \For{$i = 1$ \textbf{to} $I$}
-    \State Sample $\mathbf{v}$ uniformly from the unit 2-sphere
-    \State Propose $K_i \leftarrow K_{i-1} + r\,\mathbf{v}$
+    \State Sample unit direction $\mathbf{v}$ uniformly on the circle
+    \State Propose $K \leftarrow K_{\text{best}} + \mathbf{r}\odot\mathbf{v}$
     \For{$j = 1$ \textbf{to} $N$}
-        \State Run one trial of length $T$ under controller $K_i$
-        \State Compute $C_j = \sum_{t=0}^{T}\|z_j(t)\|^2$
+        \State Run one trial under controller $K$; record $\|y_j - y_{\mathrm{ref}}\|_2$
     \EndFor
-    \State Compute $\hat{J}(K_i) = \frac{1}{N}\sum_{j=1}^{N} C_j$
-    \If{$\hat{J}(K_i) \geq \hat{J}(K_{i-1})$}
-        \State $K_i \leftarrow K_{i-1}$ \Comment{Reject update}
-        \State $r \leftarrow r/2$     \Comment{Shrink step size}
-    \EndIf
+    \State $\hat{J}_{\mathrm{rms}}(K) \leftarrow \frac{1}{N}\sum_{j=1}^{N}\|y_j - y_{\mathrm{ref}}\|_2$
+    \If{$\hat{J}_{\mathrm{rms}}(K) < \hat{J}_{\mathrm{rms}}(K_{\text{best}})$}
+        \State $K_{\text{best}} \leftarrow K$ \Comment{Accept (lower cost)}
+    \EndIf \Comment{else retain $K_{\text{best}}$}
+    \State $\mathbf{r} \leftarrow \gamma\,\mathbf{r}$ \Comment{Anneal step size}
 \EndFor
+\State \textbf{return} $K_{\text{best}}$
 \end{algorithmic}
 \end{algorithm}
 
-The algorithm accepts a new gain vector only when it strictly reduces
-$\hat{J}$; otherwise the current gain is retained and the search radius
-is halved. We initialized the optimization with $K_{0}$ set to the
-best-performing gain from the grid sweep (Fig.~\ref{fig:cost_landscape}A).
-We considered a controller acceptable if $\hat{J}(K) \leq \hat{J}(0)$,
-where $\hat{J}(0)$ is the empirical cost of the open-loop
-(feedforward-only) controller, ensuring that feedback control improved
-upon the open-loop baseline before the validation block commenced.
+The search accepts a candidate only when it strictly reduces
+$\hat{J}_{\mathrm{rms}}$ relative to the running best; otherwise the
+previous gains are restored, and the step size is annealed after every
+iteration. The grid sweep and the auto-tuning runs were performed in
+separate sessions within each mouse rather than as a single pipeline, so
+the agreement between the grid-identified basin and the independently
+auto-tuned gains (Fig.~\ref{fig:cost_landscape}A,C) provides a
+within-mouse cross-check of the tuning. We considered a controller
+acceptable if $\hat{J}(K) \leq \hat{J}(0)$, where $\hat{J}(0)$ is the
+empirical cost of the open-loop (feedforward-only) controller, ensuring
+that feedback control improved upon the open-loop baseline before the
+validation block commenced.
 
 % ------------------------------------------------------------
 \subsection*{Offline data analysis}
