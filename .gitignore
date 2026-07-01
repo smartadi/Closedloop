@@ -1,0 +1,42 @@
+# LaTeX build artifacts — keep the repo clean for the Overleaf sync workflow.
+# NOTE: do NOT add a blanket "*.pdf" here — figure PDFs under images/ are source
+# files that Overleaf needs to compile. Only the root-level compiled main.pdf is ignored.
+
+## Core auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fmt
+*.fot
+
+## Bibliography (bibtex / biblatex / biber)
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*-blx.aux
+*-blx.bib
+
+## latexmk / synctex build state
+*.fdb_latexmk
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.pdfsync
+
+## Intermediate documents
+*.dvi
+*.xdv
+*-converted-to.*
+
+## Editor / OS cruft
+.vscode/
+.DS_Store
+Thumbs.db
+
+## Compiled output (Overleaf compiles server-side; don't track the built PDF)
+/main.pdf
