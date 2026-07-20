@@ -478,10 +478,13 @@ empirically \citep{Astrom1995}.
 \subsubsection*{Performance metric}
 
 We quantified controller performance using the squared tracking error
-accumulated over each trial (the per-trial tracking cost); in figures this
-cost is reported normalized by the number of samples in the evaluation window
-as a per-trial mean-squared error (MSE). The per-trial tracking cost for an
-experiment initiated at latent state $x_{0}$ under gain $K$ is:
+accumulated over each trial (the per-trial tracking cost). In figures this
+cost is reported as a per-trial root-mean-squared error (RMSE), that is, the
+square root of the cost normalized by the number of samples in the evaluation
+window, so that reported values carry the same units as $\Delta F/F$. Because
+the square root is monotone, ranking trials or gains by RMSE is equivalent to
+ranking them by the accumulated squared cost. The per-trial tracking cost for
+an experiment initiated at latent state $x_{0}$ under gain $K$ is:
 %
 \begin{equation}
     c(x_{0};\,K) = \sum_{t=0}^{T} \|z(t)\|^{2},
@@ -520,7 +523,7 @@ identically distributed trials. In practice, $R(N,K)$ can be inflated
 by brain-state non-stationarity across the session (see Discussion).
 We evaluated the per-trial tracking cost over two windows: the full
 stimulation window ($t = 0$ to $+3\,\text{s}$), used for the per-trial and
-cross-session MSE distributions (\texttt{er\_ncDfk}/\texttt{er\_wcDfk}), and a
+cross-session RMSE distributions (\texttt{er\_ncDfk}/\texttt{er\_wcDfk}), and a
 settled window ($t = +1\,\text{s}$ to $+3\,\text{s}$), used only for the
 disturbance-rejection comparison (\texttt{er\_ncDfk\_w}/\texttt{er\_wcDfk\_w})
 to exclude the early inhibitory transient that precedes the controller's
@@ -547,7 +550,7 @@ evaluated over the stimulation window ($t = 0$ to $+3\,\text{s}$; $0$ to
 $+4\,\text{s}$ for the one session that used a $4\,\text{s}$ stimulus).
 This is the square root of the per-trial squared cost $c(x_0;K)$ in
 \eqref{eq:trial_cost} and shares the same minimizer, so the location of
-the cost-surface minimum is identical whether scored as RMS deviation or
+the cost-surface minimum is identical whether scored as RMSE or
 mean-squared error.
 
 In the grid sessions, a single session cycled through a fixed set of PI
@@ -637,7 +640,7 @@ validation block commenced.
 We analysed controller performance across 13 sessions from two transgenic mice (AL\_0033, 9 sessions; AL\_0039, 4 sessions), all with confirmed Chrimson expression. Within each session
 we interleaved open-loop and closed-loop trials pseudorandomly so that
 both conditions sampled the same distribution of brain states. For
-cross-session figures we pooled per-trial MSE arrays, cross-trial
+cross-session figures we pooled per-trial RMSE arrays, cross-trial
 variance time-courses, and power spectral estimates. Sessions were
 included if the opsin expression was confirmed and at least 40 valid
 trials were obtained per condition after motion exclusion.
@@ -667,7 +670,7 @@ cross-session comparisons.
 To assess whether pre-trial brain state predicted controller performance,
 we computed the cross-trial variance of $\Delta F/F$ over a 3\,s window
 immediately preceding laser onset for each trial. We regressed per-trial
-tracking MSE (windowed, $t = +1$--$+3\,\text{s}$) on this pre-stimulus
+tracking RMSE (windowed, $t = +1$--$+3\,\text{s}$) on this pre-stimulus
 variance separately for open-loop and closed-loop conditions and compared
 the resulting regression slopes across sessions. A positive slope
 indicates dependence of tracking error on initial brain state; a
@@ -677,17 +680,17 @@ performance from pre-trial state.
 \subsubsection*{Motion-disturbance analysis}
 
 To test whether closed-loop feedback rejects movement-driven disturbance, we
-related per-trial tracking MSE to concurrent motion energy. For each session
+related per-trial tracking RMSE to concurrent motion energy. For each session
 with face-video motion capture, we averaged the z-scored motion energy over the
-stimulation window of each trial and z-scored the per-trial MSE within session
+stimulation window of each trial and z-scored the per-trial RMSE within session
 using the pooled open- and closed-loop distribution (preserving the
 between-condition level difference while removing session-to-session scale
-differences). We regressed within-session normalized MSE on motion energy
+differences). We regressed within-session normalized RMSE on motion energy
 separately for open- and closed-loop trials, yielding one slope per condition
 per session, and compared open- versus closed-loop slopes across sessions with
 a Wilcoxon signed-rank test (the motion~$\times$~condition interaction). As a
 companion analysis, we pooled trials across sessions, binned them by motion
-quartile, and compared open- versus closed-loop MSE within the highest motion
+quartile, and compared open- versus closed-loop RMSE within the highest motion
 quartile with a rank-sum test.
 
 \subsubsection*{Widebrain ARX model}
@@ -723,11 +726,11 @@ $\mathrm{Var}(y_{t})$ as a function of increasing batch size $N$,
 averaged over five independent subsamples per batch size.
 
 Paired across-session comparisons (open-loop vs.\ closed-loop variance and
-MSE ratios per window) used the two-sided Wilcoxon signed-rank test;
+RMSE ratios per window) used the two-sided Wilcoxon signed-rank test;
 unpaired comparisons of pooled trial distributions (e.g.\ open- vs.\
-closed-loop MSE within a motion quartile) used the Wilcoxon rank-sum test.
+closed-loop RMSE within a motion quartile) used the Wilcoxon rank-sum test.
 Trend and dependence relationships (per-trial mean vs.\ acquisition order;
-MSE vs.\ pre-stimulus variance; MSE vs.\ motion energy) were quantified by
+RMSE vs.\ pre-stimulus variance; RMSE vs.\ motion energy) were quantified by
 ordinary least-squares regression slopes with their $t$-test $p$-values, and
 corroborated by the non-parametric Spearman rank correlation. Where multiple
 sessions were tested in parallel (batch-mean stationarity), we report
