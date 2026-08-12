@@ -31,6 +31,46 @@ characterization confirmed. The convergence $\hat{J}(K) \to J(K)$ guaranteed by 
 further implies that variance reduction will be most reliable when brain state is approximately stationary across the
 session, consistent with the empirical observations and with the variance convergence in Fig.~\ref{fig:S1}.
 
+\subsection*{Feedback and preview address separable components of tracking error}
+
+Extending the controller from a constant reference to a time-varying one separates two failures that a
+regulator does not have to distinguish. Tracking a moving target requires both that the response follow the
+reference in time and that it not wander between trials, and these are limited by different things. The phase lag
+of the response is a property of the plant: the cortical impulse response has a finite rise time, so a causal
+controller driven by the instantaneous error necessarily trails a moving reference, and increasing feedback gain
+cannot remove that lag without destabilizing the loop. Trial-to-trial dispersion, by contrast, is driven by the
+disturbance $d_t$ and is exactly what the integral action of Equation~\eqref{eq:pi} suppresses. Preview
+addresses the first and feedback the second, and the sinusoidal experiments show each acting on its own component
+with little interaction: preview reduced the error at the drive frequency roughly threefold in every comparison
+while leaving broadband error unchanged, and feedback reduced broadband error while leaving the phase relationship
+largely intact.
+
+This separation has a practical consequence for how such controllers should be specified. Root-mean-square error,
+the metric that quantifies regulation performance in the constant-reference case, is a poor summary once the
+reference moves, because it sums contributions that different design choices control. In our data the majority of
+total error power sat in a constant-offset term that neither mechanism targets, which is why preview---an
+unambiguous improvement in phase---produced no detectable change in RMSE. A tracking controller is better
+specified by reporting the error at the reference frequency and the broadband error separately, and we suggest
+that studies extending closed-loop neural control to time-varying targets adopt this decomposition rather than
+report a single error norm.
+
+We deliberately did not tune the preview horizon. The lookahead was fixed at five samples ($143$\,ms at 35\,Hz),
+chosen to approximate the measured response delay, and the resulting correction matched that value closely
+($51.4^\circ$ at the 1\,Hz drive). Because the horizon was fixed rather than fitted, closed-loop preview slightly
+overcorrected---feedback had already removed part of the lag, so the same lookahead carried the response into
+phase lead. A horizon scheduled on the loop configuration, or estimated online from the residual phase error,
+would be a direct extension. More generally, preview here is the simplest member of a family: knowing the
+reference in advance is precisely the information a model-predictive controller exploits over a receding horizon,
+and the fact that a single fixed-lag shift already removes most of the at-frequency error suggests that the
+predictable component of the tracking problem is largely captured by the plant delay.
+
+Two limitations bound these conclusions. The tracking experiments come from a single mouse and a single
+hemisphere, at one drive frequency, so the frequency dependence that would characterize the closed-loop
+bandwidth is not established; the $80$\,ms loop latency (Fig.~\ref{fig:figure1}F) predicts that both effects
+should weaken as the reference frequency approaches the loop bandwidth, which remains to be tested. And with
+three sessions the repeated-measures test across modes is underpowered (Friedman $p = 0.060$), so the
+across-session claim rests on the consistency of the direction rather than on a session-level test.
+
 \subsection*{Relation to prior closed-loop neural control work}
 
 These results contribute to a growing literature demonstrating the feasibility of closed-loop optogenetic control for manipulating neural circuit dynamics. \citep{Newman2015} introduced a PI ``optoclamp'' that locked single-neuron firing rates to stationary targets in cultured networks and the anesthetized rat thalamus, establishing the feasibility of the PI control structure used here. \citep{bolus2021state} demonstrated state-space optimal feedback control of single-neuron firing rates in awake mice using linear-quadratic (LQ) design strategies requiring explicit system identification~\citep{van2012subspace} and disturbance identification. Our approach differs in that the underlying system is not identified step-by-step; instead, Assumption~\ref{assm:trial_avg} is exploited to bypass full identification, and the integral term of Equation~\eqref{eq:pi} compensates for model inaccuracies online. This makes the framework accessible in settings where the non-stationarity and parameter dependence of the cortical response render classical identification methods infeasible within the given experimental time-frame.

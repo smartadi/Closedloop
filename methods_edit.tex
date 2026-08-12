@@ -710,6 +710,17 @@ session-averaged open-loop impulse response; and (iii) contralateral
 pixels plus the per-trial laser command sequence convolved with the
 fitted transfer function (Section~\ref{sec:tf_fitting}).
 
+\subsubsection*{Disturbance decomposition and rejection}
+\label{sec:disturbance_decomp}
+
+To separate the part of the controlled response that feedback acts on from the part it cannot anticipate, we predicted the ipsilateral control readout from the contralateral hemisphere and used this prediction as a stimulation-blind estimate of the disturbance. On spontaneous, no-laser frames we fit an ordinary least-squares predictor from a grid of contralateral pixels (sampled inside the contralateral cortical mask, eroded at the boundary) to the ipsilateral output-kernel $\Delta F/F$, z-scoring each pixel on the training partition; pixels near the homotopic stimulation site whose apparent coupling was contaminated by direct optical crosstalk were excluded. The predictor was fit on a target-independent train/test split of spontaneous frames, and its generalization was confirmed on held-out pre-stimulus (no-laser) windows.
+
+On each stimulation trial we applied the fixed predictor to the concurrent contralateral activity to obtain the \emph{Global} component $G(t)$---the ipsilateral activity expected with no controller input---and defined the \emph{Local} component $L(t) = A(t) - G(t)$, where $A(t)$ is the measured ipsilateral response. We assessed the decomposition by reconstructing $A$ as $G$ plus the leave-one-trial-out average local response, reporting the cross-validated $R^2$ over the $0$--$3$\,s response window against nested null models (Global only; trial-average only).
+
+We quantified per-trial disturbance rejection as $\rho = \lVert A - r\rVert / \lVert G\rVert$, the ratio of the root-mean-square tracking error (referenced to the target $r = -5\%\,\Delta F/F$) to the root-mean-square disturbance, over the $1$--$3$\,s steady-state window (excluding the $0$--$1$\,s laser-evoked transient); $\rho = 0$ is perfect rejection, $\rho = 1$ a disturbance passed unattenuated, and $\rho > 1$ amplification. Open- and closed-loop $\rho$ were compared per session with the Wilcoxon rank-sum test.
+
+To test whether rejection depends on the pre-trial state, we classified $\rho$ against two state variables defined as in the motion-disturbance factor analysis: motion energy (mean squared z-scored motion over $-2$\,s to trial end) and relative $2$--$4$\,Hz (delta) power of the output $\Delta F/F$ (band power $2$--$4$\,Hz divided by $0.4$--$10$\,Hz total, over $-2$\,s to stimulation end, from a linearly detrended, Hann-tapered periodogram). Within each condition we binned trials into state quartiles on pooled open- and closed-loop edges, compared the median $\rho$ across quartiles, and summarized the monotonic dependence by the Spearman rank correlation between the continuous state and $\rho$.
+
 % ------------------------------------------------------------
 \subsection*{Statistical analysis}
 % ------------------------------------------------------------
