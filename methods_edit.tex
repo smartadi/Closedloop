@@ -666,6 +666,7 @@ across trials within each session and then across sessions for
 cross-session comparisons.
 
 \subsubsection*{Pre-stimulus state analysis}
+\label{sec:disturbance}
 
 To assess whether pre-trial brain state predicted controller performance,
 we computed the cross-trial variance of $\Delta F/F$ over a 3\,s window
@@ -676,6 +677,28 @@ the resulting regression slopes across sessions. A positive slope
 indicates dependence of tracking error on initial brain state; a
 near-zero closed-loop slope indicates that feedback control decouples
 performance from pre-trial state.
+
+We characterized the pre-stimulus state spectrally using a
+power-independent measure, the \emph{relative 2--4\,Hz power} of the output
+readout. For each trial we formed the ratio of band power in 2--4\,Hz---the
+sub-band least attenuated by the controller---to total power in
+0.4--10\,Hz, computed from a linear-detrended, Hann-windowed one-sided
+periodogram of the readout over the $-2$\,s to trial-end window; a
+pre-stimulus-only window ($-2$\,s to onset) gave the same result and served
+as a circularity control. Expressing the state as this relative ratio,
+rather than absolute band power, avoids the signal-power confound whereby
+any absolute spectral measure co-varies with the magnitude of the readout
+it is drawn from. To test state dependence without assuming a linear
+relationship, we binned trials into quartiles of each pre-stimulus state
+(initial deviation, motion energy, and relative 2--4\,Hz power), z-scored
+per-trial RMSE within session using the pooled open- and closed-loop
+distribution (preserving the between-condition level difference while
+removing session-to-session scale), and compared the open- versus
+closed-loop RMSE profile across quartiles. A state whose open-loop RMSE
+climbs from the lowest to the highest quartile while the closed-loop
+profile stays flat is a disturbance the controller decouples from tracking
+error; a state that the closed-loop profile tracks as steeply as (or more
+steeply than) open loop is one it cannot reject.
 
 \subsubsection*{Motion-disturbance analysis}
 
