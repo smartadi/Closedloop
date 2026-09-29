@@ -737,9 +737,9 @@ To separate the part of the controlled response that feedback acts on from the p
 
 On each stimulation trial we applied the fixed predictor to the concurrent contralateral activity to obtain the \emph{Global} component $G(t)$---the ipsilateral activity expected with no controller input---and defined the \emph{Local} component $L(t) = A(t) - G(t)$, where $A(t)$ is the measured ipsilateral response. We assessed the decomposition by reconstructing $A$ as $G$ plus the leave-one-trial-out average local response, reporting the cross-validated $R^2$ over the $0$--$3$\,s response window against nested null models (Global only; trial-average only).
 
-We quantified per-trial disturbance rejection as the fraction of disturbance energy removed, $\phi = 1 - \lVert A - r\rVert^2 / \lVert G\rVert^2$, where $\lVert A - r\rVert^2$ is the residual response energy (the measured response relative to the target $r = -5\%\,\Delta F/F$) and $\lVert G\rVert^2$ the energy of the Global disturbance, evaluated over the $1$--$3$\,s steady-state window (excluding the $0$--$1$\,s laser-evoked transient); $\phi = 1$ is perfect rejection, $\phi = 0$ none (the response merely passes the disturbance through), and $\phi < 0$ amplification. We summarised each session by its median $\phi$ and compared open- versus closed-loop rejection across sessions with the two-sided Wilcoxon signed-rank test.
+We quantified per-trial closed-loop disturbance rejection as an energy ratio $\mathrm{RR} = \lVert A - r\rVert^2 / \lVert D\rVert^2$, where $\lVert A - r\rVert^2$ is the residual response energy (the measured response relative to the target $r = -5\%\,\Delta F/F$) and $\lVert D\rVert^2$ the energy of the disturbance---the Global (contralaterally predicted) excursion referenced to its own no-laser baseline (leak-corrected)---evaluated over the $1$--$3$\,s steady-state window (excluding the $0$--$1$\,s laser-evoked transient); $\mathrm{RR} < 1$ indicates the controlled response carries less energy than the disturbance it counters. We tested whether closed-loop $\mathrm{RR}$ lies below one with a session-aware linear mixed-effects model on $\log \mathrm{RR}$, $\log\mathrm{RR} \sim 1 + (1 \mid \text{mouse}) + (1 \mid \text{mouse:session})$ (one-sided test of the intercept), and report the geometric-mean $\mathrm{RR}$ with its 95\% confidence interval. Two sessions in which the controller never reached the setpoint (settled mean farther than $1.5\%\,\Delta F/F$ from target), where the residual is dominated by a standing setpoint error rather than by disturbance rejection, were excluded.
 
-To test whether the rejection benefit depends on the pre-trial state, we used two state variables: motion energy (mean z-scored motion over $-2$\,s to trial end) and relative $2$--$4$\,Hz (delta) power of the output $\Delta F/F$ (band power $2$--$4$\,Hz divided by $0.4$--$10$\,Hz total, over $-2$\,s to stimulation end, from a linearly detrended, Hann-tapered periodogram). Binning trials into state quartiles on pooled open- and closed-loop edges, we took the open-minus-closed-loop difference in per-trial tracking RMSE within each quartile as the rejection benefit (Fig.~\ref{fig:figure4}D,E). Significance was assessed with a session-aware linear mixed-effects model fit to the raw settled-window ($1$--$3$\,s) RMSE, $\mathrm{RMSE} \sim \text{condition} \times \text{state} + (1 + \text{condition} \mid \text{session}) + (1 \mid \text{mouse})$, with the state centred and scaled within each session. The condition main effect estimates the overall open- versus closed-loop gap, and the condition-by-state interaction tests whether that gap varies with the state, a significant interaction identifying a disturbance whose rejection is state-dependent. Random per-session open/closed-loop slopes let each session contribute its own gap, so the test accounts for mouse and session structure rather than pooling trials, and we corroborated the per-session slope differences with a hierarchical (mouse\,$\rightarrow$\,session\,$\rightarrow$\,trial) bootstrap. The same model, with motion as the state on the $11$ motion-capture sessions, provided the test reported for the motion-disturbance panel (Fig.~\ref{fig:figure_motion}).
+To test whether the rejection benefit depends on the pre-trial state, we used two state variables: motion energy (mean z-scored motion over $-2$\,s to trial end) and relative $2$--$4$\,Hz (delta) power of the output $\Delta F/F$ (band power $2$--$4$\,Hz divided by $0.4$--$10$\,Hz total, over $-2$\,s to stimulation end, from a linearly detrended, Hann-tapered periodogram). Binning trials into state quartiles on pooled open- and closed-loop edges, we took the open-minus-closed-loop difference in per-trial tracking RMSE within each quartile as the rejection benefit (Fig.~\ref{fig:figure4}D). Significance was assessed with a session-aware linear mixed-effects model fit to the raw settled-window ($1$--$3$\,s) RMSE, $\mathrm{RMSE} \sim \text{condition} \times \text{state} + (1 + \text{condition} \mid \text{session}) + (1 \mid \text{mouse})$, with the state centred and scaled within each session. We summarise each state by two quantities read from this model: the open-loop state slope (the condition main effect on the open-loop level), which we report as the state's effect on \emph{predictability} (the open-loop disturbance), and the condition-by-state interaction, which we report as its effect on \emph{controllability} (steerability---the trend of the open-minus-closed-loop rejected fraction); we use these two terms operationally in the disturbance-rejection sense, not the structural (Kalman) sense. Random per-session open/closed-loop slopes let each session contribute its own gap, so the test accounts for mouse and session structure rather than pooling trials, and we corroborated the per-session slope differences with a hierarchical (mouse\,$\rightarrow$\,session\,$\rightarrow$\,trial) bootstrap. Non-spectral, non-motion states used all $11$ closed-loop sessions; motion used the $7$ with motion capture.
 
 % ------------------------------------------------------------
 \subsection*{Statistical analysis}
@@ -789,4 +789,39 @@ $\alpha = 0.05$ unless a corrected threshold is stated.
     stationary, approximately zero-mean disturbance rather than an averaging
     artefact of a drifting mean.}
     \label{fig:S2}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/supplementary/f4_exemplars_sessions.pdf}
+    \caption{\textbf{State exemplars are consistent across sessions.} For every
+    session with motion capture (rows; 7 sessions), a representative closed-loop
+    trial for each of the four pre-stimulus states (columns: high initial
+    deviation, high motion, high relative 2--4\,Hz power, high absolute 2--4\,Hz
+    power), chosen as the trial highest in that state and low in the others within
+    that session. Colours match Fig.~\ref{fig:figure4}A. Dashed line, reference
+    ($-5\%\,\Delta F/F$); shaded, stimulation window; scale bars 1\,s and 5\%.
+    The main-text exemplars (Fig.~\ref{fig:figure4}A) are representative of the
+    same patterns seen across sessions.}
+    \label{fig:S3}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_both.pdf}\hfill
+    \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_rel.pdf}\hfill
+    \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_abs.pdf}
+    \caption{\textbf{Error-composition decomposition is robust to how the
+    low-frequency factor is defined.} Unique $R^2$ of each state factor for the
+    closed-loop tracking error (early 0--1\,s and settled 1--3\,s windows), for
+    three specifications of the low-frequency term: both relative and absolute
+    2--4\,Hz power entered together (left), relative 2--4\,Hz only (middle), and
+    absolute 2--4\,Hz only (right). The main text (Fig.~\ref{fig:figure4}C) shows
+    each low-frequency term in its own initial-deviation$+$motion base, avoiding
+    the collinearity between the relative and absolute measures that suppresses
+    the relative term when both are forced into one model (left). Across all
+    specifications the initial deviation owns the early transient and the
+    low-frequency term carries the settled window, while motion contributes
+    negligibly.}
+    \label{fig:S4}
 \end{figure}
