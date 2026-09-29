@@ -114,6 +114,13 @@ Across 15 sessions from 4 mice, with confirmed opsin expression, closed-loop fee
 %     \label{fig:figure3}
 % \end{figure}
 
+% ------------------------------------------------------------
+\subsection*{Closed-loop control improves reference-tracking accuracy}
+% ------------------------------------------------------------
+Across 15 sessions from 4 mice, with confirmed opsin expression, closed-loop feedback consistently improved tracking of a reference target activity relative to open-loop stimulation (Fig.~\ref{fig:figure3}). Under open-loop conditions, the feedforward term produced responses that systematically deviated from the reference, reflecting the inability of a fixed input to compensate for ongoing spontaneous fluctuations or for inaccuracies in the estimated open-loop controller. Under closed-loop control, the proportional term corrected instantaneous deviations, while the integral term accumulated and eliminated persistent offset, yielding substantially improved alignment with the target reference at the single-trial level (Fig.~\ref{fig:figure3}A).
+
+
+
 Trial-averaged responses confirmed that closed-loop activity tracked the reference closely throughout the stimulation window, whereas open-loop responses showed a systematic positive bias (Fig.~\ref{fig:figure3}B). The difference in mean input between conditions (Fig.~\ref{fig:figure3}C) reflects the additional corrective signal contributed by real-time feedback. Per-trial tracking costs shifted toward lower values and showed reduced spread under closed-loop control (Fig.~\ref{fig:figure3}E), indicating both improved mean performance and greater reliability of neural modulation across trials. These improvements held across all recorded sessions (Fig.~\ref{fig:figure3}G,I) and required only small controller gains; for the session shown in Fig.~\ref{fig:figure3}A--E we used $K_{r} = 0.1$, $K_{p} = 0.07$, and $K_{i} = 0.1$. The sufficiency of such small gains suggests that the approximately linear, stationary input--output structure identified empirically was adequate to support stable PI feedback.
 
 % ------------------------------------------------------------
