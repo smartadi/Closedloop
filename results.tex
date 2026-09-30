@@ -179,38 +179,7 @@ We then resolved the mechanism at the single-trial level. Applying the predictor
 % (init p=0.394 n.s., motion p=0.00423, rel p=0.0182, abs p=0.876 n.s.). n=11 (motion 7). PAPER.md Fig-4.
 Finally, we made these regimes explicit by binning trials into quartiles of each pre-stimulus state (low to high) and reading off two properties from a session-aware mixed model (RMSE regressed on condition, state and their interaction, with random per-session intercepts and open/closed-loop slopes and a mouse intercept; $n = 11$ sessions, $7$ for motion; Fig.~\ref{fig:figure4}D). We summarise each state by its effect on \emph{predictability}---the open-loop disturbance, read from the trend of the uncontrolled error---and on \emph{controllability}, or steerability---read from the trend of the rejected fraction, the open-minus-closed-loop gap (the condition-by-state interaction). Closed-loop control reduced tracking error strongly at every state (open-minus-closed-loop gap at mean state $p < 10^{-6}$ for all four factors). The states differed in how that benefit moved. Motion made the disturbance less predictable---open-loop error rose with motion ($p = 9\times10^{-5}$)---yet more controllable: the loop rejected a growing share of it and the gap widened ($p = 0.004$), the signature of feedback rejecting an unanticipated disturbance. Relative 2--4\,Hz power did the opposite: the open loop was unaffected while closed-loop error climbed, so controllability fell ($p = 0.018$), identifying the ongoing low-frequency fluctuation as the one disturbance feedback cannot fully cancel. The initial deviation and absolute 2--4\,Hz power lowered predictability (open-loop error rose, $p < 10^{-6}$) but left controllability unchanged---disturbances that scale both conditions together. The controller therefore behaves as an internal model whose rejection is steerable for the unanticipated motor disturbance but limited for the ongoing low-frequency brain state that sets the residual error.
 
-% Terminology (defined for the reader; kept operational per AL 2026-09-29): "predictability" = the
-% open-loop disturbance (trend of uncontrolled error); "controllability" = steerability (trend of the
-% rejected fraction / cond:state interaction), NOT the structural Kalman sense.
 
-% \begin{figure}[h]
-%     \centering
-%     % ===== ASSEMBLED FIGURE (2026-09-29; lettering A--G) ========================
-%     % Panels: A state exemplars | B error-decomposition model | C unique R^2 |
-%     % D four states vs performance (stitched quartiles) | E contra kernel weights |
-%     % F A=G+L model example | G CL disturbance rejection (all reacher sessions).
-%     % Source: figures_final/Figure4.pdf (FIgure4.ai), MANIFEST [figure4].
-%     \includegraphics[width=\linewidth]{images/Figure4.pdf}
-%     % ===========================================================================
-%     \caption{\textbf{Closed-loop feedback decouples the controlled response from a state-dependent disturbance carried by the contralateral hemisphere.}\\
-%     \small{Open loop red, closed loop blue; settled window 1--3\,s after laser onset. Decomposition (C) uses the 7 sessions with usable motion capture (397 closed-loop trials); the state-quartile panel (D) uses 11 sessions (1240 trials; motion 7 sessions, 760 trials); the rejection panel (G) the 11 sessions that reach the setpoint. Single-trial and single-session insets from a representative session (AL\_0033).\\
-%     \textbf{A:} State exemplars. Representative closed-loop trials chosen for high initial deviation (blue), motion (orange), relative 2--4\,Hz power (green), and absolute 2--4\,Hz power (purple)---the four pre-stimulus state factors used throughout.\\
-%     \textbf{B:} Error-decomposition model. Per-trial settled tracking error (RMSE) is regressed on the four state factors, $\mathrm{RMSE}\approx\beta_0+\sum_i\beta_i X_i$; predictor colours match A.\\
-%     \textbf{C:} Unique $R^2$ of each factor for the closed-loop error, resolved by window (early 0--1\,s, light; settled 1--3\,s, dark): initial deviation owns the transient ($0.29\rightarrow0.004$), relative and absolute 2--4\,Hz power carry the settled window ($0.10\rightarrow0.12$ and $0.23\rightarrow0.35$), motion neither ($<0.01$).\\
-%     \textbf{D:} Effect of state on controller performance. Open- and closed-loop settled error across quartiles of each state (low~$\rightarrow$~high) with the open-minus-closed-loop gap (black), and two properties read from a session-aware mixed model (RMSE $\sim$ condition${\times}$state, random per-session intercepts and open/closed-loop slopes, mouse intercept). \emph{Predictability} denotes the open-loop disturbance (trend of the uncontrolled error) and \emph{controllability} the steerability (trend of the rejected fraction, the open-minus-closed-loop gap); arrows point in the estimated direction and carry stars where significant. Motion: predictability$\downarrow$ ($p=9\times10^{-5}$), controllability$\uparrow$ ($p=0.004$)---the loop rejects a growing share of an unanticipated disturbance. Relative 2--4\,Hz: predictability unchanged, controllability$\downarrow$ ($p=0.018$) as closed-loop error climbs. Initial deviation and absolute power: predictability$\downarrow$ ($p<10^{-6}$) with controllability unchanged.\\
-%     \textbf{E:} Contra$\rightarrow$ipsilateral kernel---ridge weights mapping contralateral pixels onto the ipsilateral control readout (representative session).\\
-%     \textbf{F:} The controlled response $A$ splits into the Global disturbance $G$ (predicted from the contralateral hemisphere with no controller input) and the Local component $L = A - G$ (laser and controller effect); trial average for a representative session ($R^2_{\mathrm{te}} = 0.75$).\\
-%     \textbf{G:} Closed-loop disturbance rejection. Per-session energy ratio $\mathrm{RR} = \|A-r\|^2/\|D\|^2$---residual energy of the actual response about the reference ($r = -5\%\,\Delta F/F$) over the energy of the disturbance $D$ (the contra-predicted excursion, leak-corrected), settled 1--3\,s; $\mathrm{RR} < 1$ is rejection. Geometric-mean $\mathrm{RR} = 0.58$ (95\% CI $[0.48, 0.71]$), below one by a session-aware mixed model ($\log\mathrm{RR} \sim 1 + (1|\mathrm{mouse}) + (1|\mathrm{mouse{:}session})$; one-sided $p = 2.1\times10^{-8}$, $n = 11$ sessions). The two sessions that never reach the setpoint are excluded.}}
-%     \label{fig:figure4}
-% \end{figure}
-
-% FIGURE 4 --- assembled Figure4.pdf now rendered (A--G, 2026-09-29). Source FIgure4.ai ->
-% figures_final/Figure4.pdf -> images/Figure4.pdf; panel set in MANIFEST [figure4].
-% METRIC (2026-09-29, FINAL per AL): panel G is the CL-only reach-gated energy ratio
-% RR = ||A-r||^2/||D||^2 (D = leak-corrected contra-predicted disturbance, settled 1--3 s),
-% geomean RR=0.58 [0.48,0.71], one-sided LMM p=2.1e-8, n=11 reachers (2 non-reachers dropped).
-% Supersedes the old OL-vs-CL phi=1-RR. methods_edit.tex updated to match.
-% Full provenance: PAPER.md "Figure 4" + RESEARCH 2026-09-28/29.
 \begin{figure}[!t]
     \centering
     \includegraphics[width=0.82\linewidth]{images/Figure5.pdf}
