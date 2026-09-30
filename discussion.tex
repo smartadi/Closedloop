@@ -4,8 +4,8 @@ In this study, we demonstrate that closed-loop optogenetic stimulation driven by
 
 \subsection*{Linear approximation of mesoscale cortical dynamics enables controller design}
 
-A central result enabling our framework was the empirical demonstration that trial-averaged cortical responses to optogenetic stimulation are well approximated by a linear input--output map. The theoretical basis for this is that the underlying dynamics are state-dependent, governed by a parameter $\rho$ that varies across trials with spontaneous fluctuations in arousal, behavioral state, and network dynamics. Under \textbf{trial-averaging} Assumption~\ref{assm:trial_avg}, taking expectations over $\rho$ and $d$ yields the nominal LTI system $(\bar{A}, \bar{B}, C)$, whose input--output behavior corresponds to the observed trial-averaged dynamics. This averaging framework explains why linearity is observed in expectation even when individual trials reflect the richer dynamics of
-Equations~\eqref{eq:nl_state}--\eqref{eq:nl_out}: the contributions of $\rho_t$ and $d_t$ cancel in the mean when drawn from stationary, zero-mean distributions. 
+A central result enabling our framework was the empirical demonstration that trial-averaged cortical responses to optogenetic stimulation are well approximated by a linear input--output map. The theoretical basis for this is that the underlying dynamics are nonlinear and depend on ongoing brain state, which fluctuates across trials with arousal, behavior, and network activity. Under \textbf{trial-averaging} Assumption~\ref{assm:trial_avg}, averaging over brain state and over unobserved disturbances yields the nominal LTI system $(\bar{A}, \bar{B}, C)$, whose input--output behavior corresponds to the observed trial-averaged dynamics. This explains why linearity is observed in expectation even when individual trials reflect the richer dynamics of
+Equations~\eqref{eq:nl_state}--\eqref{eq:nl_out}: the brain-state and disturbance contributions average out when drawn from stationary distributions. 
 
 This finding is consistent with a broader literature demonstrating that complex nonlinear neural population dynamics often admit locally low-dimensional or approximately linear representations when viewed through population-level measurements~\citep{Churchland2012, Cunningham2014, Stringer2019}. Identifying this structure at the mesoscale, using trial averaging to suppress the influence of spontaneous variability, provides a tractable basis for controller design without requiring explicit system identification. Crucially, inaccuracies in the feedforward gain $K_r$ (Equation~\ref{eq:kr}) arising from session-to-session differences in opsin expression, spatial alignment, external stimulus, or brain state are compensated online by the integral term of Equation~\eqref{eq:pi}, making the approach robust to moderate model mismatch.
 
@@ -16,8 +16,8 @@ The trial-averaged step responses did not definitively converge to a steady stat
 \subsection*{Disturbance rejection underlies variability reduction}
 
 The reduction in trial-to-trial variability observed under closed-loop stimulation has a natural interpretation within this framework. Under Assumption~\ref{assm:trial_avg}, individual
-trial responses are perturbations of the nominal trajectory $\bar{\Sigma}_{\bar{x}_0}$ driven by the disturbance $d_t$
-and parameter variation $\rho_t - \bar{\rho}$. These perturbations are zero-mean in expectation but nonzero on
+trial responses are perturbations of the nominal trial-averaged trajectory, driven by the unobserved disturbance
+and by trial-to-trial variation in brain state. These perturbations are zero-mean in expectation but nonzero on
 individual trials, and they constitute the primary source of cross-trial variance under open-loop conditions. The PI
 controller (Equation~\ref{eq:pi}) suppresses these deviations through two complementary mechanisms: the
 proportional term $K_p(y_{\mathrm{ref}} - y_t)$ provides immediate timestep-level correction, while the integral term
