@@ -36,22 +36,39 @@ All procedures were approved by the Institutional Animal Care and Use Committee
 at the University of Washington and followed NIH guidelines for the care and use
 of laboratory animals.
 
-%% FILL: N, sex split, age range at first session, line names and supplier with
-%% RRIDs, housing and light cycle, and whether any water or food restriction was
-%% used (if none, say so).
-We used \textbf{N} adult transgenic mice (\textbf{n} female, \textbf{n} male;
-8--20 weeks at the first recording session) expressing GCaMP6s or GCaMP8s in
-excitatory cortical neurons under the CaMKII promoter. To allow optogenetic
-perturbation during imaging, each mouse received a retro-orbital injection of a
-PHP.eB-serotype AAV carrying a DLX2.0-driven Chrimson construct, which restricts
-opsin expression to inhibitory interneurons. Driving inhibitory cells suppresses
-local activity focally and keeps the actuation spectrum clear of the GCaMP
-excitation band.
-%% FILL: AAV titer (GC/mL), injected volume, and the interval between injection
-%% and the first recording. Also state which mouse carried which indicator.
+We used double-transgenic mice obtained by crossing CaMKII-tTA
+(B6.Cg-Tg(Camk2a-tTA)1Mmay/DboJ; Jackson \#007004) with either tetO-GCaMP6s
+(B6;DBA-Tg(tetO-GCaMP6s)2Niell/J; Jackson \#024742) or tetO-jGCaMP8s
+(B6;D2-Tg(tetO-GCaMP8s)1Genie/J; Jackson \#037717), which expresses the calcium
+indicator in excitatory cortical neurons \citep{Matveev2024}. To express the
+opsin we retro-orbitally injected mice aged P28--42 with
+DLX2.0-ChrimsonR-tdTomato packaged in a PHP.eB-serotype AAV, produced from
+pAAV-Syn-ChrimsonR-tdT (Addgene \#59171). The DLX2.0 promoter restricts
+expression to forebrain inhibitory interneurons, so driving the opsin suppresses
+local activity focally, and the red-shifted excitation spectrum of ChrimsonR
+keeps actuation clear of the GCaMP excitation band. Titers and per-animal details
+are in Table~\ref{tab:cohort}.
+%% Mouse lines, promoter, construct and injection age are the lab standard
+%% preparation, taken from Matveev et al. 2024 (bioRxiv 2024.11.01.621418), in
+%% which AL_0033 and AL_0034 appear as Subjects 1 and 3. Both are male/female
+%% respectively, tetO-GCaMP8s, injected with 1.6e12 GC in 100 uL PBS.
+%% FILL: sex, indicator line and titer for AL_0039, AL_0041, AL_0048 and AL_0051,
+%% which postdate that paper. Add them to Table~\ref{tab:cohort}.
+%% FILL: age range at the first recording session, housing and light cycle.
+%% CHECK: Matveev et al. gives the titer as 1.6e13 GC in the Surgery text but
+%% 1.6e12 GC in Table 1 for these animals. One is a typo in that paper. Use the
+%% value from the lab's own injection records rather than either.
+
+Mice were acclimated to handling and head fixation for at least two days before
+recording. To maintain an alert state, animals were lightly water restricted for
+at least one day before imaging began and received 10\% sucrose rewards at random
+2--5\,s intervals during sessions.
+%% FILL: confirm this applied to all four controller mice, and note any that were
+%% not restricted. Matveev et al. restricted 7 of 9 animals, so it was not
+%% universal in that cohort.
 
 Two mice (AL\_0048 and AL\_0051) additionally expressed a second, spectrally
-distinct opsin, and were stimulated at 638 and 594\,nm respectively. The control
+distinct opsin and were stimulated at 638 and 594\,nm respectively. The control
 loop accommodates either polarity through a feedback sign (see below), so both
 animals were driven toward the same suppression target.
 %% FILL: name the second construct and give one sentence on why the two mice were
@@ -64,16 +81,16 @@ contributed to. All counts in the Results refer to this table.
 \begin{table}[h]
     \centering
     \small
-    \begin{tabular}{lllcl}
+    \begin{tabular}{llllcll}
         \hline
-        Mouse & Sessions & Dates & Trials/session & Contributes to \\
+        Mouse & Sex & Indicator & Sessions & Dates & Trials/session & Contributes to \\
         \hline
-        AL\_0033 & 9 & 2025-01-20 to 2025-04-19 & 30--200 & Closed- vs open-loop comparison \\
-        AL\_0039 & 4 & 2025-04-19 to 2025-04-30 & 100     & Closed- vs open-loop comparison \\
-        AL\_0048 & 1 & 2026-07-29               & 100     & Closed- vs open-loop comparison \\
-        AL\_0051 & 1 & 2026-07-29               & 100     & Closed- vs open-loop comparison \\
-        AL\_0034 & 1 & 2025-10-17               & \textbf{--} & Gain-grid sweep only \\
-        AL\_0041 & 2 & 2025-12-02               & \textbf{--} & Impulse characterization only \\
+        AL\_0033 & M & GCaMP8s & 9 & 2025-01-20 to 2025-04-19 & 30--200 & Closed- vs open-loop \\
+        AL\_0039 & \textbf{--} & \textbf{--} & 4 & 2025-04-19 to 2025-04-30 & 100 & Closed- vs open-loop \\
+        AL\_0048 & \textbf{--} & \textbf{--} & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
+        AL\_0051 & \textbf{--} & \textbf{--} & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
+        AL\_0034 & F & GCaMP8s & 1 & 2025-10-17 & \textbf{--} & Gain-grid sweep only \\
+        AL\_0041 & \textbf{--} & \textbf{--} & 2 & 2025-12-02 & \textbf{--} & Impulse characterization only \\
         \hline
     \end{tabular}
     \caption{Animals and sessions. The closed- versus open-loop comparison rests
@@ -94,29 +111,49 @@ contributed to. All counts in the Results refer to this table.
 % -----------------------------------------------------------------------------
 
 We implanted a chronic trans-cranial window over the dorsal cortex following
-published procedures \citep{Matveev2024}. After removing the scalp and
-periosteum we applied thin layers of UV-cured optical glue to the exposed skull
-inside a 3D-printed recording chamber fixed with dental cement, which keeps the
-bone transparent across the imaging field. A custom head-plate allowed
-reproducible head fixation. Mice recovered for at least one week before any
-handling and were then habituated to head fixation
-%% FILL: number and duration of habituation sessions.
-before recording began. Animals were awake, were not restrained apart from head
-fixation, and performed no task.
+published procedures \citep{Matveev2024}. Virus was injected under isoflurane
+anesthesia (4\% in O$_2$). Once animals reached P48 or older, the implant surgery
+was performed under isoflurane (1--4\% in O$_2$), with subcutaneous carprofen
+(5\,mg/kg) in the shoulders and lidocaine (2\,mg/kg) over the skull. The skin was
+cleared to expose the dorsal skull and the edges of the incision were glued down
+with cyanoacrylate (VetBond, World Precision Instruments) to protect the
+underlying muscle. The skull was treated with 10\% citric acid (Dentin Activator
+Liquid, Parkell) to improve adhesion, and a 3D-printed recording chamber was
+secured with dental cement (Metabond, Parkell). Thin layers of UV-cured optical
+glue (Norland Optical Adhesive 81) were applied to the exposed skull inside the
+chamber, which keeps the bone transparent across the imaging field. A 3D-printed
+titanium headpost (ProtoLabs) was cemented to the posterior end of the chamber
+for reproducible head fixation. Mice received carprofen for two days after
+surgery and recovered for at least one week before any experiment.
+
+During recordings mice were head-fixed under the objective, awake, and free to
+turn a rubber wheel with their forepaws. They performed no task. A 3D-printed
+cone glued to light-blocking fabric was fixed between the implant well and the
+surrounding screens to prevent light contamination.
 
 % -----------------------------------------------------------------------------
 \subsection*{Wide-field calcium imaging}
 % -----------------------------------------------------------------------------
 
-We imaged with a custom single-photon mesoscopic fluorescence microscope with
-excitation and emission filters matched to GCaMP. Frames were acquired on a
-hardware-triggered Basler camera through the pypylon interface as
-$560 \times 560$ pixel 16-bit images at 70\,Hz, with blue (470\,nm) and violet
-(405\,nm) illumination alternating frame by frame, so each channel was sampled at
-35\,Hz. The rig calibration is 57.8 pixels per mm, so one pixel is 0.0173\,mm at
-the brain surface and the field of view is $9.7 \times 9.7$\,mm, covering the
-dorsal cortical surface.
-%% FILL: camera model and exposure time.
+We imaged with the custom single-photon mesoscopic fluorescence microscope
+described in \citet{Matveev2024}, which shares one light path between imaging and
+photostimulation through a triple-dichroic design. Blue (470\,nm) and violet
+(405\,nm) LEDs (Cairn OptoLED) were combined on a 425\,nm dichroic, coupled into
+a liquid light guide, and reflected to the brain by a 495\,nm dichroic through a
+0.63$\times$ objective; GCaMP emission returned through that dichroic, reflected
+off a 580\,nm dichroic, and was imaged through a 1$\times$ condenser onto the
+camera.
+
+Frames were captured on a Basler acA2440-75m camera at 70\,Hz with a
+$560 \times 560$ pixel frame after $3\times3$ binning, and acquired through the
+pypylon interface. The field of view is $9.7 \times 9.7$\,mm, so one pixel is
+17.3\,\textmu m at the brain surface. Blue and violet illumination alternated
+frame by frame, giving 35\,Hz per channel, with the violet channel used for
+hemodynamic correction. LED pulse onsets and offsets were ramped sinusoidally
+over 1\,ms.
+%% FILL: exposure time per frame, and measured illumination power density (the
+%% lab paper computes LED intensity over the 70.8 mm^2 area of a Thorlabs S130C
+%% sensor, so the same convention can be reused).
 
 [RIG] The acquisition thread forwarded every second frame to the control process,
 so the control loop saw the blue channel alone at 35\,Hz. Violet frames were not
@@ -131,24 +168,42 @@ activation.
 
 Real-time and offline signals differ, and we state which was used wherever it
 matters. The control loop used the signal defined in the next section, computed
-on the raw camera stream with no hemodynamic correction. Offline analysis used
-the standard pipeline: rigid motion correction, reflectance normalization, and
-computation of $\Delta F/F$. Frames were registered to a common anatomical
-reference atlas, and stimulation timestamps were aligned to the imaging stream.
-%% FILL: name the registration method or cite it, and name the preprocessing
-%% pipeline.
+on the blue channel alone with no hemodynamic correction, because correction
+requires both channels and cannot be done within one control interval. Offline,
+non-neuronal signals arising from hemodynamic changes were removed by regressing
+the violet-evoked signal out of the blue-evoked signal
+\citep{Matveev2024}, and the data were compressed by
+singular value decomposition, retaining the top 50 components
+\citep{Matveev2024}. Frames were registered to a common anatomical reference
+atlas, and stimulation timestamps were aligned to the imaging stream.
+%% FILL: refs.bib has no key for Zatka-Haas et al. 2021 or Ye et al. 2023, which
+%% are the primary sources for this correction; add them and cite all three here.
+%% Also note refs.bib carries the Matveev paper TWICE, as Matveev2024 and as
+%% matveev2024simultaneous. This file uses Matveev2024; delete the duplicate or
+%% the reference list will show it twice.
+%% FILL: name the registration method or cite it, and confirm the number of SVD
+%% components retained for these sessions (the lab paper keeps 50, accounting for
+%% 98.2 +/- 0.2% of variance).
 %% FILL: one sentence stating which of the two signals each figure uses. This is
 %% the most likely referee question about the 2-4 Hz result, because uncorrected
-%% hemodynamics fall in that band.
+%% hemodynamics fall in that band, and the controller acted on the uncorrected
+%% signal by necessity. Saying so plainly is stronger than leaving it implicit.
 
 % -----------------------------------------------------------------------------
 \subsection*{Optogenetic stimulation}
 % -----------------------------------------------------------------------------
 
-Stimulation ran concurrently with imaging through a second illumination path
-tuned to the opsin activation spectrum (638\,nm; 594\,nm in AL\_0051). A
-galvanometer-steered beam confined stimulation to a user-specified target. Galvo
-mirror voltages were driven from a National Instruments analog output and
+Stimulation ran concurrently with imaging through the same objective, using the
+shared light path of the microscope \citep{Matveev2024}. Red light was produced
+by a 638\,nm diode laser (Omicron LuxX 638-200) coupled into a
+\O{}50\,\textmu m, 0.22\,NA fiber, collimated, and steered by a two-dimensional
+galvanometer mirror pair (Thorlabs GVS002) through scan ($f = 100$\,mm) and tube
+($f = 300$\,mm) lenses, so that the beam entered the central light path from
+above and was focused on the brain by the objective. AL\_0051 was stimulated at
+594\,nm instead.
+%% FILL: the 594 nm source for AL_0051, which is not part of the published rig.
+
+Galvo mirror voltages were driven from a National Instruments analog output and
 converted from millimeters using per-rig calibration files. [RIG] Targets were
 entered in millimeters relative to bregma, with positive $x$ toward the left
 hemisphere and positive $y$ anterior, after the operator marked bregma on the
@@ -159,20 +214,33 @@ live image.
 
 We placed the stimulation target in a region neighboring the readout site, close
 enough that the spatial spread of activation covered the readout
-(Fig.~\ref{fig:spatial_spread}). Light power was calibrated before each session
-with a power meter at the objective focal plane.
+(Fig.~\ref{fig:spatial_spread}). Laser power was calibrated with a power meter
+(Thorlabs PM100D with an S130C sensor) at the objective focal plane. Power is
+linear in the modulation voltage over the laser's 0--5\,V range and stable across
+sessions \citep{Matveev2024}.
+%% FILL: whether power was re-measured before every session or taken from a
+%% standing calibration. The lab paper reports 14 measurements across 0-5 V.
 
-Commands reached the laser driver over a serial link to a microcontroller at
-2\,Mbaud. [RIG] The command was transmitted as an 8-bit index equal to the
-command voltage in hundredths of a volt, so the delivered command was quantized
-to 0.01\,V and hard-limited to 2.45\,V, with a linear map from voltage to light
-power.
-%% CHECK: the old draft said commands were clipped to [0, 5] V corresponding to
-%% 0-36 mW. The rig clamps at 2.45 V. Give the light power at 2.45 V and use that
-%% as the ceiling throughout. Related: the impulse amplitude set below includes
-%% 2.7 V, which is above this ceiling. If the impulse sessions used the same
-%% serial path, that level was delivered as 2.45 V and the top point of the
-%% dose-response is mislabeled. Check the script those sessions actually ran.
+%% FILL: did the closed-loop sessions insert the randomized 100-800 ms delay
+%% between galvo movement and laser onset that Matveev et al. use to prevent the
+%% sound of the galvanometers from evoking activity? With a fixed target per trial
+%% the galvos do not move within a trial, but they do move between trials, so the
+%% control is still relevant. State it either way; a reviewer who knows the lab
+%% paper will look for it.
+
+Commands reached the stimulation hardware over a serial link to a
+microcontroller at 2\,Mbaud. [RIG] Each command was transmitted as an 8-bit index
+equal to the controller output voltage in hundredths of a volt, so the command was
+quantized to 0.01\,V and limited to 2.45\,V at the microcontroller output. A
+downstream voltage amplifier scales that output to the laser drive range, so the
+2.45\,V figure is a controller-side limit and not the delivered drive. Light power
+was linear in the command over the range used and was capped at 36\,mW to stay
+within the unsaturated range of the opsin.
+%% FILL: the amplifier gain, so a reader can map the command voltages quoted in
+%% this paper to delivered drive voltage and to mW. Give the command-voltage range
+%% used and the corresponding mW, measured at the focal plane. Whatever convention
+%% you pick, use the same one for the impulse amplitudes below and in the Results,
+%% and say once which domain the quoted volts live in.
 
 Stimulus waveforms were
 %% FILL: constant-power steps or pulse trains? The old draft said "pulse trains
@@ -186,16 +254,15 @@ delivered for the durations given under Trial structure.
 \subsection*{Behavioral monitoring}
 % -----------------------------------------------------------------------------
 
-%% FILL: this subsection did not exist in the previous draft, but the motion
-%% analyses depend on it. Give camera model, frame rate, illumination, the body
-%% part in view, and how the video clock was aligned to the imaging clock.
-A camera recorded the face during a subset of sessions
-(Table~\ref{tab:cohort}) at \textbf{n}\,Hz under infrared illumination. We
-computed a scalar motion energy signal per video frame as the squared pixel norm
-of the difference between consecutive frames, restricted to
-%% FILL: the ROI, for example the whisker pad.
-and z-scored it within session. Video and imaging streams were aligned using
-%% FILL: shared trigger, TTL, or timestamp interpolation.
+A camera (FLIR Chameleon3) with an infrared filter and a 16\,mm focal-length
+lens (Thorlabs MVL16M23) recorded the face and forepaws during a subset of
+sessions \citep{Matveev2024}. We computed a scalar motion energy signal per video
+frame as the squared pixel norm of the difference between consecutive frames, and
+z-scored it within session.
+%% FILL: video frame rate, the ROI the motion energy was computed over (whole
+%% frame, or face/whisker pad), and how the video clock was aligned to the imaging
+%% clock. These three are the only parts of the motion analysis a reader cannot
+%% currently reconstruct.
 
 % -----------------------------------------------------------------------------
 \subsection*{Real-time control system}
@@ -273,10 +340,11 @@ brain states. Each session began with a tuning phase
 (Section~\ref{sec:gain_opt}); in AL\_0048 and AL\_0051 that phase swept $K_p$,
 and only the final 100 trials, recorded with $K_p$ held fixed, entered the
 comparison. Sessions lasted roughly one hour.
-%% CHECK: the old draft said "half were randomly designated as closed-loop and
-%% half as open-loop", which implies a balanced draw. Per-trial Bernoulli
-%% assignment is not balanced. Report the realized per-session trial counts per
-%% condition, or state the assignment as it is.
+%% The old draft said "half were randomly designated as closed-loop and half as
+%% open-loop", which implies a balanced draw; per-trial Bernoulli assignment is
+%% not balanced, which is why the text above says "approximately".
+%% FILL: if you quote realized per-condition trial counts anywhere, take them from
+%% the server-derived analysis output.
 
 % -----------------------------------------------------------------------------
 \subsection*{Plant model and controller}
@@ -464,23 +532,23 @@ the only input. This is the baseline against which closed-loop performance is
 measured, and it is open loop in the strict sense: no measurement enters the
 command.
 
-% Gains are listed in Table~\ref{tab:gains}.
+Gains are listed in Table~\ref{tab:gains}.
 
-% \begin{table}[h]
-%     \centering
-%     \small
-%     \begin{tabular}{llccc}
-%         \hline
-%         Mouse & Session & $K_{r}$ & $K_{p}$ & $K_{i}$ \\
-%         \hline
-%         AL\_0033 & 2025-02-26 & 0.1 & 0.07  & 0.1 \\
-%         AL\_0048 & 2026-07-29 & \textbf{--} & 0.05  & \textbf{--} \\
-%         AL\_0051 & 2026-07-29 & \textbf{--} & 0.075 & \textbf{--} \\
-%         \hline
-%     \end{tabular}
-%     \caption{Controller gains per session.}
-%     \label{tab:gains}
-% \end{table}
+\begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{llccc}
+        \hline
+        Mouse & Session & $K_{r}$ & $K_{p}$ & $K_{i}$ \\
+        \hline
+        AL\_0033 & 2025-02-26 & 0.1 & 0.07  & 0.1 \\
+        AL\_0048 & 2026-07-29 & \textbf{--} & 0.05  & \textbf{--} \\
+        AL\_0051 & 2026-07-29 & \textbf{--} & 0.075 & \textbf{--} \\
+        \hline
+    \end{tabular}
+    \caption{Controller gains per session.}
+    \label{tab:gains}
+\end{table}
 %% FILL: the remaining 12 sessions. Each session logs Kref/Kp/Ki per trial in
 %% input_params.csv, so this table can be generated rather than typed. If a full
 %% table is too long, give median and range and keep these rows as exemplars.
@@ -508,14 +576,20 @@ absence of oscillatory instability in any session.
 
 \subsubsection*{Impulse-response protocol}
 
-To test whether the input--output relation was linear and monotonic, we
-delivered brief stimuli at amplitudes drawn from a discrete set
-(0, 0.8, 1.6, 2.4, 2.7\,V) in pseudorandom order with randomized inter-trial
-intervals.
-%% CHECK: 2.7 V exceeds the 2.45 V command ceiling in the current rig code. Verify
-%% against the script these sessions ran; if the ceiling applied, the top two
-%% levels are 2.4 and 2.45 V and the dose-response axis needs correcting.
-Each amplitude was summarized by its mean evoked suppression
+The impulse characterization was run on an earlier version of the control
+system, before the loop described above. Its acquisition and readout parameters
+are therefore stated separately here, and the command voltages it delivered are
+not subject to the controller-side limit given above.
+%% FILL: for that earlier system, state the frame rate, the readout kernel, the
+%% baseline window, and the command-to-power mapping, in the same terms as the
+%% controller sessions. If any of them match, say so explicitly rather than
+%% leaving the reader to assume it.
+
+To test whether the input--output relation was linear and monotonic, we delivered
+brief stimuli at amplitudes drawn from a discrete set (0, 0.8, 1.6, 2.4, 2.7\,V)
+in pseudorandom order with randomized inter-trial intervals. All five levels were
+delivered as commanded. Each amplitude was summarized by its mean evoked
+suppression
 (Section~\ref{sec:inhib_energy}), and we regressed suppression on amplitude to
 test linearity. Amplitudes with fewer than 20 trials were excluded from the fit.
 
@@ -730,10 +804,10 @@ here.
           $R^{2} > 0.3$, removing \textbf{n} sessions.
     \item \emph{Behavioral video.} Motion analyses used the \textbf{n} sessions
           with a usable motion trace (\textbf{n} trials).
-          %% CHECK: this count is inconsistent in the current draft. The Results
-          %% say 7 of 11 sessions and 397 trials; the analysis code header says
-          %% 11 sessions with motion and 613 trials. Resolve it once here and
-          %% have the Results quote this subsection.
+          %% FILL: take this count, and every other n in this subsection, from the
+          %% server-derived analysis output rather than from any script header or
+          %% cached comment. Then have the Results quote this subsection so the two
+          %% cannot drift apart again.
     \item \emph{Stimulation quality.} One further animal (AL\_0050) was recorded
           on the same day as AL\_0048 and AL\_0051 and excluded for poor
           stimulation.
