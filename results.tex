@@ -255,9 +255,43 @@ rejection---were excluded.
 % ------------------------------------------------------------
 Feedback and preview correct different failures of sinusoidal tracking: feedback removes trial-to-trial variability, while preview removes the phase lag imposed by the plant. We asked the controller to track a 1\,Hz sinusoidal reference for 4\,s in a dual-opsin mouse (AL\_0048, right hemisphere, inhibitory opsin), and crossed two factors in a $2\times2$ design---feedback on or off, and preview on or off---giving four modes: open-loop (OL), open-loop with preview (OL$+$p), closed-loop (CL), and closed-loop with preview (CL$+$p). The preview block shifts the reference forward by a fixed lookahead before it reaches the controller, compensating the delay of the cortical response rather than its amplitude (Fig.~\ref{fig:figure5}A). We report one representative session in detail (200 sinusoidal trials; $n = 51, 46, 46, 57$ trials for OL, OL$+$p, CL, CL$+$p) and the consistency of each effect across three sessions.
 
-Open-loop tracking followed the reference in shape but lagged it and drifted between trials (Fig.~\ref{fig:figure5}B,C). Adding feedback reduced per-trial tracking error: median RMSE fell from $3.82$ to $2.80$\,\%\,$\Delta F/F$ between OL and CL (rank-sum $p = 7.7\times10^{-4}$; Fig.~\ref{fig:figure5}G), and across-trial variance fell from $17.9$ to $14.8$ (Fig.~\ref{fig:figure5}E). The same ordering held in every session tested (CL $<$ OL for both RMSE and variance in 3/3 sessions; Fig.~\ref{fig:figure5}I,K), and pooling per-trial RMSE across sessions confirmed it (OL $4.58 \pm 1.77$, $n = 136$; CL $3.83 \pm 1.94$, $n = 100$; rank-sum $p = 1.5\times10^{-4}$; Kruskal--Wallis across all four modes $\chi^2 = 19.6$, $p = 2.1\times10^{-4}$). A repeated-measures test treating session as the unit is underpowered at $n = 3$ and did not reach significance (Friedman $p = 0.060$), so we treat the direction, not the session-level test, as the result.
+Open-loop tracking followed the reference in shape but lagged it and drifted
+between trials (Fig.~\ref{fig:figure5}B). The trial average retained the sinusoid in every mode,
+with the across-trial spread widest under open loop (Fig.~\ref{fig:figure5}C); the trial-average
+laser commands that produced these responses are shown in Fig.~\ref{fig:figure5}D.
 
-Preview cancelled the phase lag but did not by itself improve tracking error. The cortical response lagged the reference by $60^\circ$ under open loop and by $36^\circ$ under closed loop; adding preview moved both to approximately zero ($5^\circ$ and $-9^\circ$ respectively; Fig.~\ref{fig:figure5}H). The correction matched the lookahead by construction: a five-sample preview at 35\,Hz corresponds to $143$\,ms, or $51^\circ$ at the 1\,Hz drive frequency, and the measured open-loop correction across all pooled trials was $5.0$ samples ($51.4^\circ$, median). Lag cancellation replicated in all three sessions (Fig.~\ref{fig:figure5}J). Tracking error, however, was unchanged by preview (OL versus OL$+$p, median RMSE $3.82$ versus $3.55$, $p = 0.32$; pooled across sessions $p = 0.44$), and preview did not further improve closed-loop error (CL versus CL$+$p, $p = 0.093$). Closed-loop control with preview did reduce error relative to open loop ($p = 0.020$) and produced the tightest distribution of the four modes (SD $1.57$ versus $1.85$, $2.75$ and $2.19$ for OL, OL$+$p and CL), but the error reduction is attributable to feedback and the lag correction to preview.
+Feedback reduced both the trial-to-trial spread and the error itself.
+Across-trial variance fell from $17.9$ to $14.8$ between OL and CL (Fig.~\ref{fig:figure5}E), and
+the time-resolved tracking error fell alongside it (Fig.~\ref{fig:figure5}F). Collapsing each
+trial to a single number, median RMSE fell from $3.82$ to
+$2.80$\,\%\,$\Delta F/F$ (rank-sum $p = 7.7\times10^{-4}$; Fig.~\ref{fig:figure5}G). Preview did
+not reproduce this effect: median RMSE was unchanged between OL and OL$+$p
+($3.82$ versus $3.55$, $p = 0.32$), and adding preview to closed-loop control
+did not improve it further (CL versus CL$+$p, $p = 0.093$). Closed-loop control
+with preview nonetheless gave the tightest distribution of the four modes
+(SD $1.57$ versus $1.85$, $2.75$ and $2.19$ for OL, OL$+$p and CL) and reduced
+error relative to open loop ($p = 0.020$).
+
+What preview did correct was the lag. The cortical response lagged the
+reference by $60^\circ$ under open loop and by $36^\circ$ under closed loop;
+adding preview moved both to approximately zero ($5^\circ$ and $-9^\circ$
+respectively; Fig.~\ref{fig:figure5}H). The correction matched the lookahead by construction: a
+five-sample preview at 35\,Hz corresponds to $143$\,ms, or $51^\circ$ at the
+1\,Hz drive frequency, and the measured open-loop correction across all pooled
+trials was $5.0$ samples ($51.4^\circ$, median).
+
+All three effects held across sessions. Per-trial RMSE was lower under
+closed loop than open loop in 3/3 sessions (Fig.~\ref{fig:figure5}I), preview cancelled the lag in
+all three (Fig.~\ref{fig:figure5}J), and across-trial variance was lower under closed loop in 3/3
+(Fig.~\ref{fig:figure5}K). Pooling per-trial RMSE across sessions confirmed the error reduction
+(OL $4.58 \pm 1.77$, $n = 136$; CL $3.83 \pm 1.94$, $n = 100$; rank-sum
+$p = 1.5\times10^{-4}$; Kruskal--Wallis across all four modes $\chi^2 = 19.6$,
+$p = 2.1\times10^{-4}$), and left the preview comparison null ($p = 0.44$). A
+repeated-measures test treating session as the unit is underpowered at $n = 3$
+and did not reach significance (Friedman $p = 0.060$), so we treat the direction
+and its consistency, not the session-level test, as the result. The error
+reduction is therefore attributable to feedback and the lag correction to
+preview.
 
 Decomposing the error clarifies why the two mechanisms do not overlap. Because the stimulation window contains exactly four cycles of the drive, per-trial squared error partitions without loss into a constant-offset term, a term at the drive frequency, and the remaining broadband term. Averaged over the three sessions, preview reduced the error at the drive frequency roughly threefold in every comparison (OL $3.14 \rightarrow$ OL$+$p $0.89$; CL $1.78 \rightarrow$ CL$+$p $1.22$\,(\%\,$\Delta F/F)^2$), while feedback reduced the broadband term ($10.55 \rightarrow 6.62$ from OL to CL). Preview therefore acts on the component of error that a fixed phase relationship can remove, and feedback on the component generated by ongoing spontaneous activity. Closed-loop control with preview was the only mode to engage both, and had the lowest total error power in two of three sessions.
 
