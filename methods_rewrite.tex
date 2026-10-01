@@ -720,11 +720,18 @@ initial conditions. Its standard error falls as $N^{-1/2}$ for independent
 trials, and it is inflated by non-stationarity of brain state across a session
 (see Discussion).
 
-We used two evaluation windows. The full stimulation window, $t = 0$ to
-$+3$\,s, was used for per-trial and cross-session RMSE. A settled window,
-$t = +1$ to $+3$\,s, was used for the disturbance-rejection comparison only,
-because it excludes the early inhibitory transient that precedes settling. The
-one session with a 4\,s stimulus was scored over 0 to $+4$\,s.
+We used three evaluation windows, named here and used with these names
+throughout. The \textbf{full stimulation window}, $t = 0$ to $+3$\,s, was used
+for per-trial and cross-session RMSE. Within it we distinguish the
+\textbf{transient window}, $t = 0$ to $+1$\,s, over which the response is still
+approaching the reference after the laser-evoked inhibitory deflection, from the
+\textbf{steady-state window}, $t = +1$ to $+3$\,s, over which it has settled and
+the controller is holding it there. The $1$\,s boundary is a fixed convention
+rather than a fitted changepoint: it is roughly five times the $\sim200$\,ms
+settling time of the impulse response (Table~\ref{tab:tf_sessions}), so the
+transient is complete well inside it. The steady-state window alone was used for
+the disturbance-rejection comparison, because it excludes the laser-evoked
+transient. The one session with a 4\,s stimulus was scored over 0 to $+4$\,s.
 
 \subsubsection*{Gain-grid sweep}
 
@@ -924,7 +931,7 @@ We quantified rejection per trial as the energy ratio
 where the numerator is the energy of the measured response about the reference
 $r = -5\%\,\Delta F/F$ and the denominator the energy of the disturbance, taken
 as the contralaterally predicted excursion referenced to its own no-laser
-baseline and leak-corrected. Both were evaluated over the settled window,
+baseline and leak-corrected. Both were evaluated over the steady-state window,
 1--3\,s, which excludes the laser-evoked transient. Referencing the disturbance
 to its own baseline rather than to the target keeps the fixed setpoint offset
 from being counted as disturbance, so $\mathrm{RR} < 1$ means the controlled
@@ -1117,14 +1124,14 @@ request.
     \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_abs.pdf}
     \caption{\textbf{The error decomposition does not depend on how the
     low-frequency factor is defined.} Unique $R^2$ of each state factor for
-    closed-loop tracking error, in the early (0--1\,s) and settled (1--3\,s)
-    windows, under three specifications of the low-frequency term: relative and
+    closed-loop tracking error, in the transient (0--1\,s) and steady-state
+    (1--3\,s) windows, under three specifications of the low-frequency term: relative and
     absolute 2--4\,Hz power entered together (left), relative only (middle), and
     absolute only (right). The main text (Fig.~\ref{fig:figure4}C) enters each
     low-frequency term in its own initial-deviation-plus-motion base, which
     avoids the collinearity that suppresses the relative term when both are
     forced into one model (left). In every specification the initial deviation
-    owns the early transient, the low-frequency term carries the settled window,
+    owns the transient window, the low-frequency term carries the steady-state window,
     and motion contributes little.}
     \label{fig:S4}
 \end{figure}
