@@ -93,11 +93,8 @@ We deploy our closed loop controller(Fig.~\ref{fig:figure1}), where we set targe
 
 Trial-averaged responses show that closed-loop activity tracked the reference closely throughout the stimulation window, whereas open-loop responses reflected the inaccuracies in tuning (Fig.~\ref{fig:figure3}B). The difference in mean input between conditions (Fig.~\ref{fig:figure3}C) demonstrates the additional corrective signal contributed by real-time feedback.
 We quantified controller accuracy per trial using Root Mean Squared Error(RMSE) of output against the target reference. 
-Per-trial RMSE spread comparison of both controllers shows that the advantage of closed loop is reflected on most of the trials, as the spread shifted towards zero with a tighter spread showing lack of worst case tracking trials
-(Fig.~\ref{fig:figure3}E). This indicates both improved mean performance and greater reliability of neural modulation across trials. These improvements held across all recorded sessions: averaging the tracking error over the 15 sessions showed the same gap open at stimulation onset and persist for the rest of the trial (Fig.~\ref{fig:figure3}G), and the open-loop/closed-loop RMSE ratio exceeded one in both stimulation windows but not before or after (Fig.~\ref{fig:figure3}I). 
+The per-trial RMSE spread comparison of both controllers indicates both improved mean performance and greater reliability of neural modulation across trials (Fig.~\ref{fig:figure3}E). These improvements held across all recorded sessions: averaging the tracking error over the 15 sessions showed the same gap open at stimulation onset and persist for the rest of the trial (Fig.~\ref{fig:figure3}G), and the open-loop/closed-loop RMSE ratio exceeded one across the stimulation window not before or after (Fig.~\ref{fig:figure3}I). We split the stimulation window analysis into 0--1s and 1--3s window as initial deviation settles before 1s so 1--3s reflects a purely disturbance affected dynamic. 
 For the session shown in Fig.~\ref{fig:figure3}A--E we used $K_{r} = 0.1$, $K_{p} = 0.07$, and $K_{i} = 0.1$. The sufficiency of such small gains suggests that the approximately linear, stationary input--output structure identified empirically was adequate to support stable PI feedback.
-
-
 % ------------------------------------------------------------
 \subsection*{Closed-loop control reduces trial-to-trial variability}
 % ------------------------------------------------------------
