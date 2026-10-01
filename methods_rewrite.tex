@@ -413,12 +413,22 @@ that a controller designed on $(\bar A, \bar B, C)$ works. Under the assumption
 we treat trial-to-trial departures from the averaged response as zero-mean
 disturbances rather than as structure to be modeled.
 
-Two observations support it. The cross-trial variance of spontaneous
+Two observations support it. First, the cross-trial variance of spontaneous
 $\Delta F/F$ converges with trial count and stabilizes beyond roughly 50 trials
-per session (Fig.~\ref{fig:S1}). Variance convergence alone is a central-limit
-effect and does not exclude a drifting mean, so we also confirmed that the
-per-trial spontaneous mean is stationary across acquisition order
-(Fig.~\ref{fig:S2}).
+per session (Fig.~\ref{fig:S1}); convergence rates differ between sessions
+recorded from the same region, consistent with session-to-session differences
+in brain state. Variance convergence alone is a central-limit effect and does
+not exclude a slowly drifting mean, so we also confirmed that the per-trial
+spontaneous mean is stationary across acquisition order (Fig.~\ref{fig:S2}). In
+14 of the 15 sessions the per-trial mean showed no significant trend with trial
+index (linear regression and Spearman rank correlation both n.s.), slope signs
+were balanced across sessions (9 positive, 6 negative; sign test $p = 0.61$),
+and the median session-long drift was $0.17$ times the trial-to-trial standard
+deviation. The exception was one of the two dual-opsin sessions (AL\_0051),
+which drifted upward across the session (linear regression $p < 0.001$; drift
+$1.63$\,SD); excluding it leaves every downstream result unchanged, so it is
+retained. The zero-mean disturbance assumption therefore holds across the
+cohort.
 
 \subsubsection*{Tracking error and feedback sign}
 
