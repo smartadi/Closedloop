@@ -547,23 +547,38 @@ Gains are listed in Table~\ref{tab:gains}.
 \begin{table}[h]
     \centering
     \small
-    \begin{tabular}{llccc}
+    \begin{tabular}{llclcccrr}
         \hline
-        Mouse & Session & $K_{r}$ & $K_{p}$ & $K_{i}$ \\
+        ID & Mouse & Exp. & Date & $K_{r}$ & $K_{p}$ & $K_{i}$ & OL & CL \\
         \hline
-        AL\_0033 & 2025-02-26 & 0.1 & 0.07  & 0.1 \\
-        AL\_0048 & 2026-07-29 & \textbf{--} & 0.05  & \textbf{--} \\
-        AL\_0051 & 2026-07-29 & \textbf{--} & 0.075 & \textbf{--} \\
+        m1 & AL\_0033 & 3 & 2025-01-20 & 0.175 & 0.1 & 0.1 & 56 & 64 \\
+        m2 & AL\_0033 & 2 & 2025-02-12 & 0.25 & 0.1 & 0.25 & 97 & 103 \\
+        m3 & AL\_0033 & 2 & 2025-02-24 & 0.22 & 0.075 & 0.01 & 101 & 99 \\
+        m4 & AL\_0033 & 2 & 2025-02-26 & 0.16--0.17 & 0.1--0.2 & 0.002--0.005 & 92 & 108 \\
+        m5 & AL\_0033 & 1 & 2025-03-04 & 0.18 & 0.125 & 0.075 & 36 & 24 \\
+        m6 & AL\_0033 & 2 & 2025-03-05 & 0.15 & 0.15 & 0.1 & 14 & 16 \\
+        m7 & AL\_0033 & 4 & 2025-03-20 & 0.15 & 0.06 & 0.01 & 46 & 54 \\
+        m8 & AL\_0033 & 2 & 2025-04-15 & 0.15 & 0.05 & 0.1 & 38 & 22 \\
+        m9 & AL\_0039 & 1 & 2025-04-20 & 0.07 & 0.05 & 0.1 & 50 & 50 \\
+        m10 & AL\_0039 & 1 & 2025-04-19 & 0.1 & 0.07 & 0.1 & 48 & 52 \\
+        m11 & AL\_0039 & 3 & 2025-04-30 & 0.05 & 0.05 & 0.2 & 50 & 50 \\
+        m12 & AL\_0033 & 1 & 2025-04-19 & 0.1 & 0.05 & 0.1 & 35 & 65 \\
+        m13 & AL\_0039 & 2 & 2025-04-20 & 0.07 & 0.07 & 0.1 & 55 & 45 \\
+        m14 & AL\_0048 & 2 & 2026-07-29 & 0.05 & 0.075 & 0.01 & 45 & 55 \\
+        m15 & AL\_0051 & 2 & 2026-07-29 & 0.075 & 0.1 & 0.05 & 55 & 45 \\
         \hline
     \end{tabular}
-    \caption{Controller gains per session.}
+    \caption{Controller gains and trial counts for all 15 closed-loop
+        sessions. Gains are those logged on the closed-loop trials of each
+        session's validation block, the trials that enter every analysis,
+        read from \texttt{input\_params} columns 4--6; OL and CL are the
+        open- and closed-loop trial counts in that block. Gains were held
+        fixed within a block in 14 of the 15 sessions; m4 interleaved three
+        $K_p$ values and is given as a range. $K_r$ scales the feedforward
+        term and $K_p$, $K_i$ the feedback terms of Equation~\eqref{eq:pi}.
+        The reference was $-5\%\,\Delta F/F$ in every session.}
     \label{tab:gains}
 \end{table}
-%% FILL: the remaining 12 sessions. Each session logs Kref/Kp/Ki per trial in
-%% input_params.csv, so this table can be generated rather than typed. If a full
-%% table is too long, give median and range and keep these rows as exemplars.
-%% What is not acceptable is silence: the controller cannot be reproduced
-%% without these numbers.
 
 \subsubsection*{Closed-loop stability}
 
@@ -737,12 +752,22 @@ transient. The one session with a 4\,s stimulus was scored over 0 to $+4$\,s.
 
 Gradient-based optimization of the cost is not available here, since gradients
 require a model and the number of trials available to estimate the cost is
-limited. We mapped the cost surface directly instead. A single session cycled
-through a fixed list of PI gain pairs spanning
-$K = (K_p, K_i) \in [0,\,0.3] \times [0,\,0.1]$, grouping trials by pair to
-estimate $\hat{J}(K)$ at each node (Fig.~\ref{fig:cost_landscape}A). We repeated
-the sweep in a second mouse (AL\_0034, Fig.~\ref{fig:cost_landscape}B).
-%% FILL: grid spacing and the number of trials per node.
+limited. We mapped the cost surface directly instead. A session cycled through a fixed list of PI gain pairs, grouping trials by
+pair to estimate $\hat{J}(K)$ at each node (Fig.~\ref{fig:cost_landscape}A). We
+ran four such sweeps in two mice: AL\_0033 on 2025-01-10, 2025-03-03 and
+2025-03-05, and AL\_0034 on 2024-10-17 (Fig.~\ref{fig:cost_landscape}B), with 5,
+13, 10 and 17 occupied nodes respectively over $K_p \in [0,\,0.3]$ and
+$K_i \in [0,\,0.3]$. The node list was chosen per session rather than from a
+common lattice, so the sweeps are not a single replicated design. Cost was
+scored over $t = 0$ to $+3$\,s, or $0$ to $+4$\,s for the one session run with a
+4\,s stimulus. The per-session minima fell at $(K_p, K_i) = (0.30,\,0.10)$,
+$(0.05,\,0.10)$, $(0.30,\,0.10)$ and $(0.02,\,0.02)$, with
+$\hat{J} = 23.7$, $17.4$, $16.1$ and $30.2$. In two of the four the minimum sits
+on the upper $K_p$ edge of the swept range, so those sweeps bound the optimum
+from one side only; we therefore read the grid as showing that the cost surface
+is smooth and has an interior basin in $K_i$, not as locating a global optimum.
+A fifth sweep (AL\_0034, 2024-10-18) was logged in an earlier file format with
+no stimulus-onset column and could not be scored.
 
 \subsubsection*{Online gain search}
 
@@ -755,6 +780,14 @@ accepted only if it lowered the running best cost; otherwise the previous gains
 were restored. The cost was evaluated over the stimulation window less two
 samples.
 
+Four auto-tuning sessions were run, two in AL\_0034 (2024-10-25, two
+experiments) and two in AL\_0033 (2024-12-19 and 2025-03-17), of 136, 135, 100
+and 136 trials. All four started from $K_p = K_i = 0$ and ended at
+$(K_p, K_i) = (0.20,\,0.20)$, $(0.05,\,0.002)$, $(0.16,\,0.05)$ and
+$(0.02,\,0.04)$. The spread across runs is wide and only the first ends near any
+grid minimum, so we report the online search as a feasibility demonstration,
+not as a reliable optimizer; the gains used for the validation blocks
+(Table~\ref{tab:gains}) were set by hand within the range the grid had explored.
 Grid sweeps and auto-tuning runs were done in separate sessions within each
 mouse, so agreement between the grid minimum and the independently auto-tuned
 gains is a cross-check rather than a restatement
