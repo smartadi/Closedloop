@@ -65,7 +65,7 @@ predictable component of the tracking problem is largely captured by the plant d
 
 Two limitations bound these conclusions. The tracking experiments come from a single mouse and a single
 hemisphere, at one drive frequency, so the frequency dependence that would characterize the closed-loop
-bandwidth is not established; the $80$\,ms loop latency (Fig.~\ref{fig:figure1}F) predicts that both effects
+bandwidth is not established; the measured loop latency (Fig.~\ref{fig:figure1}F) predicts that both effects
 should weaken as the reference frequency approaches the loop bandwidth, which remains to be tested. And with
 three sessions the repeated-measures test across modes is underpowered (Friedman $p = 0.060$), so the
 across-session claim rests on the consistency of the direction rather than on a session-level test.
@@ -99,10 +99,21 @@ corrective inputs. Future implementations could benefit from adaptive reference 
 $y_{\mathrm{ref}}$ based on the estimated current cortical state, or from optogenetic actuators with a wider dynamic
 range.
 
-Third, the 80\,ms control-loop latency (Fig.~\ref{fig:figure1}F) spans approximately three 35\,Hz timesteps and
-limits the bandwidth of disturbance rejection for fast spontaneous fluctuations. Optimization of onboard computation
-and hardware communication could reduce this latency and extend the effective control bandwidth, particularly for
-rejecting high-frequency cortical oscillations.
+Third, loop latency bounds the bandwidth over which feedback can act, and that bound falls close to the band
+whose disturbance the controller failed to reject. A pure delay contributes a phase lag of $\omega\tau$ without
+attenuating gain, so it consumes phase margin at every frequency without being visible in the gain response. The
+measured end-to-end latency is at most $47$\,ms (Fig.~\ref{fig:figure1}F), to which the 35\,Hz sample-and-hold adds
+an effective half-sample ($14$\,ms), giving $\tau_{\mathrm{eff}} \approx 61$\,ms. The delay alone therefore reaches a
+quarter cycle of lag near $4$\,Hz. The delay is not the only source of lag: the identified plant is itself a lightly
+damped second-order system resonant near $2.2$\,Hz (Table~\ref{tab:tf_sessions}), whose phase has already fallen to
+roughly $-165^\circ$ by $5$\,Hz, and the integral action adds further lag at low frequency. Taking the standard
+crossover criterion $\omega_c \tau_{\mathrm{eff}} \lesssim 1$\,rad gives an achievable closed-loop bandwidth of
+${\sim}2.6$\,Hz. That this coincides with the 2--4\,Hz band identified above (Fig.~\ref{fig:figure4}C,D) is
+suggestive rather than conclusive---we did not sweep reference frequency, and the margin calculation uses a
+worst-case latency---but it points to the residual low-frequency error being set by the loop's own timing rather
+than by the form of the control law. Reducing onboard computation and communication latency, and compensating the
+remaining delay with a predictor rather than fixed preview, are the direct routes to extending the rejection
+bandwidth past this band.
 
 \subsection*{Future directions}
 
