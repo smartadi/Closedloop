@@ -908,8 +908,11 @@ The \emph{initial deviation} is the absolute distance of the readout from the
 reference at the onset sample, $\lvert \Delta F/F(t_{\mathrm{on}}) - r \rvert$,
 where $r = -5\%\,\Delta F/F$. It measures how far from target a trial starts.
 
-\emph{Motion energy} is the mean z-scored motion signal over the trial, defined
-under Behavioral monitoring above.
+\emph{Motion energy} is the mean squared z-scored motion signal over the
+trial, defined under Behavioral monitoring above. The motion trace is z-scored
+over the session, so it is signed and centred on zero; we therefore use the mean
+square, which is a movement energy, rather than the mean, which would let quiet
+and moving periods cancel.
 
 \emph{Relative 2--4\,Hz power} is the ratio of band power in 2--4\,Hz, the
 sub-band least attenuated by the controller, to total power in 0.4--10\,Hz. Both
@@ -988,7 +991,15 @@ response carries less energy than the disturbance it opposes.
 %% mixed models were fitted with fitlme, the estimator, and the denominator
 %% degrees of freedom).
 
-Analyses were performed in MATLAB R2025b (25.2.0.3055257, Update~2) with the Statistics and Machine Learning Toolbox 25.2. Significance was taken at
+Analyses were performed in MATLAB R2025b (25.2.0.3055257, Update~2) with the
+Statistics and Machine Learning Toolbox 25.2. Mixed models were fitted with
+\texttt{fitlme} by restricted maximum likelihood, and $p$-values for fixed
+effects use Satterthwaite-approximated denominator degrees of freedom. We use
+restricted rather than full maximum likelihood because the variance components
+are estimated from 15 sessions in 4 mice, where full maximum likelihood biases
+them downward, and Satterthwaite rather than residual degrees of freedom so that
+a between-session contrast is referenced against the number of sessions rather
+than the number of trials. Significance was taken at
 $\alpha = 0.05$ unless a corrected threshold is stated. We report $n$ as the
 number of sessions for session-level tests and the number of trials for
 trial-level tests, and state which in each case.
