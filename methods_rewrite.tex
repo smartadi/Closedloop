@@ -626,12 +626,13 @@ We summarized the response to each impulse as the mean $\Delta F/F$ over the
 %
 \begin{equation}
     E_{j} = \frac{1}{\lvert W \rvert}\sum_{t \in W} y_{j,t},
-    \qquad W = \{t_{\mathrm{on}},\ldots,t_{\mathrm{on}}+6\},
+    \qquad W = \{t_{\mathrm{on}}+1,\ldots,t_{\mathrm{on}}+7\},
     \label{eq:inhib_energy}
 \end{equation}
 %
 where $j$ indexes trials, $t_{\mathrm{on}}$ is the onset sample, and $W$ spans
-seven samples at 35\,Hz. We used a window mean rather than the instantaneous
+the seven samples from 29 to 200\,ms after onset at 35\,Hz. The onset sample
+itself is excluded because it straddles the trigger. We used a window mean rather than the instantaneous
 trough because the mean is less sensitive to single-sample noise and reflects the
 cumulative effect of a short input. Amplitude levels are reported as medians
 with 2.5th--97.5th percentile bounds, or as means with SEM, as stated in each
@@ -670,13 +671,15 @@ $560 \times 560$ maps. Results are in Figs.~\ref{fig:spatial_spread} and
 
 We fitted continuous-time transfer functions to the trial-averaged impulse
 responses with \textsc{tfest} (MATLAB System Identification Toolbox
-%% FILL: MATLAB release and toolbox version.
-). We swept 1--3 poles, 0--2 zeros, and 0--5 samples of pure delay (0--143\,ms
-at 35\,Hz), took the best fit at each order, and selected across orders by the
-Akaike Information Criterion. We validated by leave-one-amplitude-out
-cross-validation, fitting to all amplitudes but one and evaluating the
-normalized root-mean-square prediction error at the held-out amplitude, and
-report cross-validated $R^{2}$.
+). We swept 1--5 poles, 0--4 zeros with the number of zeros kept below the
+number of poles, and 0--3 samples of pure delay (0--85.7\,ms at 35\,Hz), took
+the best fit at each order, and selected across orders by the Akaike
+Information Criterion, escalating to a higher order when the fit to the
+held-in response fell below $R^{2} = 0.98$. We validated by a stratified
+random half-split over trials: for each of 100 splits the model was fitted to
+one half and evaluated on the other, in both directions, giving 200 folds with
+trial order held fixed. We report the median and interquartile range of the
+held-out $R^{2}$, computed with no free gain.
 
 Fits were performed on one primary session (AL\_0033, 2025-01-29) and compared
 across the three impulse sessions (Table~\ref{tab:tf_sessions}). The discretized
@@ -899,10 +902,11 @@ then across sessions.
 \subsubsection*{Pre-stimulus state measures}
 \label{sec:disturbance}
 
-We characterized cortical state before each trial in three ways.
+We characterized cortical state before each trial in four ways.
 
-The \emph{initial deviation} is the cross-trial variance of $\Delta F/F$ over the
-3\,s preceding laser onset.
+The \emph{initial deviation} is the absolute distance of the readout from the
+reference at the onset sample, $\lvert \Delta F/F(t_{\mathrm{on}}) - r \rvert$,
+where $r = -5\%\,\Delta F/F$. It measures how far from target a trial starts.
 
 \emph{Motion energy} is the mean z-scored motion signal over the trial, defined
 under Behavioral monitoring above.
@@ -916,6 +920,12 @@ circularity control. We used the ratio rather than absolute band power because
 any absolute spectral measure co-varies with the overall magnitude of the signal
 it is drawn from, which would confound a comparison between conditions that
 differ in magnitude by construction.
+
+\emph{Absolute low-frequency power} is the $\log_{10}$ of band power in
+1--4\,Hz over the same window. It is reported alongside the relative measure
+precisely because the two dissociate: the relative measure is insensitive to
+overall signal magnitude, the absolute one is not, and a factor that acts
+through ongoing amplitude will show in the absolute measure only.
 
 Two analyses use these measures. First, we regressed per-trial RMSE on each
 state separately for open- and closed-loop trials and compared slopes across
@@ -978,7 +988,7 @@ response carries less energy than the disturbance it opposes.
 %% mixed models were fitted with fitlme, the estimator, and the denominator
 %% degrees of freedom).
 
-Analyses were performed in MATLAB \textbf{Rxxxx}. Significance was taken at
+Analyses were performed in MATLAB R2025b (25.2.0.3055257, Update~2) with the Statistics and Machine Learning Toolbox 25.2. Significance was taken at
 $\alpha = 0.05$ unless a corrected threshold is stated. We report $n$ as the
 number of sessions for session-level tests and the number of trials for
 trial-level tests, and state which in each case.
@@ -998,10 +1008,13 @@ added the state and its interaction with condition,
 $\mathrm{RMSE} \sim \mathrm{condition} \times \mathrm{state} + (1 +
 \mathrm{condition} \mid \mathrm{session}) + (1 \mid \mathrm{mouse})$, with the
 state centered and scaled within session. From that model we read two
-quantities: the condition main effect on the open-loop level, which we report as
-the effect of state on \emph{predictability} of the disturbance, and the
+quantities: the state main effect, which with open loop as the reference level
+is the slope of open-loop error against state and which we report as the effect
+of state on \emph{predictability} of the disturbance, and the
 condition-by-state interaction, which we report as its effect on
-\emph{controllability}, meaning the trend in the open-minus-closed-loop gap. We
+\emph{controllability}, meaning the trend in the open-minus-closed-loop gap.
+The condition main effect, the open-minus-closed-loop gap at mean state, is
+reported separately and is not either of these. We
 use both terms in the disturbance-rejection sense, not the structural sense of
 Kalman controllability. For the rejection ratio we tested
 $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{mouse}) +
@@ -1141,7 +1154,7 @@ request.
     \caption{\textbf{State exemplars are consistent across sessions.} For every
     session with motion capture (rows), a representative closed-loop trial for
     each of four pre-stimulus states (columns: high initial deviation, high
-    motion, high relative 2--4\,Hz power, high absolute 2--4\,Hz power), chosen as
+    motion, high relative 2--4\,Hz power, high absolute 1--4\,Hz power), chosen as
     the trial highest in that state and low in the others within that session.
     Colors match Fig.~\ref{fig:figure4}A. Dashed line, reference
     ($-5\%\,\Delta F/F$); shading, stimulation window; scale bars 1\,s and 5\%.
@@ -1159,7 +1172,7 @@ request.
     low-frequency factor is defined.} Unique $R^2$ of each state factor for
     closed-loop tracking error, in the transient (0--1\,s) and steady-state
     (1--3\,s) windows, under three specifications of the low-frequency term: relative and
-    absolute 2--4\,Hz power entered together (left), relative only (middle), and
+    absolute 1--4\,Hz power entered together (left), relative only (middle), and
     absolute only (right). The main text (Fig.~\ref{fig:figure4}C) enters each
     low-frequency term in its own initial-deviation-plus-motion base, which
     avoids the collinearity that suppresses the relative term when both are
