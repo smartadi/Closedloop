@@ -697,13 +697,13 @@ We summarized the response to each impulse as the mean $\Delta F/F$ over the
 %
 \begin{equation}
     E_{j} = \frac{1}{\lvert W \rvert}\sum_{t \in W} y_{j,t},
-    \qquad W = \{t_{\mathrm{on}}+1,\ldots,t_{\mathrm{on}}+7\},
+    \qquad W = \{t_{\mathrm{on}},\ldots,t_{\mathrm{on}}+7\},
     \label{eq:inhib_energy}
 \end{equation}
 %
 where $j$ indexes trials, $t_{\mathrm{on}}$ is the onset sample, and $W$ spans
-the seven samples from 29 to 200\,ms after onset at 35\,Hz. The onset sample
-itself is excluded because it straddles the trigger. We used a window mean rather than the instantaneous
+the eight samples from 0 to 200\,ms after onset at 35\,Hz, inclusive of the
+onset sample. We used a window mean rather than the instantaneous
 trough because the mean is less sensitive to single-sample noise and reflects the
 cumulative effect of a short input. Amplitude levels are reported as medians
 with 2.5th--97.5th percentile bounds, or as means with SEM, as stated in each
