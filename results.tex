@@ -115,10 +115,10 @@ The validity of these results depends on the trial-averaging assumption holding 
     % ===========================================================================
     \caption{\small{\textbf{Closed-loop feedback decouples the controlled response from a state-dependent disturbance carried by the contralateral hemisphere.}\\
     \small{Open loop red, closed loop blue; steady-state window 1--3\,s after laser onset. Decomposition (C) uses the 7 sessions with usable motion capture and at least 12 trials per state (397 closed-loop trials); the state-quartile panel (D) uses all 15 sessions from 4 mice (1670 trials), except for motion, which uses the 11 sessions carrying a usable motion trace (1190 trials); the rejection panel (G) the 11 of 13 sessions that reach the setpoint (595 trials). Single-trial and single-session insets from a representative session (AL\_0033).\\
-    \textbf{A:} State exemplars. Representative closed-loop trials chosen for high initial deviation (blue), motion (orange), relative 2--4\,Hz power (green), and absolute 1--4\,Hz power (purple)---the four pre-stimulus state factors used throughout.\\
+    \textbf{A:} State exemplars. Representative closed-loop trials chosen for high initial deviation (blue), motion (orange), relative 2--4\,Hz power (green), and absolute 1--4\,Hz power (purple)---the four state factors used throughout, measured from $-2$\,s to $+3$\,s around stimulus onset (initial deviation at onset).\\
     \textbf{B:} Error-decomposition model. Per-trial steady-state tracking error (RMSE) is regressed on the four state factors, $\mathrm{RMSE}\approx\beta_0+\sum_i\beta_i X_i$; predictor colours match A.\\
-    \textbf{C:} Unique $R^2$ of each factor for the closed-loop error, resolved by window (transient 0--1\,s, light; steady-state 1--3\,s, dark): initial deviation owns the transient ($0.39\rightarrow0.02$), relative and absolute 1--4\,Hz power carry the steady-state window ($0.10\rightarrow0.13$ and $0.28\rightarrow0.44$), motion neither ($<0.01$).\\
-    \textbf{D:} Effect of state on controller performance. Open- and closed-loop steady-state error across quartiles of each state (low~$\rightarrow$~high) with the open-minus-closed-loop gap (black), and two properties read from a session-aware mixed model (RMSE $\sim$ condition${\times}$state, random per-session intercepts and open/closed-loop slopes, mouse intercept). \emph{Predictability} denotes the open-loop disturbance (trend of the uncontrolled error) and \emph{controllability} the steerability (trend of the rejected fraction, the open-minus-closed-loop gap); arrows point in the estimated direction and carry stars where significant. Motion: predictability$\downarrow$ ($p=7.3\times10^{-4}$), controllability$\uparrow$ ($p=0.0015$)---the loop rejects a growing share of an unanticipated disturbance. Relative 2--4\,Hz: predictability unchanged, with controllability trending down but not significant ($p=0.07$) as closed-loop error climbs. Initial deviation and absolute power: predictability$\downarrow$ ($p<10^{-6}$) with controllability unchanged.\\
+    \textbf{C:} Unique $R^2$ of each factor for the closed-loop error, resolved by window (transient 0--1\,s, light; steady-state 1--3\,s, dark): initial deviation owns the transient ($0.41\rightarrow0.03$), relative 2--4\,Hz and absolute 1--4\,Hz power carry the steady-state window ($0.15\rightarrow0.19$ and $0.28\rightarrow0.44$), motion neither ($<0.01$).\\
+    \textbf{D:} Effect of state on controller performance. Open- and closed-loop steady-state error across quartiles of each state (low~$\rightarrow$~high) with the open-minus-closed-loop gap (black), and two properties read from a session-aware mixed model (RMSE $\sim$ condition${\times}$state, random per-session intercepts and open/closed-loop slopes, mouse intercept). \emph{Predictability} denotes the open-loop disturbance (trend of the uncontrolled error) and \emph{controllability} the steerability (trend of the rejected fraction, the open-minus-closed-loop gap); arrows point in the estimated direction and carry stars where significant. Motion: predictability$\downarrow$ ($p=7.3\times10^{-4}$), controllability$\uparrow$ ($p=0.0015$)---the loop rejects a growing share of an unanticipated disturbance. Relative 2--4\,Hz: predictability unchanged, controllability$\downarrow$ ($p=0.032$) as closed-loop error climbs. Initial deviation and absolute power: predictability$\downarrow$ ($p<10^{-6}$) with controllability unchanged.\\
     \textbf{E:} Contra$\rightarrow$ipsilateral kernel---ridge weights mapping contralateral pixels onto the ipsilateral control readout (representative session).\\
     \textbf{F:} The controlled response $A$ splits into the Global disturbance $G$ (predicted from the contralateral hemisphere with no controller input) and the Local component $L = A - G$ (laser and controller effect); trial average for a representative session ($R^2_{\mathrm{te}} = 0.75$).\\
     \textbf{G:} Closed-loop disturbance rejection. Per-session energy ratio $\mathrm{RR} = \|A-r\|^2/\|D\|^2$---residual energy of the actual response about the reference ($r = -5\%\,\Delta F/F$) over the energy of the disturbance $D$ (the contra-predicted excursion, leak-corrected), steady-state window 1--3\,s; $\mathrm{RR} < 1$ is rejection. Geometric-mean $\mathrm{RR} = 0.58$ (95\% CI $[0.48, 0.71]$), below one by a session-aware mixed model ($\log\mathrm{RR} \sim 1 + (1|\mathrm{mouse}) + (1|\mathrm{mouse{:}session})$; one-sided $p = 2.1\times10^{-8}$, $n = 11$ sessions). The two sessions that never reach the setpoint are excluded.}}}
@@ -132,16 +132,17 @@ The validity of these results depends on the trial-averaging assumption holding 
 % ------------------------------------------------------------
 Closed-loop control lowered tracking error in every session, but the error it
 left behind was not constant: single trials departed from the session mean in a
-way that tracked the state the cortex was in when the trial began. We
-characterised that state by four pre-stimulus quantities---the initial deviation
-from the reference, motion energy, relative 2--4\,Hz power, and absolute
-2--4\,Hz power---chosen because each can be read from the trial itself before
-the laser turns on. Representative closed-loop trials selected to be extreme in
+way that tracked the state of the cortex around the trial. We characterised
+that state by four quantities---the initial deviation from the reference,
+motion energy, relative 2--4\,Hz power, and absolute 1--4\,Hz power. The initial
+deviation is read at stimulus onset; the other three are measured over one
+common window, from 2\,s before onset to the end of stimulation at $+3$\,s,
+because the controller's performance over a trial is shaped both by activity
+before the stimulus begins and by activity while it is delivered. Representative closed-loop trials selected to be extreme in
 one factor and unremarkable in the others are shown in
 Fig.~\ref{fig:figure4}A, with exemplars for every session in
-Fig.~\ref{fig:S3}. Motion capture was available for 11 of the 15 sessions; the
-7 of those with enough trials in every state bin enter the error decomposition
-below (397 closed-loop trials), and the 4 sessions with no video are excluded
+Fig.~\ref{fig:S3}. Motion capture was available for 11 of the 15 sessions; all
+11 enter the error decomposition below (613 closed-loop trials), and the 4 sessions with no video are excluded
 from every motion analysis.
 
 We decomposed per-trial tracking error (RMSE) into the unique contribution of
@@ -149,8 +150,8 @@ the four factors (Fig.~\ref{fig:figure4}B), resolved separately in the transient
 (0--1\,s) and steady-state (1--3\,s) windows (Fig.~\ref{fig:figure4}C). The
 composition turned over between the two. The initial deviation dominated the
 transient and then collapsed once the response reached steady state (unique
-$R^2 = 0.39 \rightarrow 0.02$), whereas relative and absolute 1--4\,Hz power
-carried the steady-state window ($0.10 \rightarrow 0.13$ and
+$R^2 = 0.41 \rightarrow 0.03$), whereas relative 2--4\,Hz and absolute 1--4\,Hz
+power carried the steady-state window ($0.15 \rightarrow 0.19$ and
 $0.28 \rightarrow 0.44$). Motion contributed negligibly in either window (unique
 $R^2 < 0.01$). The error that feedback cannot remove is therefore not a leftover
 of the transient but a distinct quantity tied to ongoing low-frequency activity,
@@ -166,20 +167,20 @@ each state by its effect on \emph{predictability}---the open-loop disturbance,
 read from the trend of the uncontrolled error---and on \emph{controllability},
 read from the trend of the open-minus-closed-loop gap, the condition-by-state
 interaction. Closed-loop control reduced error strongly at every state (gap at
-mean state $p \le 3.8\times10^{-5}$ for all four factors), but the states differed in how
+mean state $p \le 3.7\times10^{-5}$ for all four factors), but the states differed in how
 that benefit moved. Motion made the disturbance less predictable---open-loop
 error rose with it ($p = 7.3\times10^{-4}$)---yet more controllable: the loop
 rejected a growing share and the gap widened ($p = 0.0015$), the signature of
 feedback rejecting an unanticipated disturbance. The same effect is visible
 within sessions: regressing per-trial RMSE on concurrent motion energy, with
 both quantities $z$-scored within session, open-loop error rose with motion
-(median slope $+0.16$ standard deviations of RMSE per standard deviation of
-motion; Wilcoxon signed-rank $p = 0.016$) while under closed-loop control the
-dependence was abolished (median slope $-0.04$; $p = 0.30$), and the open-loop
-slope exceeded the closed-loop slope in all 7 sessions ($p = 0.016$). Relative
-2--4\,Hz power showed the opposite tendency: the open loop was unaffected while
-closed-loop error climbed, so controllability trended downward, though this did
-not reach significance ($+0.10$, 95\% CI $[-0.01, +0.21]$, $p = 0.07$). The initial deviation and
+(median slope $+0.13$ standard deviations of RMSE per standard deviation of
+motion; Wilcoxon signed-rank $p = 0.002$) while under closed-loop control the
+dependence was abolished (median slope $-0.05$; $p = 0.47$), and the open-loop
+slope exceeded the closed-loop slope in all 11 sessions ($p = 0.001$). Relative
+2--4\,Hz power showed the opposite pattern: the open loop was unaffected while
+closed-loop error climbed, so controllability fell ($+0.12$, 95\% CI
+$[+0.01, +0.23]$, $p = 0.032$). The initial deviation and
 absolute 1--4\,Hz power lowered predictability (open-loop error rose,
 $p < 10^{-6}$) but left controllability unchanged---disturbances that scale both
 conditions together. The controller therefore behaves as an internal model whose
@@ -231,7 +232,7 @@ rejection---were excluded.
 % % ------------------------------------------------------------
 \subsection*{Feedforward control for variable reference tracking}
 % ------------------------------------------------------------
-Feedback and preview correct different failures of sinusoidal tracking: feedback removes trial-to-trial variability, while preview removes the phase lag imposed by the plant. We designed the controller to track a 1\,Hz sinusoidal reference for 4\,s,. We compared four controller modes, open-loop (OL), open-loop with preview (OL$+$p), closed-loop (CL), and closed-loop with preview (CL$+$p). The preview block shifts the reference forward by a fixed lookahead, that is determined by open loop response characteristics, before it reaches the controller.  This controller compensates the delay of the cortical response rather than just its amplitude (Fig.~\ref{fig:figure5}A). We report one representative session in detail (200 sinusoidal trials; $n = 51, 46, 46, 57$ trials for OL, OL$+$p, CL, CL$+$p) and the consistency of each effect across three sessions.
+Feedback and preview correct different failures of sinusoidal tracking: feedback removes trial-to-trial variability, while preview removes the phase lag imposed by the plant. We designed the controller to track a 1\,Hz sinusoidal reference for 4\,s. We compared four controller modes, open-loop (OL), open-loop with preview (OL$+$p), closed-loop (CL), and closed-loop with preview (CL$+$p). The preview block shifts the reference forward by a fixed lookahead, that is determined by open loop response characteristics, before it reaches the controller.  This controller compensates the delay of the cortical response rather than just its amplitude (Fig.~\ref{fig:figure5}A). We report one representative session in detail (200 sinusoidal trials; $n = 51, 46, 46, 57$ trials for OL, OL$+$p, CL, CL$+$p) and the consistency of each effect across three sessions.
 \begin{figure}[!t]
     \centering
     \includegraphics[width=0.82\linewidth]{images/Figure5.pdf}
@@ -243,19 +244,19 @@ Tracking a 1\,Hz sinusoidal reference over a 4\,s stimulation window. Four modes
 \textbf{C:} Trial average $\pm$ SD ($n = 51, 46, 46, 57$ trials for OL, OL$+$p, CL, CL$+$p).
 \textbf{D:} Trial-average laser command $\pm$ SD, in mW; panels B--D share the time axis carried by D.\\
 \textbf{E:} Across-trial variance over time. \textbf{F:} RMSE over time, mean $\pm$ SEM (bands are asymmetric because mean and edges are square-rooted after averaging squared error).\\
-\textbf{G:} Per-trial RMSE by mode, sample-normalised over the full 4\,s stimulation window rather than split into transient and steady-state epochs: half-violins show the full distribution (density estimated in log space), dots are individual trials, bars are median and interquartile range. The axis is logarithmic so that no trial is clipped. $^{*}p<0.05$, $^{***}p<0.001$, Wilcoxon rank-sum; all six pairwise comparisons were tested and unmarked pairs are not significant.
+\textbf{G:} Per-trial RMSE by mode, sample-normalised over the full 4\,s stimulation window rather than split into transient and steady-state epochs: half-violins show the full distribution (density estimated in log space), dots are individual trials, bars are median and interquartile range. The axis is logarithmic so that no trial is clipped.
 \textbf{H:} Phase lag relative to the reference from a 1\,Hz fundamental fit to the trial average; dashed line marks the preview lookahead ($51^\circ$ at 1\,Hz).\\
-\textbf{I--K:} Consistency across the three sessions ---one point per session per mode joined by faint lines, bold bar the across-session mean---for per-trial RMSE (I), phase lag (J) and across-trial variance (K). Controller gains, reference amplitude and delivered optical power differ between sessions, so I--K report direction and consistency, not magnitude; at $n = 3$ sessions no session-level significance test is possible, and the within-session statistics are those in G.\\
+\textbf{I--K:} Consistency across the three sessions ---one point per session per mode joined by faint lines, bold bar the across-session mean---for per-trial RMSE (I), phase lag (J) and across-trial variance (K). Controller gains, reference amplitude and delivered optical power differ between sessions, so I--K report direction and consistency, not magnitude; with $n = 3$ sessions, no significance tests are reported for this figure.\\
 }}
     \label{fig:figure5}
 \end{figure}
 Open-loop tracking followed the reference in shape but lagged it and drifted between trials (Fig.~\ref{fig:figure5}B). The trial average retained the sinusoid in every mode, with the across-trial spread widest under open loop (Fig.~\ref{fig:figure5}C); the trial-average laser commands that produced these responses are shown in Fig.~\ref{fig:figure5}D.
 
-Feedback reduced both the trial-to-trial spread and the error itself. Across-trial variance fell from $17.9$ to $14.8$ between OL and CL (Fig.~\ref{fig:figure5}E), and the time-resolved tracking error fell alongside it (Fig.~\ref{fig:figure5}F). Collapsing each trial to a single number, median RMSE fell from $3.82$ to $2.80$\,\%\,$\Delta F/F$ (rank-sum $p = 7.7\times10^{-4}$; Fig.~\ref{fig:figure5}G). Preview did not reproduce this effect: median RMSE was unchanged between OL and OL$+$p ($3.82$ versus $3.55$, $p = 0.32$), and adding preview to closed-loop control did not improve it further (CL versus CL$+$p, $p = 0.093$). Closed-loop control with preview gave the tightest distribution of the four modes (SD $1.57$ versus $1.85$, $2.75$ and $2.19$ for OL, OL$+$p and CL) and reduced error relative to open loop ($p = 0.020$).
+Feedback reduced both the trial-to-trial spread and the error itself. Across-trial variance fell from $17.9$ to $14.8$ between OL and CL (Fig.~\ref{fig:figure5}E), and the time-resolved tracking error fell alongside it (Fig.~\ref{fig:figure5}F). Collapsing each trial to a single number, median RMSE fell from $3.82$ to $2.80$\,\%\,$\Delta F/F$ (Fig.~\ref{fig:figure5}G). Preview did not reproduce this effect: median RMSE changed little between OL and OL$+$p ($3.82$ versus $3.55$), and adding preview to closed-loop control did not improve it further (CL $2.80$ versus CL$+$p $3.30$). Closed-loop control with preview gave the tightest distribution of the four modes (SD $1.57$ versus $1.85$, $2.75$ and $2.19$ for OL, OL$+$p and CL) and reduced error relative to open loop (median $3.30$ versus $3.82$).
 
 Preview specifically worked on lag compensation and improved tracking of a moving reference. The cortical response lagged the reference by $60^\circ$ under open loop and by $36^\circ$ under closed loop; adding preview moved both to approximately zero ($5^\circ$ and $-9^\circ$ respectively; Fig.~\ref{fig:figure5}H). The correction matched the lookahead by construction: a five-sample preview at 35\,Hz corresponds to $143$\,ms, or $51^\circ$ at the 1\,Hz drive frequency, and the measured open-loop correction across all pooled trials was $5.0$ samples ($51.4^\circ$, median).
 
-All three effects held across sessions. Per-trial RMSE was lower under closed loop than open loop in 3/3 sessions (Fig.~\ref{fig:figure5}I), preview cancelled the lag in all three (Fig.~\ref{fig:figure5}J), and across-trial variance was lower under closed loop in 3/3 (Fig.~\ref{fig:figure5}K). Pooling per-trial RMSE across sessions confirmed the error reduction (OL $4.58 \pm 1.77$, $n = 136$; CL $3.83 \pm 1.94$, $n = 100$; rank-sum $p = 1.5\times10^{-4}$; Kruskal--Wallis across all four modes $\chi^2 = 19.6$, $p = 2.1\times10^{-4}$), and left the preview comparison null ($p = 0.44$). A repeated-measures test treating session as the unit is underpowered at $n = 3$ and did not reach significance (Friedman $p = 0.060$), so we treat the direction and its consistency, not the session-level test, as the result. The error reduction is therefore attributable to feedback and the lag correction to preview.
+All three effects held across sessions. Per-trial RMSE was lower under closed loop than open loop in 3/3 sessions (Fig.~\ref{fig:figure5}I), preview cancelled the lag in all three (Fig.~\ref{fig:figure5}J), and across-trial variance was lower under closed loop in 3/3 (Fig.~\ref{fig:figure5}K). Pooling per-trial RMSE across sessions showed the same reduction (mean $\pm$ SD: OL $4.58 \pm 1.77$, $n = 136$; CL $3.83 \pm 1.94$, $n = 100$) and no comparable change with preview (OL$+$p $4.47 \pm 2.22$, $n = 110$; CL$+$p $3.95 \pm 1.58$, $n = 132$). With three sessions we do not report significance tests; we treat the direction of each effect and its consistency across sessions as the result. The error reduction is therefore attributable to feedback and the lag correction to preview.
 
-Decomposing the error clarifies why the two mechanisms do not overlap. Because the stimulation window contains exactly four cycles of the drive, per-trial squared error partitions without loss into a constant-offset term, a term at the drive frequency, and the remaining broadband term. Averaged over the three sessions, preview reduced the error at the drive frequency roughly threefold in every comparison (OL $3.14 \rightarrow$ OL$+$p $0.89$; CL $1.78 \rightarrow$ CL$+$p $1.22$\,(\%\,$\Delta F/F)^2$), while feedback reduced the broadband term ($10.55 \rightarrow 6.62$ from OL to CL). Preview therefore acts on the component of error that a fixed phase relationship can remove, and feedback on the component generated by ongoing spontaneous activity. Closed-loop control with preview was the only mode to engage both, and had the lowest total error power in two of three sessions.
+Decomposing the error clarifies why the two mechanisms do not overlap. Because the stimulation window contains exactly four cycles of the drive, per-trial squared error partitions without loss into a constant-offset term, a term at the drive frequency, and the remaining broadband term. Averaged over the three sessions, preview reduced the error at the drive frequency in both comparisons (OL $3.14 \rightarrow$ OL$+$p $0.89$, 3.5-fold; CL $1.78 \rightarrow$ CL$+$p $1.22$\,(\%\,$\Delta F/F)^2$, 1.5-fold), while feedback reduced the broadband term ($10.55 \rightarrow 6.62$ from OL to CL). Preview therefore acts on the component of error that a fixed phase relationship can remove, and feedback on the component generated by ongoing spontaneous activity. Closed-loop control with preview was the only mode to engage both, and had the lowest total error power in two of three sessions.
 

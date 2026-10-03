@@ -307,9 +307,11 @@ sample $t$,
 \end{equation}
 %
 in percent, where $\bar{F}_{t}$ is a running mean of $F$ over the preceding
-20\,s (700 control samples, held in a circular buffer).
-%% CHECK: the old draft said a 21x21 pixel kernel and a 40 s baseline. The rig
-%% uses a half-width of 5 pixels, so 10x10, and a 20 s buffer.
+40.0\,s (1400 control samples at 35\,Hz). This length is the controller's horizon
+parameter and was identical in every session.
+%% CHECK (kernel only): the old draft said a 21x21 pixel kernel; the rig uses a
+%% half-width of 5 pixels, given here as 10x10. Confirm on the rig. The baseline
+%% length is settled: d.params.horizon = 1400 samples = 40.0 s in all 15 sessions.
 
 The baseline was frozen at trial onset for the stimulated site and resumed
 updating at trial end. Freezing matters: if the evoked suppression were allowed
@@ -321,6 +323,21 @@ not being stimulated kept updating their own baselines normally.
 The controller acted on $y_t$ directly. The rig also provides a second-order
 Butterworth low-pass on the feedback path, which is used only for sine-reference
 trajectory tracking and was off in every session reported here.
+
+\paragraph{Two $\Delta F/F$ normalizations.}
+Equation~\eqref{eq:dff} is the signal the controller computed online, and every
+closed-loop analysis (Figs.~\ref{fig:figure3}--\ref{fig:figure5}) uses it
+unchanged. Because the loop could use only past samples, re-normalizing these data
+by a retrospective whole-session mean would characterize a signal the controller
+never had. The open-loop impulse experiments (Fig.~\ref{fig:figure2}) enter no
+feedback path and are analyzed retrospectively, so they need no online baseline;
+they are normalized by a fixed denominator,
+$\Delta F/F = 100 \times F / \bar{F}_{\mathrm{img}}$, where
+$\bar{F}_{\mathrm{img}}$ is the session mean image averaged over the readout
+kernel. The choice does not affect the state analysis of
+Fig.~\ref{fig:figure2}G, whose quartiles are rank-based and whose dependent
+variable is scaled within stimulus amplitude, so it is invariant to any constant
+rescaling of $\Delta F/F$.
 
 \subsubsection*{Trial structure}
 
@@ -595,6 +612,59 @@ closed-loop poles lie inside the unit circle, with a gain margin of
 consistent with the small gains that proved sufficient in practice and with the
 absence of oscillatory instability in any session.
 
+\subsubsection*{Sinusoidal reference and preview}
+\label{sec:preview}
+
+For Fig.~\ref{fig:figure5} the reference varied in time. [RIG] The trajectory
+was
+%
+\begin{equation}
+    r_{k} = A\left[1 - \cos\!\left(2\pi f\,k / f_{s}\right)\right],
+    \qquad y_{\mathrm{ref},k} = -\tilde{r}_{k},
+    \label{eq:sine_ref}
+\end{equation}
+%
+with $f = 1$\,Hz, so the setpoint swings between 0 and $-2A\%\,\Delta F/F$, and
+the 4\,s stimulation window holds exactly four cycles. Preview acts on the
+reference before it reaches the controller,
+%
+\begin{equation}
+    \tilde{r}_{k} = r_{k} + K_{v}\,(r_{k+1} - r_{k})
+                + K_{a}\,(r_{k+1} - 2r_{k} + r_{k-1})
+                + K_{\mathrm{pv}}\,(r_{k+d} - r_{k}),
+    \label{eq:preview}
+\end{equation}
+%
+and the previewed setpoint replaces $y_{\mathrm{ref}}$ in both the feedforward
+term and the error: $\bar{u}_{k} = K_{r}\,\tilde{r}_{k}$ in Eq.~\eqref{eq:ff} and
+$e_{k} = \sigma y_{k} + \tilde{r}_{k}$ in Eq.~\eqref{eq:error}. In every session
+reported here $K_{v} = K_{a} = 0$ and $K_{\mathrm{pv}} = 1$, so
+$\tilde{r}_{k} = r_{k+d}$, a pure lookahead of $d = 5$ samples (143\,ms, or
+$51.4^{\circ}$ at 1\,Hz), chosen to match the lag of the open-loop response.
+
+Each trial was assigned independently and uniformly at random to one of four
+modes: open loop (OL; $g = 0$, $K_{\mathrm{pv}} = 0$, command $K_{r} r_{k}$),
+open loop with preview (OL$+$p; $g = 0$, $K_{\mathrm{pv}} = 1$), closed loop (CL;
+$g = 1$, $K_{\mathrm{pv}} = 0$), and closed loop with preview (CL$+$p; $g = 1$,
+$K_{\mathrm{pv}} = 1$), with $g$ the feedback switch of Eq.~\eqref{eq:pi}. Three
+sessions in one mouse (AL\_0048, inhibitory side; 2026-07-01, experiment 6,
+$A = 3$; 2026-07-14, experiment 1, $A = 2$; 2026-07-21, experiment 1, $A = 2$)
+contributed; Fig.~\ref{fig:figure5}B--H show 2026-07-14.
+%% FILL: K_r, K_p, K_i per sine session (not in the logged params struct).
+
+\emph{Metrics.} All are computed from stimulation onset to $+4$\,s against the
+logged reference. Per-trial RMSE is as in the static case. Across-trial variance
+is the across-trial variance at each sample, averaged over the window. Phase lag
+comes from a least-squares fit of $b_{0} + b_{1}\sin(2\pi f t) + b_{2}\cos(2\pi f
+t)$ to the trial-averaged response and to the reference; the phase of each is
+$\operatorname{atan2}(b_{2}, b_{1})$ and the lag is their wrapped difference.
+Per-trial lag is the lag of the cross-correlation peak between response and
+reference, searched within half a period. Because the window holds an integer
+number of cycles, 1\,Hz falls on a discrete Fourier bin, and Parseval's theorem
+partitions each trial's mean squared error exactly into a constant offset, the
+1\,Hz component, and a broadband remainder; these are averaged within session and
+then across sessions.
+
 % -----------------------------------------------------------------------------
 \subsection*{System characterization}
 % -----------------------------------------------------------------------------
@@ -669,21 +739,73 @@ $560 \times 560$ maps. Results are in Figs.~\ref{fig:spatial_spread} and
 \subsubsection*{Transfer-function fitting}
 \label{sec:tf_fitting}
 
-We fitted continuous-time transfer functions to the trial-averaged impulse
-responses with \textsc{tfest} (MATLAB System Identification Toolbox
-). We swept 1--5 poles, 0--4 zeros with the number of zeros kept below the
-number of poles, and 0--3 samples of pure delay (0--85.7\,ms at 35\,Hz), took
-the best fit at each order, and selected across orders by the Akaike
-Information Criterion, escalating to a higher order when the fit to the
-held-in response fell below $R^{2} = 0.98$. We validated by a stratified
-random half-split over trials: for each of 100 splits the model was fitted to
-one half and evaluated on the other, in both directions, giving 200 folds with
-trial order held fixed. We report the median and interquartile range of the
-held-out $R^{2}$, computed with no free gain.
+We fitted a continuous-time transfer function to each session's
+amplitude-normalized impulse response. The trial-averaged response at each
+amplitude $a$ was divided by $a$, and these normalized responses were averaged
+with weights proportional to $a^{2}$, so that the high signal-to-noise amplitudes
+set the dynamics, giving $h(t)$ over the 0.5\,s after onset. Under linearity the
+normalized responses coincide, so dividing by amplitude is itself the linear
+assumption the fit then tests. We fitted $h(t)$ with \textsc{tfest} (MATLAB
+System Identification Toolbox), sweeping 1--5 poles, 0--4 zeros with the number
+of zeros kept below the number of poles (strictly proper, so $h(0) = 0$), and
+0--3 samples of pure delay (0--85.7\,ms at 35\,Hz). We selected across orders
+by the Akaike Information Criterion, escalating to a higher order when the
+selected model reproduced $h(t)$ with $R^{2} < 0.98$.
 
-Fits were performed on one primary session (AL\_0033, 2025-01-29) and compared
-across the three impulse sessions (Table~\ref{tab:tf_sessions}). The discretized
-primary fit provides $(\bar A, \bar B, C)$ for the design above.
+\emph{Held-out validation} (Fig.~\ref{fig:figure2}C,D). For each of 100 random
+splits, trials were divided in half within each amplitude, so that both halves
+span the full dose range; $h(t)$ was rebuilt on one half, the model refitted at
+the session's selected order, and its prediction scored against the other half,
+in both directions (200 folds). The prediction carries the model's own gain, so
+a gain mismatch counts against it. We report the median and interquartile range
+of the held-out $R^{2}$. Model order was selected once on all trials and is not
+itself cross-validated.
+
+\emph{Cross-session model swap} (Fig.~\ref{fig:figure2}E). Entry $(i,j)$ is the
+$R^{2}$ of session $i$'s fitted unit response against session $j$'s measured
+$h(t)$, after a single least-squares gain for that pair. The free gain restricts
+the comparison to the shape of the response, the property a controller cannot
+re-tune; gain is re-tuned per session in any case. The diagonal is each model's
+fit to its own session.
+
+\emph{Time constants} (Fig.~\ref{fig:figure2}F). Each continuous-time pole $p$
+gives $\tau = -1/\mathrm{Re}(p)$; we report the slowest and fastest distinct
+values per session. Confidence intervals come from 300 bootstrap resamples of
+trials within amplitude, each rebuilding $h(t)$ and refitting at the selected
+order. A resample whose slowest $\tau$ exceeded the 0.5\,s fit window was
+discarded, because a time constant longer than the window cannot be identified
+from it; the discarded fraction is reported per session
+(Table~\ref{tab:tf_fig2}). Intervals are the 2.5th and 97.5th percentiles of the
+retained resamples. To separate session from drive range, we also refitted every
+session over the amplitude range common to all four.
+
+\begin{table}[h]
+    \centering
+    \small
+    \begin{tabular}{llccccc}
+        \hline
+        & Session & Order (p/z/delay) & $\tau_{\mathrm{slow}}$ (ms) [95\% CI] & $\tau_{\mathrm{fast}}$ (ms) & $R^{2}_{h}$ & Discarded \\
+        \hline
+        Mouse 1a & AL\_0041 2025-12-02 (1) & 3/1/0 & 176 [69, 471]  & 148 & 0.97 & 42\% \\
+        Mouse 1b & AL\_0041 2025-12-02 (2) & 4/3/0 & 540 [155, 502] & 93  & 1.00 & 50\% \\
+        Mouse 2  & AL\_0033 2025-01-29     & 4/3/0 & 333 [207, 478] & 150 & 1.00 & 2\%  \\
+        Mouse 3  & AL\_0048 2026-07-15     & 4/2/0 & 302 [109, 498] & 142 & 1.00 & 50\% \\
+        \hline
+    \end{tabular}
+    \caption{Impulse-response fits underlying Fig.~\ref{fig:figure2}C--F, at the
+        selected order. $R^{2}_{h}$, in-sample fit to $h(t)$; Discarded, fraction
+        of bootstrap resamples whose slowest time constant exceeded the 0.5\,s fit
+        window. Where half the resamples are discarded the interval is censored
+        and unreliable; for Mouse 1b it excludes the point estimate.}
+    \label{tab:tf_fig2}
+\end{table}
+
+The controller was designed on an earlier fit to the primary session
+(Table~\ref{tab:tf_sessions}); its discretization provides
+$(\bar A, \bar B, C)$ for the design above.
+%% CHECK: tab:tf_sessions predates the 2026-08-10 widening of the order sweep
+%% (it was 1-3 poles); the discussion's 2.2 Hz resonance quotes it. Confirm it is
+%% the fit the controller was actually designed on, or replace it.
 
 \begin{table}[h]
     \centering
@@ -899,36 +1021,76 @@ or relative normalization was applied at any stage, so differences in absolute
 power between conditions are preserved. Spectra were averaged within session and
 then across sessions.
 
-\subsubsection*{Pre-stimulus state measures}
+\subsubsection*{Brain-state measures}
 \label{sec:disturbance}
 
-We characterized cortical state before each trial in four ways.
+We characterized cortical state on each trial with up to four quantities. The
+impulse analysis (Fig.~\ref{fig:figure2}G) and the controller analysis
+(Fig.~\ref{fig:figure4}) measure them over different windows, deliberately,
+because they ask different questions.
 
-The \emph{initial deviation} is the absolute distance of the readout from the
-reference at the onset sample, $\lvert \Delta F/F(t_{\mathrm{on}}) - r \rvert$,
-where $r = -5\%\,\Delta F/F$. It measures how far from target a trial starts.
+The \emph{initial deviation} (Fig.~\ref{fig:figure4} only) is the absolute
+distance of the readout from the reference at the onset sample,
+$\lvert y(t_{\mathrm{on}}) - r \rvert$, where $r = -5\%\,\Delta F/F$. It measures
+how far from target a trial starts.
 
-\emph{Motion energy} is the mean squared z-scored motion signal over the
-trial, defined under Behavioral monitoring above. The motion trace is z-scored
-over the session, so it is signed and centred on zero; we therefore use the mean
-square, which is a movement energy, rather than the mean, which would let quiet
-and moving periods cancel.
+\emph{Motion energy} is the mean, over the window, of the z-scored motion signal
+defined under Behavioral monitoring. That signal is already an energy (a squared
+frame difference, non-negative before z-scoring), so its window mean is a
+monotone function of the trial's mean movement energy. We did not square the
+z-score: the square of a session z-score is smallest for trials near the session
+mean, and would rank unusually still trials alongside active ones.
 
 \emph{Relative 2--4\,Hz power} is the ratio of band power in 2--4\,Hz, the
-sub-band least attenuated by the controller, to total power in 0.4--10\,Hz. Both
-were taken from a one-sided periodogram of the readout after linear detrending
-and Hann tapering, over the window from $-2$\,s to trial end. A
-pre-stimulus-only window, $-2$\,s to onset, gave the same result and serves as a
-circularity control. We used the ratio rather than absolute band power because
-any absolute spectral measure co-varies with the overall magnitude of the signal
-it is drawn from, which would confound a comparison between conditions that
-differ in magnitude by construction.
+sub-band least attenuated by the controller, to total power in 0.4--10\,Hz. We
+used the ratio because any absolute spectral measure co-varies with the overall
+magnitude of the signal it is drawn from, which would confound a comparison
+between conditions that differ in magnitude by construction. \emph{Absolute
+low-frequency power} is band power without that normalization: 2--4\,Hz in
+Fig.~\ref{fig:figure2}G and $\log_{10}$ of 1--4\,Hz power in
+Fig.~\ref{fig:figure4}. It is reported alongside the relative measure because
+the two dissociate: a factor that acts through the amplitude of ongoing activity
+shows in the absolute measure only.
 
-\emph{Absolute low-frequency power} is the $\log_{10}$ of band power in
-1--4\,Hz over the same window. It is reported alongside the relative measure
-precisely because the two dissociate: the relative measure is insensitive to
-overall signal magnitude, the absolute one is not, and a factor that acts
-through ongoing amplitude will show in the absolute measure only.
+\emph{Windows.} In Fig.~\ref{fig:figure2}G all three measures (motion, relative
+and absolute power) are taken over the same strictly pre-stimulus window,
+$[-1, 0)$\,s, the 35 samples before onset. An impulse is a single brief input, so
+the question there is how the state in which the stimulus arrives alters its
+response, and a pre-stimulus window measures that state without overlapping the
+29--200\,ms response window. In Fig.~\ref{fig:figure4} all three are taken over
+one common window, $[-2, +3)$\,s, the 175 samples from 2\,s before onset to the
+end of the 3\,s stimulation. Tracking performance over a trial depends both on
+the state the trial begins in and on activity that develops while the controller
+acts, so the state window spans the whole interval over which error is scored,
+plus a 2\,s lead-in. Because this window overlaps stimulation, the
+Fig.~\ref{fig:figure4} measures describe concurrent activity rather than a
+pre-stimulus state; the effect of feedback is assessed through the open- versus
+closed-loop contrast, in which both conditions are measured identically.
+
+\emph{Spectral estimation.} In Fig.~\ref{fig:figure2}G each 35-sample segment was
+mean-subtracted and Hann-tapered, and band power was the sum of the one-sided
+periodogram over the bins inside the band, edges inclusive; at 1\,Hz resolution
+the bands fall exactly on bins (2, 3 and 4\,Hz for the 2--4\,Hz band). In
+Fig.~\ref{fig:figure4} each 175-sample segment $x$ was linearly detrended,
+Hann-tapered with window $w$, and zero-padded to
+$N_{\mathrm{FFT}} = \max(8192,\, 2^{\lceil \log_2 8N \rceil})$ points, giving the
+one-sided spectral density
+%
+\begin{equation}
+    S(f) = \frac{2\,\lvert X(f) \rvert^{2}}{f_{s} \sum_{n} w_{n}^{2}},
+    \qquad
+    P_{[f_1, f_2]} = \int_{f_1}^{f_2} S(f)\,df ,
+    \label{eq:bandpow}
+\end{equation}
+%
+with the integral evaluated by the trapezoid rule between the exact band edges,
+using interpolated values of $S$ at $f_1$ and $f_2$. Summing native periodogram
+bins instead would tie the band edges to the segment length: at $N = 175$ the
+native resolution is 0.2\,Hz, and a one-sample change in window length moves the
+nominal 2--4\,Hz band between 2.00--3.80 and 2.19--3.98\,Hz. With
+Eq.~\eqref{eq:bandpow} the measure is unchanged by such a shift (Spearman
+$\rho = 0.9999$ between 174-, 175- and 176-sample windows), as are the
+Fig.~\ref{fig:figure4} inferences that depend on it.
 
 Two analyses use these measures. First, we regressed per-trial RMSE on each
 state separately for open- and closed-loop trials and compared slopes across
@@ -940,6 +1102,89 @@ session using the pooled open- and closed-loop distribution, and compared the
 two conditions across quartiles. Pooling the conditions for the z-score
 preserves the level difference between them while removing session-to-session
 differences in scale.
+
+\subsubsection*{State exemplars and error decomposition}
+\label{sec:f4_decomp}
+
+To ask which state accounts for closed-loop tracking error, and when within the
+trial, we pooled the closed-loop trials of the 11 sessions with motion capture
+(613 trials). The outcome was per-trial RMSE about the reference in two windows,
+the transient (0--1\,s after onset) and the steady state (1--3\,s). The four
+state measures were z-scored over the pool, with absolute power entered as its
+logarithm. For each window we fitted ordinary least-squares models with an
+intercept and report each factor's \emph{unique} $R^2$, the drop in $R^2$ when
+that factor is removed from the model,
+%
+\begin{equation}
+    R^{2}_{\mathrm{unique},j} = R^{2}(\mathcal{M}) - R^{2}(\mathcal{M} \setminus j).
+    \label{eq:uniqueR2}
+\end{equation}
+%
+Relative and absolute power are correlated, and a single four-factor model lets
+one absorb the variance the other shares with it. In the main panel
+(Fig.~\ref{fig:figure4}C) each power measure therefore enters its own
+three-factor model on the same base, $\{\text{initial deviation}, \text{motion},
+\text{relative}\}$ and $\{\text{initial deviation}, \text{motion},
+\text{absolute}\}$; the unique $R^2$ of initial deviation and motion are taken
+from the first. Per-session points repeat the same fit within each session with at
+least 12 closed-loop trials, z-scoring within session. Fig.~\ref{fig:S4} repeats
+the decomposition with both power terms in one model, and with each alone.
+
+The exemplar trials (Fig.~\ref{fig:figure4}A) illustrate each state as cleanly
+as the data allow. With $z_{ij}$ the z-scored value of state $j$ on trial $i$,
+the exemplar for state $j$ is the trial that maximizes the margin
+$z_{ij} - \max_{k \neq j} z_{ik}$ among trials with $z_{ij} > 1$, so that it is
+high in that state and as low as possible in the other three. Exemplars are
+selected over the pool for Fig.~\ref{fig:figure4}A and within each session for
+Fig.~\ref{fig:S3}; where no trial in a session exceeds $z = 1$ the trial with the
+largest $z_{ij}$ is shown. Traces are drawn from $-2$ to $+3$\,s, the window over
+which the states are measured.
+
+\subsubsection*{Impulse-response variability and brain state}
+\label{sec:imp_state}
+
+For Fig.~\ref{fig:figure2}G we asked whether brain state changes how far a
+single impulse response departs from the model prediction. Any fixed
+amplitude-to-response model, the LTI model included, predicts the same response
+for every trial at a given amplitude, so we took the per-trial prediction error
+as the deviation of the evoked suppression (Eq.~\eqref{eq:inhib_energy}) from
+its amplitude mean, $d_{j} = E_{j} - \bar{E}_{s,a}$, for trial $j$ at amplitude
+$a$ in session $s$. Amplitude levels with fewer than eight trials were excluded
+(1767 trials in four sessions). To pool amplitudes we scaled the deviation by
+its within-amplitude standard deviation, $z_{j} = d_{j} / \mathrm{SD}_{s,a}(d)$.
+The question concerns the spread of responses rather than their mean, so we
+test $\lvert z_{j} \rvert$, a Levene-type scale statistic.
+
+Each state measure (Section~\ref{sec:disturbance}, $[-1, 0)$\,s window) was
+converted to a within-session percentile, so that every session spans the same
+axis, and trials were binned into quartiles of that percentile. The effect size
+is the ratio of the standard deviation of $z$ in the top quartile to that in the
+bottom quartile, with a 95\% confidence interval from 2000 bootstrap resamples of
+trials, re-binning each resample. The panel shows the same quantity in
+interpretable units: the standard deviation of $d_{j}$ within each
+(session $\times$ amplitude) cell, pooled across cells within a quartile and
+divided by the session's own pooled within-cell standard deviation, so that 1 is
+that session's typical error.
+
+Inference respects the session structure. We fitted
+$\lvert z \rvert \sim \mathrm{state} + (1 \mid \mathrm{session})$ by
+restricted maximum likelihood; a random slope is not identifiable from four
+sessions, and two of the four sessions come from one mouse. Session agreement is
+the number of sessions whose within-session Spearman correlation between
+$\lvert z \rvert$ and state has the sign of the trial-weighted mean correlation.
+For relative power, whose quartile ratio is close to one, we also report the
+pooled Spearman correlation as a continuous effect.
+
+\emph{Stimulus-free control.} Every test was repeated on a matched quantity that
+contains no stimulus: the mean $\Delta F/F$ over a seven-sample window, the same
+length as the response window, from $-1.20$ to $-1.03$\,s, expressed as a
+deviation from its amplitude mean and scaled in the same way. This window lies
+before the state window, so it shares no samples with any state measure, and
+outside the $-0.5$ to $0$\,s interval used to baseline the impulse traces, which
+would otherwise constrain it toward zero. A state that predicts the spread of
+this control as strongly as the spread of the response acts on the amplitude of
+ongoing activity rather than on the response to the stimulus, and we attribute
+an effect to the stimulus only when it exceeds its control.
 
 \subsubsection*{Contralateral prediction and disturbance decomposition}
 \label{sec:disturbance_decomp}
@@ -1002,7 +1247,10 @@ a between-session contrast is referenced against the number of sessions rather
 than the number of trials. Significance was taken at
 $\alpha = 0.05$ unless a corrected threshold is stated. We report $n$ as the
 number of sessions for session-level tests and the number of trials for
-trial-level tests, and state which in each case.
+trial-level tests, and state which in each case. Fig.~\ref{fig:figure5} rests on
+three sessions in one mouse, too few for a session-level test, so it is reported
+descriptively: per-session direction of each effect and pooled mean $\pm$ SD,
+with no significance tests.
 
 \emph{Mixed models.} Sessions are nested within mice, so every
 open-versus-closed-loop comparison was tested with a linear mixed-effects model
@@ -1164,9 +1412,10 @@ request.
     \includegraphics[width=0.9\linewidth]{images/supplementary/f4_exemplars_sessions.pdf}
     \caption{\textbf{State exemplars are consistent across sessions.} For every
     session with motion capture (rows), a representative closed-loop trial for
-    each of four pre-stimulus states (columns: high initial deviation, high
+    each of four state measures (columns: high initial deviation, high
     motion, high relative 2--4\,Hz power, high absolute 1--4\,Hz power), chosen as
-    the trial highest in that state and low in the others within that session.
+    the trial highest in that state and low in the others within that session
+    (Section~\ref{sec:f4_decomp}).
     Colors match Fig.~\ref{fig:figure4}A. Dashed line, reference
     ($-5\%\,\Delta F/F$); shading, stimulation window; scale bars 1\,s and 5\%.
     The main-text exemplars in Fig.~\ref{fig:figure4}A are representative of the
@@ -1182,7 +1431,7 @@ request.
     \caption{\textbf{The error decomposition does not depend on how the
     low-frequency factor is defined.} Unique $R^2$ of each state factor for
     closed-loop tracking error, in the transient (0--1\,s) and steady-state
-    (1--3\,s) windows, under three specifications of the low-frequency term: relative and
+    (1--3\,s) windows, under three specifications of the low-frequency term: relative 2--4\,Hz and
     absolute 1--4\,Hz power entered together (left), relative only (middle), and
     absolute only (right). The main text (Fig.~\ref{fig:figure4}C) enters each
     low-frequency term in its own initial-deviation-plus-motion base, which
