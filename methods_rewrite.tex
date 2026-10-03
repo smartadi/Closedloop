@@ -774,31 +774,9 @@ values per session. Confidence intervals come from 300 bootstrap resamples of
 trials within amplitude, each rebuilding $h(t)$ and refitting at the selected
 order. A resample whose slowest $\tau$ exceeded the 0.5\,s fit window was
 discarded, because a time constant longer than the window cannot be identified
-from it; the discarded fraction is reported per session
-(Table~\ref{tab:tf_fig2}). Intervals are the 2.5th and 97.5th percentiles of the
+from it, and the discarded fraction is reported. Intervals are the 2.5th and 97.5th percentiles of the
 retained resamples. To separate session from drive range, we also refitted every
 session over the amplitude range common to all four.
-
-\begin{table}[h]
-    \centering
-    \small
-    \begin{tabular}{llccccc}
-        \hline
-        & Session & Order (p/z/delay) & $\tau_{\mathrm{slow}}$ (ms) [95\% CI] & $\tau_{\mathrm{fast}}$ (ms) & $R^{2}_{h}$ & Discarded \\
-        \hline
-        Mouse 1a & AL\_0041 2025-12-02 (1) & 3/1/0 & 176 [69, 471]  & 148 & 0.97 & 42\% \\
-        Mouse 1b & AL\_0041 2025-12-02 (2) & 4/3/0 & 540 [155, 502] & 93  & 1.00 & 50\% \\
-        Mouse 2  & AL\_0033 2025-01-29     & 4/3/0 & 333 [207, 478] & 150 & 1.00 & 2\%  \\
-        Mouse 3  & AL\_0048 2026-07-15     & 4/2/0 & 302 [109, 498] & 142 & 1.00 & 50\% \\
-        \hline
-    \end{tabular}
-    \caption{Impulse-response fits underlying Fig.~\ref{fig:figure2}C--F, at the
-        selected order. $R^{2}_{h}$, in-sample fit to $h(t)$; Discarded, fraction
-        of bootstrap resamples whose slowest time constant exceeded the 0.5\,s fit
-        window. Where half the resamples are discarded the interval is censored
-        and unreliable; for Mouse 1b it excludes the point estimate.}
-    \label{tab:tf_fig2}
-\end{table}
 
 The controller was designed on an earlier fit to the primary session
 (Table~\ref{tab:tf_sessions}); its discretization provides
