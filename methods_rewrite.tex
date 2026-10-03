@@ -285,7 +285,8 @@ that loop performance is a measured quantity rather than an assumption.
 %% FILL: report the p50/p99/max loop interval pooled over sessions from
 %% timing_stats.csv. This is a better statement than the single worst-case number
 %% and you already have the data.
-End-to-end latency from camera exposure to stimulation command was at most
+End-to-end latency from camera exposure to stimulation command, measured over
+200 consecutive loop cycles, was at most
 47\,ms (Fig.~\ref{fig:figure1}F), which is 1.6 control intervals. Image
 transfer, signal computation, and command delivery each contribute.
 
@@ -1172,10 +1173,12 @@ readout site can be predicted from the opposite hemisphere without reference to
 the stimulus. We used that prediction as a stimulation-blind estimate of the
 disturbance the controller has to reject.
 
-On spontaneous, no-laser frames we fitted an ordinary least-squares predictor
+On spontaneous, no-laser frames we fitted a ridge-regularized linear predictor
 from a grid of contralateral pixels to the ipsilateral readout, sampling pixels
 inside the contralateral cortical mask with the boundary eroded and z-scoring
-each pixel on the training partition. Pixels near the homotopic stimulation site
+each pixel on the training partition. The ridge penalty was chosen stim-blind,
+from catch windows only, so no stimulation trial informs the regularization.
+Pixels near the homotopic stimulation site
 were excluded, because direct optical cross-talk contaminates their apparent
 coupling. The predictor was fitted on a target-independent train-test split of
 spontaneous frames, and we confirmed that it generalized to held-out
