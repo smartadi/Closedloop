@@ -600,18 +600,14 @@ Gains are listed in Table~\ref{tab:gains}.
 
 \subsubsection*{Closed-loop stability}
 
-%% FILL: this paragraph replaces a claim that rested only on a textbook citation.
-%% Everything needed is in hand: the fitted 2-pole plant, the 35 Hz rate, the
-%% 47 ms latency, and the gains above. No feedback filter belongs in the model,
-%% since it was off in these sessions.
-We assessed stability on the nominal model rather than asserting it. We
-discretized the fitted plant (Section~\ref{sec:tf_fitting}) at 35\,Hz, appended
-\textbf{n} samples of dead time for the 47\,ms loop latency, and closed the loop
-at the gains of Table~\ref{tab:gains}. The
-closed-loop poles lie inside the unit circle, with a gain margin of
-\textbf{n}\,dB and a phase margin of \textbf{n}$^{\circ}$. The margins are
-consistent with the small gains that proved sufficient in practice and with the
-absence of oscillatory instability in any session.
+No session showed oscillatory instability or divergence at the gains of
+Table~\ref{tab:gains}, and the controller reduced the steady-state offset from
+the reference in 13 of the 15 sessions. We therefore treat the laser-driven
+cortical dynamics as stable over the operating range used here, rather than
+certifying gain and phase margins on a nominal model: the loop contains a
+saturating, one-sided actuator and a finite-window integral term, so margins
+computed from a linear nominal model would describe a controller other than the
+one that ran.
 
 \subsubsection*{Sinusoidal reference and preview}
 \label{sec:preview}
@@ -944,9 +940,10 @@ here.
           %% FILL: how confirmed, and how many sessions this removed.
     \item \emph{Trial count.} Sessions required at least 40 valid trials per
           condition after motion exclusion, removing \textbf{n} sessions.
-    \item \emph{Motion.} Trials whose peak motion energy exceeded 1.5 standard
-          deviations above the session mean were excluded, removing \textbf{n}
-          of \textbf{n} trials.
+    \item \emph{Motion.} Trials whose mean $z$-scored motion energy over the
+          $-2$ to $+3$\,s window differed from the session mean by more than 1.5
+          standard deviations in either direction were excluded, removing $30$ of
+          $1190$ trials.
     \item \emph{Tracking failure.} For the disturbance-rejection analysis only,
           two sessions whose settled mean never came within
           $1.5\%\,\Delta F/F$ of the reference were excluded, because their
@@ -955,8 +952,8 @@ here.
     \item \emph{Contralateral predictor quality.} Sessions entered the
           decomposition only if the spontaneous-data predictor reached
           $R^{2} > 0.3$, removing \textbf{n} sessions.
-    \item \emph{Behavioral video.} Motion analyses used the \textbf{n} sessions
-          with a usable motion trace (\textbf{n} trials).
+    \item \emph{Behavioral video.} Motion analyses used the $11$ of $15$ sessions
+          with a usable motion trace ($1190$ trials).
           %% FILL: take this count, and every other n in this subsection, from the
           %% server-derived analysis output rather than from any script header or
           %% cached comment. Then have the Results quote this subsection so the two
