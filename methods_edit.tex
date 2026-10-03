@@ -109,6 +109,21 @@ We computed the real-time feedback signal as the mean $\Delta F/F$ within a squa
 %
 where $F_{t}$ is the kernel-averaged fluorescence at frame $t$ and $\bar{F}$ is the running-window mean computed over a preceding baseline window of fixed duration(40 seconds).
 
+\paragraph{Two $\Delta F/F$ normalisations.}
+Equation~\ref{eq:dff} is the signal the controller itself computed online, and all
+closed-loop analyses (Figs.~\ref{fig:figure3}--\ref{fig:figure5}) use it unchanged: the
+baseline $\bar{F}$ is a trailing mean over the preceding $40.0$\,s ($1400$ samples at
+$35$\,Hz), which is the controller's own horizon parameter and is identical across all
+sessions. Because the loop could only use past samples, re-normalising these data by a
+retrospective whole-session mean would characterise a signal the controller never had
+access to. The open-loop impulse experiments (Fig.~\ref{fig:figure2}) are analysed
+retrospectively and enter no feedback path, so no online baseline estimate is required
+there; those data are normalised by a fixed denominator, $\Delta F/F = F/\bar{F}_{\mathrm{img}}
+\times 100$, where $\bar{F}_{\mathrm{img}}$ is the session mean image over the kernel ROI.
+The difference does not affect the state-dependence analysis of Fig.~\ref{fig:figure2},
+whose quartile binning is rank-based and whose dependent variable is $z$-scored within
+stimulus amplitude, making it invariant to any constant rescaling of $\Delta F/F$.
+
 \subsubsection*{Trial structure and experimental design}
 
 We delivered optogenetic stimulation in discrete trials of 3\,s
