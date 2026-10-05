@@ -938,8 +938,6 @@ here.
     \item \emph{Opsin expression.} Sessions were included only with confirmed
           expression at the stimulation site.
           %% FILL: how confirmed, and how many sessions this removed.
-    \item \emph{Trial count.} Sessions required at least 40 valid trials per
-          condition after motion exclusion, removing \textbf{n} sessions.
     \item \emph{Motion.} Trials whose mean $z$-scored motion energy over the
           $-2$ to $+3$\,s window differed from the session mean by more than 1.5
           standard deviations in either direction were excluded, removing $30$ of
@@ -949,9 +947,13 @@ here.
           $1.5\%\,\Delta F/F$ of the reference were excluded, because their
           residual is dominated by a standing setpoint error rather than by
           rejection. These were AL\_0033 2025-02-12 and AL\_0051 2026-07-29.
-    \item \emph{Contralateral predictor quality.} Sessions entered the
-          decomposition only if the spontaneous-data predictor reached
-          $R^{2} > 0.3$, removing \textbf{n} sessions.
+    \item \emph{Contralateral predictor.} No session was excluded on predictor
+          quality. The controller analysis needs only a stimulation-blind estimate
+          of the disturbance, not a certified model of it, so rather than gating on
+          a fixed $R^{2}$ we report the predictor's held-out performance directly
+          and reference the predicted disturbance to its own no-laser baseline,
+          leak-corrected, which sets its zero level
+          (Section~\ref{sec:disturbance_decomp}).
     \item \emph{Behavioral video.} Motion analyses used the $11$ of $15$ sessions
           with a usable motion trace ($1190$ trials).
           %% FILL: take this count, and every other n in this subsection, from the
@@ -1184,10 +1186,12 @@ On each stimulation trial we applied the fixed predictor to concurrent
 contralateral activity. This gives the \emph{Global} component $G(t)$, the
 ipsilateral activity expected with no controller input, and by subtraction the
 \emph{Local} component $L(t) = A(t) - G(t)$, where $A(t)$ is the measured
-response. We tested the decomposition by reconstructing $A$ as $G$ plus the
-leave-one-trial-out average local response, and report cross-validated $R^{2}$
-over the 0--3\,s window against two nested nulls, Global alone and trial-average
-alone.
+response. We checked the decomposition by reconstructing $A$ as $G$ plus the
+leave-one-trial-out average local response, and report the cross-validated
+$R^{2}$ of that reconstruction over the 0--3\,s window. We make no claim from
+the decomposition itself: it is the construction by which a per-trial
+disturbance becomes measurable, and the controller is tested against the
+disturbance it defines.
 
 We quantified rejection per trial as the energy ratio
 %
