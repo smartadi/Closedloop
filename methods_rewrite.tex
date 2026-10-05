@@ -214,7 +214,7 @@ live image.
 
 We placed the stimulation target in a region neighboring the readout site, close
 enough that the spatial spread of activation covered the readout
-(Fig.~\ref{fig:spatial_spread}). Laser power was calibrated with a power meter
+(Fig.~\ref{fig:spatial_spread}A,B). Laser power was calibrated with a power meter
 (Thorlabs PM100D with an S130C sensor) at the objective focal plane. Power is
 linear in the modulation voltage over the laser's 0--5\,V range and stable across
 sessions \citep{Matveev2024}.
@@ -432,10 +432,14 @@ we treat trial-to-trial departures from the averaged response as zero-mean
 disturbances rather than as structure to be modeled.
 
 Two observations support it. First, the cross-trial variance of spontaneous
-$\Delta F/F$ converges with trial count and stabilizes beyond roughly 50 trials
-per session (Fig.~\ref{fig:spont_variance}); convergence rates differ between sessions
-recorded from the same region, consistent with session-to-session differences
-in brain state. Variance convergence alone is a central-limit effect and does
+$\Delta F/F$ is estimated consistently once enough trials enter the average: the
+mean total variance is flat in trial count to within 1--2\% of itself, while the
+SEM of that estimate falls as roughly $N^{-1/2}$ (Fig.~\ref{fig:spatial_spread}C).
+The estimate is therefore unbiased and its uncertainty shrinks with trial count,
+which is what the trial-averaging step requires. Across-trial variance is also
+not inflated by the stimulus itself: in open-loop trials it falls during
+stimulation and recovers afterwards (Fig.~\ref{fig:spatial_spread}D).
+A converging variance estimate is a central-limit effect and does
 not exclude a slowly drifting mean, so we also confirmed that the per-trial
 spontaneous mean is stationary across acquisition order (Fig.~\ref{fig:mean_stationarity}). In
 14 of the 15 sessions the per-trial mean showed no significant trend with trial
@@ -723,8 +727,7 @@ median response within 0.2\,mm of the peak at the strongest amplitude. The
 background offset was estimated per amplitude from an annulus 0.6--0.9\,mm from
 the response peak, which removes the global hemodynamic component. Pixel counts
 were converted to mm$^2$ at 0.0173\,mm per pixel, on native-resolution
-$560 \times 560$ maps. Results are in Figs.~\ref{fig:spatial_spread} and
-\ref{fig:spatial_maps}.
+$560 \times 560$ maps. Results are in Fig.~\ref{fig:spatial_spread}A,B.
 %% The analysis previously used 0.173 mm per pixel, ten times the rig calibration,
 %% so reported areas were 100x too large, and the annulus and local zone were
 %% described as 6-9 mm and 2 mm when the pixels actually selected sat at
@@ -830,9 +833,10 @@ transient. The one session with a 4\,s stimulus was scored over 0 to $+4$\,s.
 Gradient-based optimization of the cost is not available here, since gradients
 require a model and the number of trials available to estimate the cost is
 limited. We mapped the cost surface directly instead. A session cycled through a fixed list of PI gain pairs, grouping trials by
-pair to estimate $\hat{J}(K)$ at each node (Fig.~\ref{fig:cost_landscape}A). We
+pair to estimate $\hat{J}(K)$ at each node (Fig.~\ref{fig:cost_landscape}A,D,
+for AL\_0033 on 2025-03-05). We
 ran four such sweeps in two mice: AL\_0033 on 2025-01-10, 2025-03-03 and
-2025-03-05, and AL\_0034 on 2024-10-17 (Fig.~\ref{fig:cost_landscape}B), with 5,
+2025-03-05, and AL\_0034 on 2024-10-17, with 5,
 13, 10 and 17 occupied nodes respectively over $K_p \in [0,\,0.3]$ and
 $K_i \in [0,\,0.3]$. The node list was chosen per session rather than from a
 common lattice, so the sweeps are not a single replicated design. Cost was
@@ -868,7 +872,7 @@ not as a reliable optimizer; the gains used for the validation blocks
 Grid sweeps and auto-tuning runs were done in separate sessions within each
 mouse, so agreement between the grid minimum and the independently auto-tuned
 gains is a cross-check rather than a restatement
-(Fig.~\ref{fig:cost_landscape}A,C). Before starting a validation block we
+(Fig.~\ref{fig:cost_landscape}A--C). Before starting a validation block we
 required the tuned controller to satisfy $\hat{J}(K) \leq \hat{J}(0)$, that is,
 to be no worse than the feedforward-only baseline.
 %% CHECK: with 5 iterations of 5 trials the search evaluates 5 candidates. Say so
@@ -1081,7 +1085,7 @@ three-factor model on the same base, $\{\text{initial deviation}, \text{motion},
 \text{relative}\}$ and $\{\text{initial deviation}, \text{motion},
 \text{absolute}\}$; the unique $R^2$ of initial deviation and motion are taken
 from the first. Per-session points repeat the same fit within each session with at
-least 12 closed-loop trials, z-scoring within session. Fig.~\ref{fig:f4_unique} repeats
+least 12 closed-loop trials, z-scoring within session. Fig.~\ref{fig:f4_exemplars}B--D repeats
 the decomposition with both power terms in one model, and with each alone.
 
 The exemplar trials (Fig.~\ref{fig:figure4}A) illustrate each state as cleanly
@@ -1090,7 +1094,7 @@ the exemplar for state $j$ is the trial that maximizes the margin
 $z_{ij} - \max_{k \neq j} z_{ik}$ among trials with $z_{ij} > 1$, so that it is
 high in that state and as low as possible in the other three. Exemplars are
 selected over the pool for Fig.~\ref{fig:figure4}A and within each session for
-Fig.~\ref{fig:f4_exemplars}; where no trial in a session exceeds $z = 1$ the trial with the
+Fig.~\ref{fig:f4_exemplars}A; where no trial in a session exceeds $z = 1$ the trial with the
 largest $z_{ij}$ is shown. Traces are drawn from $-2$ to $+3$\,s, the window over
 which the states are measured.
 

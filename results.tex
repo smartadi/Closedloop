@@ -102,7 +102,7 @@ The same pattern held across the cohort. Pooling the within-session variance tra
 
 We tested every open-loop--closed-loop comparison with a session-aware linear mixed model---condition as a fixed effect, random per-session condition slopes, and a mouse random effect---because the 15 sessions come from only four mice, and treating them as independent would overstate the evidence. Closed-loop control lowered both tracking RMSE and trial-to-trial variance in the transient and steady-state windows (all $p < 5\times10^{-4}$; Fig.~\ref{fig:figure3}H,I). Per-session Wilcoxon signed-rank tests agreed in every case, and the between-mouse variance was negligible, so no single animal is carrying the effect.
 
-The validity of these results depends on the trial-averaging assumption holding across the session; the empirical variance convergence in Fig.~\ref{fig:spont_variance} is consistent with this assumption over the validation period. Performance varied across animals and sessions, likely reflecting residual non-stationarity in arousal and behavioral state, differences in opsin expression, and session-to-session variation in the spatial overlap between the stimulation and output regions. Despite this variability, the direction of improvement---in both tracking accuracy and trial-to-trial variance---was consistent across all experiments.
+The validity of these results depends on the trial-averaging assumption holding across the session; the convergence of the variance estimate in Fig.~\ref{fig:spatial_spread}C is consistent with this assumption over the validation period. Performance varied across animals and sessions, likely reflecting residual non-stationarity in arousal and behavioral state, differences in opsin expression, and session-to-session variation in the spatial overlap between the stimulation and output regions. Despite this variability, the direction of improvement---in both tracking accuracy and trial-to-trial variance---was consistent across all experiments.
 
 \begin{figure}[!t]
     \centering
@@ -141,7 +141,7 @@ because the controller's performance over a trial is shaped both by activity
 before the stimulus begins and by activity while it is delivered. Representative closed-loop trials selected to be extreme in
 one factor and unremarkable in the others are shown in
 Fig.~\ref{fig:figure4}A, with exemplars for every session in
-Fig.~\ref{fig:f4_exemplars}. Motion capture was available for 11 of the 15 sessions; all
+Fig.~\ref{fig:f4_exemplars}A. Motion capture was available for 11 of the 15 sessions; all
 11 enter the error decomposition below (613 closed-loop trials), and the 4 sessions with no video are excluded
 from every motion analysis.
 
@@ -156,7 +156,7 @@ $0.28 \rightarrow 0.44$). Motion contributed negligibly in either window (unique
 $R^2 < 0.01$). The error that feedback cannot remove is therefore not a leftover
 of the transient but a distinct quantity tied to ongoing low-frequency activity,
 and this composition is robust to how the low-frequency factor is defined
-(Fig.~\ref{fig:f4_unique}).
+(Fig.~\ref{fig:f4_exemplars}B--D).
 
 Binning trials into quartiles of each state and fitting a session-aware mixed
 model made the two regimes explicit (RMSE regressed on condition, state and

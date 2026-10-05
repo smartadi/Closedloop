@@ -5,11 +5,24 @@
 % section at all. The figure counter is reset and prefixed with S here, so these
 % render as Figure S1, S2, ... rather than continuing the main sequence at 6.
 %
-% ASSEMBLY RULE. Each supplementary figure should be ONE pdf assembled in
-% Illustrator from individually exported jn-style panels, exactly like the main
-% figures -- never several \includegraphics stitched with \hfill. The
-% f4_decomp_unique trio below is the last place that still does, and is next to be
-% replaced by a single assembled panel.
+% ASSEMBLY RULE -- NOW SATISFIED FOR S1-S3 (2026-10-05). Each supplementary figure
+% is ONE pdf assembled in Illustrator from individually exported jn-style panels,
+% exactly like the main figures -- never several \includegraphics stitched with
+% \hfill. S1.pdf, S2.pdf and S3.pdf are those assemblies; the panels they are built
+% from live in brain_paper/paper/figures_final/panels/ and are listed in
+% MANIFEST.txt. Do not re-introduce multi-\includegraphics figures here.
+%
+% These three assemblies replace seven earlier floats:
+%   S1 <- imp_spatial_area + imp_spatial_maps + spont_variance, plus the new
+%         onset-variance panel. The standalone spont_variance float is gone and
+%         fig:spont_variance now resolves to S1C.
+%   S2 <- grid_cost_surface_AL_0033_0305 + grid_cost_surface_AL_0034_1017
+%         + autotune_convergence_both. The AL_0034 grid panel was CUT: the pair now
+%         shown is one mouse (AL_0033) across two sessions, which is what makes the
+%         grid/auto-tune agreement a cross-check rather than a coincidence of rigs.
+%   S3 <- f4_exemplars_sessions + the three f4_decomp_unique panels.
+% Panel letters moved, so every \ref to these labels now carries a letter. If a
+% panel is re-lettered in Illustrator, grep the whole manuscript for the label.
 
 \clearpage
 \section*{Supplementary figures}
@@ -18,81 +31,108 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.34\linewidth]{images/supplementary/imp_spatial_area.pdf}
-    \caption{\textbf{Spatial spread of optogenetic inhibition with laser power}
-    (AL\_0033, 2025-01-29). Suppressed area against stimulation amplitude, where
-    a pixel counts as suppressed if its background-corrected response falls below
-    half the median response within $0.2$\,mm of the peak at the strongest
-    amplitude; background is the mean over an annulus $0.6$--$0.9$\,mm from that
-    peak. The relationship is a threshold rather than a gradual widening: the
-    area is negligible below $0.6$\,mW, rises in two steps, and plateaus near
-    $0.9$\,mm$^2$ above $1.4$\,mW. Because the threshold is referred to the
-    strongest amplitude, these areas are relative and should not be read as an
-    absolute extent of opsin activation. Per-amplitude maps are in
-    Fig.~\ref{fig:spatial_maps}.}
-    \label{fig:spatial_spread}
-\end{figure}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.72\linewidth]{images/supplementary/imp_spatial_maps.pdf}
-    \caption{\textbf{Mean response maps across stimulation amplitudes}
-    (AL\_0033, 2025-01-29). Trial-averaged $\Delta F/F$ (\%) over 0--200\,ms
-    post-onset at each of the nine delivered amplitudes, masked to the brain and
-    drawn on a symmetric blue--white--red scale so that zero is white and
-    suppression is blue. Black square, the $10\times10$\,pixel readout kernel at
-    the stimulation site. Scale bar, $1$\,mm (pixel scale $0.0173$\,mm). A focal
-    suppression at the stimulation site deepens with laser power. Two features of
-    these maps are not focal: a positive deflection appears over the opposite
-    hemisphere at intermediate powers, and at the highest powers the suppression
-    extends bilaterally, so the response at a given pixel is not a pure readout
-    of local opsin activation
+    \includegraphics[width=\linewidth]{images/supplementary/S1.pdf}
+    \caption{\textbf{Spatial spread of optogenetic inhibition, and the validity of
+    trial averaging.}
+    \textbf{A:} Suppressed area against stimulation amplitude
+    (AL\_0033, 2025-01-29), where a pixel counts as suppressed if its
+    background-corrected response falls below half the median response within
+    $0.2$\,mm of the peak at the strongest amplitude; background is the mean over
+    an annulus $0.6$--$0.9$\,mm from that peak. The relationship is a threshold
+    rather than a gradual widening: the area is negligible below $0.6$\,mW, rises
+    in two steps, and plateaus near $0.9$\,mm$^2$ above $1.4$\,mW. Because the
+    threshold is referred to the strongest amplitude, these areas are relative and
+    should not be read as an absolute extent of opsin activation.
+    \textbf{B:} Trial-averaged $\Delta F/F$ (\%) over 0--200\,ms post-onset at each
+    of the nine delivered amplitudes, masked to the brain and drawn on a symmetric
+    blue--white--red scale so that zero is white and suppression is blue. Black
+    square, the $10\times10$\,pixel readout kernel at the stimulation site. Scale
+    bar, $1$\,mm (pixel scale $0.0173$\,mm). A focal suppression at the stimulation
+    site deepens with laser power. Two features of these maps are not focal: a
+    positive deflection appears over the opposite hemisphere at intermediate
+    powers, and at the highest powers the suppression extends bilaterally, so the
+    response at a given pixel is not a pure readout of local opsin activation.
     %% FILL: citation for graded spatial recruitment of Chrimson. The old draft
-    %% carried a red \todo here that was visible in the compiled PDF.
-    .}
-    \label{fig:spatial_maps}
+    %% carried a red \todo here that was visible in the compiled PDF. Put the
+    %% citation before that period -- do NOT reinstate the bare '.' on its own
+    %% line, it typeset as "activation . C:".
+    \textbf{C:} Total cross-trial variance of spontaneous $\Delta F/F$ against the
+    number of trials $N$ entering the average, for the three step-response
+    sessions. Each session is divided by its own mean over $N$, so the three are
+    comparable on one axis and the quantity to read is the error bars, not the
+    height of the curves; points are means over 500 random subsamples per batch
+    size and error bars are their SEM. The mean is flat in $N$ to within 1--2\% of
+    itself while the SEM falls as roughly $N^{-1/2}$: the variance estimate is
+    unbiased and its uncertainty shrinks with trial count, so the validation blocks
+    are long enough to estimate the trial-averaged response. Batch sizes equal to
+    the full trial count of a session are omitted, since there every subsample
+    returns the same trials and the SEM is zero by construction.
+    \textbf{D:} Across-trial variance of $\Delta F/F$ against time from stimulation
+    onset for open-loop trials. Thin lines, individual sessions; bold line and
+    shading, mean $\pm$ SEM across sessions; shaded band, the 3\,s stimulation
+    window. Dashed lines are least-squares fits within the pre-stimulus,
+    stimulation and post-stimulus epochs, labeled with their slopes (variance per
+    second). Variance falls during stimulation and recovers afterwards, so the
+    trial-to-trial spread is not inflated by the stimulus itself.}
+    \label{fig:spatial_spread}
 \end{figure}
 
 \begin{figure}[!ht]
     \centering
-    \begin{subfigure}[t]{0.49\linewidth}
-        \includegraphics[width=\linewidth]{images/tuning/grid_cost_surface_AL_0033_0305.pdf}
-        \caption*{\textbf{A}}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[t]{0.49\linewidth}
-        \includegraphics[width=\linewidth]{images/tuning/grid_cost_surface_AL_0034_1017.pdf}
-        \caption*{\textbf{B}}
-    \end{subfigure}
-    \\[0.5em]
-    \begin{subfigure}[t]{\linewidth}
-        \centering
-        \includegraphics[width=0.92\linewidth]{images/tuning/autotune_convergence_both.pdf}
-        \caption*{\textbf{C}}
-    \end{subfigure}
-    \caption{\textbf{Controller gain tuning.}
-        \textbf{A:} Empirical cost surface $\hat{J}(K)$ over a grid of fixed PI
-        gains in a representative session (AL\_0033, 2025-03-05), with a single
-        low-cost basin and its minimum marked.
-        \textbf{B:} An independent grid in a second mouse (AL\_0034, scored over
-        its 4\,s stimulation window) recovers the same low-cost region.
-        \textbf{C:} Online zeroth-order tuning in both mice: the accepted gain
-        trajectory $(K_p, K_i)$ and the running cost against iteration. Cost
-        descends in each mouse, and in AL\_0033 the auto-tuned gains settle
-        inside the basin identified by the grid in A.}
+    \includegraphics[width=\linewidth]{images/supplementary/S2.pdf}
+    \caption{\textbf{Controller gain tuning.} All panels are from one mouse
+    (AL\_0033): the grid sweep on 2025-03-05 and the auto-tuning session on
+    2025-03-17.
+    \textbf{A:} Empirical cost surface $\hat{J}(K)$ over the grid of fixed PI
+    gains, interpolated between the occupied nodes (circles); star, the node with
+    the lowest cost. The surface has a single low-cost basin.
+    \textbf{B:} The gain pairs accepted by the online zeroth-order search in the
+    separate auto-tuning session, from the open-loop start at $K_p = K_i = 0$
+    (open circle) to the final accepted gains (star).
+    \textbf{C:} Running cost over tuning iterations in that session; dotted line,
+    the final accepted cost. Cost descends and then holds.
+    \textbf{D:} Trial-averaged closed-loop response at each grid node, labeled with
+    its gains and its cost $\hat{J}$, including the $K_p = K_i = 0$
+    feedforward-only node. Mean (bold) $\pm$ SEM across trials; dashed line,
+    reference ($-5\%\,\Delta F/F$); shading, stimulation window; scale bars 1\,s
+    and 5\%.
+    The cost axes in \textbf{A}/\textbf{D} and in \textbf{C} are not the same
+    quantity: $\hat{J}$ in \textbf{A} and \textbf{D} is scored offline over
+    $t = 0$ to $+3$\,s, whereas \textbf{C} is the cost the rig computed online over
+    the stimulation window less two samples. Their absolute values are therefore
+    not comparable; only the shape of each is.
+    Because the grid and the auto-tuning run are different sessions in the same
+    animal, the auto-tuned gains settling inside the basin identified by the grid
+    is a cross-check rather than a restatement of the same measurement.}
     \label{fig:cost_landscape}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.46\linewidth]{images/supplementary/spont_variance.pdf}
-    \caption{\textbf{Cross-trial variance converges with trial count.} Mean total
-    variance $\mathrm{Var}(y_t)$ of spontaneous $\Delta F/F$, averaged across the
-    spontaneous window and over five random subsamples per batch size, against
-    the number of trials $N$ in the average. Each line is one session. Variance
-    stabilizes beyond roughly 50 trials, so the validation blocks are long enough
-    to estimate the trial-averaged response.}
-    \label{fig:spont_variance}
+    \includegraphics[width=\linewidth]{images/supplementary/S3.pdf}
+    \caption{\textbf{State exemplars are consistent across sessions, and the error
+    decomposition does not depend on how the low-frequency factor is defined.}
+    \textbf{A:} For every session with motion capture (rows), a representative
+    closed-loop trial for each of four state measures (columns: high initial
+    deviation, high motion, high relative 2--4\,Hz power, high absolute 1--4\,Hz
+    power), chosen as the trial highest in that state and low in the others within
+    that session (Materials and Methods, \emph{State exemplars and error
+    decomposition}). Colors match
+    Fig.~\ref{fig:figure4}A. Dashed line, reference ($-5\%\,\Delta F/F$); shading,
+    stimulation window; scale bars 1\,s and 5\%. The main-text exemplars in
+    Fig.~\ref{fig:figure4}A are representative of the same patterns.
+    \textbf{B--D:} Unique $R^2$ of each state factor for closed-loop tracking
+    error, in the transient (0--1\,s, light) and steady-state (1--3\,s, dark)
+    windows, under three specifications of the low-frequency term: relative
+    2--4\,Hz and absolute 1--4\,Hz power entered together (\textbf{B}), absolute
+    only (\textbf{C}), and relative only (\textbf{D}). Bars, mean across sessions;
+    error bars, SEM. The main text (Fig.~\ref{fig:figure4}C) enters each
+    low-frequency term in its own initial-deviation-plus-motion base, which avoids
+    the collinearity that suppresses the relative term when both are forced into
+    one model (\textbf{B}). In every specification the initial deviation owns the
+    transient window, the low-frequency term carries the steady-state window, and
+    motion contributes little.}
+    \label{fig:f4_exemplars}
 \end{figure}
 
 \begin{figure}
@@ -105,39 +145,4 @@
     absence of a trend rules that out and supports the zero-mean disturbance
     assumption behind Assumption~\ref{assm:trial_avg}.}
     \label{fig:mean_stationarity}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\linewidth]{images/supplementary/f4_exemplars_sessions.pdf}
-    \caption{\textbf{State exemplars are consistent across sessions.} For every
-    session with motion capture (rows), a representative closed-loop trial for
-    each of four state measures (columns: high initial deviation, high
-    motion, high relative 2--4\,Hz power, high absolute 1--4\,Hz power), chosen as
-    the trial highest in that state and low in the others within that session
-    (Section~\ref{sec:f4_decomp}).
-    Colors match Fig.~\ref{fig:figure4}A. Dashed line, reference
-    ($-5\%\,\Delta F/F$); shading, stimulation window; scale bars 1\,s and 5\%.
-    The main-text exemplars in Fig.~\ref{fig:figure4}A are representative of the
-    same patterns.}
-    \label{fig:f4_exemplars}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_both.pdf}\hfill
-    \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_rel.pdf}\hfill
-    \includegraphics[width=0.32\linewidth]{images/supplementary/f4_decomp_unique_abs.pdf}
-    \caption{\textbf{The error decomposition does not depend on how the
-    low-frequency factor is defined.} Unique $R^2$ of each state factor for
-    closed-loop tracking error, in the transient (0--1\,s) and steady-state
-    (1--3\,s) windows, under three specifications of the low-frequency term: relative 2--4\,Hz and
-    absolute 1--4\,Hz power entered together (left), relative only (middle), and
-    absolute only (right). The main text (Fig.~\ref{fig:figure4}C) enters each
-    low-frequency term in its own initial-deviation-plus-motion base, which
-    avoids the collinearity that suppresses the relative term when both are
-    forced into one model (left). In every specification the initial deviation
-    owns the transient window, the low-frequency term carries the steady-state window,
-    and motion contributes little.}
-    \label{fig:f4_unique}
 \end{figure}
