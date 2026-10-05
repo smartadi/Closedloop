@@ -18,7 +18,7 @@
 % Labels preserved (results.tex / discussion.tex cite these):
 %   fig:S1 fig:S2 fig:S3 fig:S4 sec:disturbance sec:disturbance_decomp
 %   sec:gain_opt sec:inhib_energy sec:ff_gain sec:tf_fitting
-%   fig:spatial_spread fig:spatial_maps tab:tf_sessions fig:cost_landscape alg:zo
+%   fig:spatial_spread fig:spatial_maps fig:cost_landscape alg:zo
 %
 % Deliberately removed: the LPV model and A(rho)/B(rho); the transition map Phi;
 % the "bounded therefore marginally stable" claim; the lifted Ybar = A x0 + Gamma U;
@@ -775,32 +775,9 @@ from it, and the discarded fraction is reported. Intervals are the 2.5th and 97.
 retained resamples. To separate session from drive range, we also refitted every
 session over the amplitude range common to all four.
 
-The controller was designed on an earlier fit to the primary session
-(Table~\ref{tab:tf_sessions}); its discretization provides
-$(\bar A, \bar B, C)$ for the design above.
-%% CHECK: tab:tf_sessions predates the 2026-08-10 widening of the order sweep
-%% (it was 1-3 poles); the discussion's 2.2 Hz resonance quotes it. Confirm it is
-%% the fit the controller was actually designed on, or replace it.
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{lcccc}
-        \hline
-        Session & Order (poles/zeros) & Dominant $\tau$ (ms) & Damped freq.\ (Hz) & Pooled $R^2$ \\
-        \hline
-        AL\_0033 2025-01-29       & 2 / 0 & 271              & 2.2 & 0.80 \\
-        AL\_0041 2025-12-02 (i)   & 3 / 1 & 196              & 2.8 & 0.74 \\
-        AL\_0041 2025-12-02 (ii)  & 2 / 1 & \emph{(low SNR)} & 1.8 & 0.48 \\
-        \hline
-    \end{tabular}
-    \caption{Transfer-function fits across the three impulse sessions, at the
-        AIC-selected order, with continuous-time poles. The dominant time
-        constant is $\tau = -1/\mathrm{Re}(\text{pole})$. Two sessions agree on a
-        200--270\,ms dominant constant and a weakly damped mode near 2--3\,Hz.
-        The third was low signal-to-noise, its fit degenerated to a slow drift,
-        and it is excluded from time-constant estimation.}
-    \label{tab:tf_sessions}
-\end{table}
+The controller was designed on an earlier transfer-function fit to the primary
+session; its discretization provides $(\bar A, \bar B, C)$ for the design
+above.
 
 % -----------------------------------------------------------------------------
 \subsection*{Controller tuning}
@@ -843,7 +820,7 @@ approaching the reference after the laser-evoked inhibitory deflection, from the
 \textbf{steady-state window}, $t = +1$ to $+3$\,s, over which it has settled and
 the controller is holding it there. The $1$\,s boundary is a fixed convention
 rather than a fitted changepoint: it is roughly five times the $\sim200$\,ms
-settling time of the impulse response (Table~\ref{tab:tf_sessions}), so the
+settling time of the impulse response, so the
 transient is complete well inside it. The steady-state window alone was used for
 the disturbance-rejection comparison, because it excludes the laser-evoked
 transient. The one session with a 4\,s stimulus was scored over 0 to $+4$\,s.
