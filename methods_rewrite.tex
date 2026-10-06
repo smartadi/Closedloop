@@ -436,21 +436,9 @@ $\Delta F/F$ is estimated consistently once enough trials enter the average: the
 mean total variance is flat in trial count to within 1--2\% of itself, while the
 SEM of that estimate falls as roughly $N^{-1/2}$ (Fig.~\ref{fig:spatial_spread}C).
 The estimate is therefore unbiased and its uncertainty shrinks with trial count,
-which is what the trial-averaging step requires. Across-trial variance is also
-not inflated by the stimulus itself: in open-loop trials it falls during
+which is what the trial-averaging step requires. Second, across-trial variance is not
+inflated by the stimulus itself: in open-loop trials it falls during
 stimulation and recovers afterwards (Fig.~\ref{fig:spatial_spread}D).
-A converging variance estimate is a central-limit effect and does
-not exclude a slowly drifting mean, so we also confirmed that the per-trial
-spontaneous mean is stationary across acquisition order (Fig.~\ref{fig:mean_stationarity}). In
-14 of the 15 sessions the per-trial mean showed no significant trend with trial
-index (linear regression and Spearman rank correlation both n.s.), slope signs
-were balanced across sessions (9 positive, 6 negative; sign test $p = 0.61$),
-and the median session-long drift was $0.17$ times the trial-to-trial standard
-deviation. The exception was one of the two dual-opsin sessions (AL\_0051),
-which drifted upward across the session (linear regression $p < 0.001$; drift
-$1.63$\,SD); excluding it leaves every downstream result unchanged, so it is
-retained. The zero-mean disturbance assumption therefore holds across the
-cohort.
 
 \subsubsection*{Tracking error and feedback sign}
 
@@ -1248,14 +1236,12 @@ mouse, then session, then trial.
 open-versus-closed-loop variance and RMSE ratios per window, used the two-sided
 Wilcoxon signed-rank test. Unpaired comparisons of pooled trial distributions,
 such as open versus closed loop within a motion quartile, used the Wilcoxon
-rank-sum test. The direction balance of per-session slopes was assessed with a
-two-sided sign test.
+rank-sum test.
 
-\emph{Regression.} Trend and dependence relations, including per-trial mean
-against acquisition order, RMSE against pre-stimulus variance, and RMSE against
-motion energy, were quantified by ordinary least-squares slopes with $t$-test
+\emph{Regression.} Trend and dependence relations, including RMSE
+against pre-stimulus variance and RMSE against motion energy, were quantified by ordinary least-squares slopes with $t$-test
 $p$-values and corroborated by Spearman rank correlation. Where several sessions
-were tested in parallel, as in the batch-mean stationarity check, we report
+were tested in parallel we report
 Bonferroni-corrected significance.
 
 % -----------------------------------------------------------------------------
