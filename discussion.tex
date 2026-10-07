@@ -30,6 +30,30 @@ characterization confirmed. The convergence $\hat{J}(K) \to J(K)$ guaranteed by 
 further implies that variance reduction will be most reliable when brain state is approximately stationary across the
 session, consistent with the empirical observations and with the convergence of the variance estimate in Fig.~\ref{fig:spatial_spread}C.
 
+The state dependence of Fig.~\ref{fig:figure4}D can be read through the internal
+model principle~\citep{francis1976internal}: a feedback loop regulates its output
+against a class of disturbances only to the extent that it embeds a model of
+the signals generating them. A PI controller embeds exactly one such model, a
+constant, through its integrator, and its proportional term adds broadband but
+finite rejection up to the loop bandwidth. Read this way, regularizability
+asks, state by state, whether the disturbance that accompanies that state falls
+within what the loop models. Movement-related disturbance does: open-loop error
+rose with motion while closed-loop error did not, and the loop removed a growing
+fraction of it. The 2--4\,Hz fluctuation does not: it left the open loop
+unchanged but degraded closed-loop regulation, consistent with a disturbance
+whose frequency content lies near or beyond the bandwidth the loop's latency
+allows (see below), and which a constant-plus-proportional model cannot
+represent. The trend of the open-minus-closed-loop gap, the quantity usually
+used to summarise how much feedback helps, tells the same story only in part.
+The gap widened with motion ($-0.20\,\%\,\Delta F/F$ per SD, $[-0.33, -0.06]$;
+$t(10) = -3.19$, $p = 0.0097$) and did not change significantly with any other
+state, including relative 2--4\,Hz power ($p = 0.050$), because a widening gap
+can come from a rising open loop as much as from a holding closed loop. We
+therefore do not use the gap trend to assess what the controller can regulate.
+An internal model of the low-frequency fluctuation---for example, a resonant
+mode at the dominant 2--4\,Hz frequency in place of the plain integrator---is the
+direct prediction of this reading, and a test of it.
+
 \subsection*{Feedback and preview address separable components of tracking error}
 
 Extending the controller from a constant reference to a time-varying one separates two failures that a

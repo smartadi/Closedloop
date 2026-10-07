@@ -1257,16 +1257,29 @@ same model was applied to per-trial windowed variance. For state dependence we
 added the state and its interaction with condition,
 $\mathrm{RMSE} \sim \mathrm{condition} \times \mathrm{state} + (1 +
 \mathrm{condition} \mid \mathrm{session}) + (1 \mid \mathrm{mouse})$, with the
-state centered and scaled within session. From that model we read two
-quantities: the state main effect, which with open loop as the reference level
-is the slope of open-loop error against state and which we report as the effect
-of state on \emph{predictability} of the disturbance, and the
-condition-by-state interaction, which we report as its effect on
-\emph{controllability}, meaning the trend in the open-minus-closed-loop gap.
-The condition main effect, the open-minus-closed-loop gap at mean state, is
-reported separately and is not either of these. We
-use both terms in the disturbance-rejection sense, not the structural sense of
-Kalman controllability. For the rejection ratio we tested
+state centered within session and scaled by its pooled standard deviation, and
+RMSE in $\%\,\Delta F/F$, so every slope is in $\%\,\Delta F/F$ of RMSE per
+within-session standard deviation of the state. From this model we read two
+properties of each state. \emph{Predictability} is the slope of open-loop error
+against state (the state main effect with open loop as the reference level): a
+positive slope means the uncontrolled disturbance grows with the state, so a
+fixed feedforward input anticipates the trial less well. \emph{Regularizability}
+is the slope of closed-loop error against state (the same model refitted with
+closed loop as the reference level): it asks whether the loop keeps regulating
+the output at the reference as the state changes, so a slope indistinguishable
+from zero means the output stays regulated and a positive slope means the loop
+loses it. We read regularizability from the closed-loop slope directly, rather
+than from the condition-by-state interaction (the trend of the
+open-minus-closed-loop gap), because the interaction cannot distinguish a
+widening gap produced by rising open-loop error under a steady closed loop from
+one produced by any other combination; we report that gap trend only in the
+Discussion. The condition main effect, the open-minus-closed-loop gap at mean
+state, is reported separately and is neither property. Separately, we quantified
+\emph{attenuation}, the proportional counterpart: the same model fitted to
+$\log \mathrm{RMSE}$, whose condition-by-state interaction is the slope of
+$\log(\mathrm{RMSE}_{\mathrm{CL}}/\mathrm{RMSE}_{\mathrm{OL}})$ against state,
+that is, how the fraction of open-loop error left by the loop---the empirical
+counterpart of the sensitivity function---changes with state. For the rejection ratio we tested
 $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{mouse}) +
 (1 \mid \mathrm{mouse}\!:\!\mathrm{session})$, one-sided on the intercept, and
 report the geometric mean of $\mathrm{RR}$ with its 95\% confidence interval.
@@ -1286,12 +1299,13 @@ Per-session slope differences were corroborated by a hierarchical bootstrap over
 mouse, then session, then trial.
 
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D
-reads two properties (predictability and controllability) for each of four state
-factors, eight tests in all, and the impulse-response analysis of
-Fig.~\ref{fig:figure2}G tests three states. We report these $p$-values
-uncorrected and state the size of each family; a Bonferroni threshold for the
-eight Fig.~\ref{fig:figure4}D tests would be $0.05/8 = 0.0063$, and we say in
-the Results which effects clear it. The open- versus closed-loop comparisons of
+reads two properties (predictability and regularizability) for each of four
+state factors, eight tests in all; attenuation is a separate family of four
+tests, and the impulse-response analysis of Fig.~\ref{fig:figure2}G tests three
+states. We report these $p$-values uncorrected and state the size of each
+family; Bonferroni thresholds would be $0.05/8 = 0.0063$ for the
+Fig.~\ref{fig:figure4}D properties and $0.05/4 = 0.0125$ for attenuation, and we
+say in the Results which effects clear them. The open- versus closed-loop comparisons of
 Fig.~\ref{fig:figure3} are pre-specified, one per metric and window, and are
 not corrected.
 

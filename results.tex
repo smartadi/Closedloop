@@ -118,7 +118,7 @@ The validity of these results depends on the trial-averaging assumption holding 
     \textbf{A:} State exemplars. Representative closed-loop trials chosen for high initial deviation (blue), motion (orange), relative 2--4\,Hz power (green), and absolute 1--4\,Hz power (purple)---the four state factors used throughout, measured from $-2$\,s to $+3$\,s around stimulus onset (initial deviation at onset).\\
     \textbf{B:} Error-decomposition model. Per-trial steady-state tracking error (RMSE) is regressed on the four state factors, $\mathrm{RMSE}\approx\beta_0+\sum_i\beta_i X_i$; predictor colours match A.\\
     \textbf{C:} Unique $R^2$ of each factor for the closed-loop error, resolved by window (transient 0--1\,s, light; steady-state 1--3\,s, dark): initial deviation owns the transient ($0.41\rightarrow0.03$), relative 2--4\,Hz and absolute 1--4\,Hz power carry the steady-state window ($0.15\rightarrow0.19$ and $0.28\rightarrow0.44$), motion neither ($<0.01$).\\
-    \textbf{D:} Effect of state on controller performance. Open- and closed-loop steady-state error (per-trial RMSE, $z$-scored within session) across quartiles of each state (low~$\rightarrow$~high) with the open-minus-closed-loop gap (black), and two properties read from a session-aware mixed model (RMSE $\sim$ condition${\times}$state, random per-session intercepts and open/closed-loop slopes, mouse intercept). \emph{Predictability} denotes the open-loop disturbance (trend of the uncontrolled error) and \emph{controllability} the steerability (trend of the rejected fraction, the open-minus-closed-loop gap); arrows point in the estimated direction and carry stars where significant (uncorrected; eight tests, Bonferroni threshold $p = 0.0063$; $t$ on $n_{\mathrm{sessions}} - 1$ degrees of freedom). Motion: predictability$\downarrow$ ($t(10) = 3.39$, $p = 0.0069$), controllability$\uparrow$ ($t(10) = -3.19$, $p = 0.0097$)---the loop rejects a growing share of an unanticipated disturbance. Relative 2--4\,Hz: predictability unchanged ($p = 0.36$), controllability trending down ($t(14) = 2.14$, $p = 0.050$, n.s.). Initial deviation and absolute power: predictability$\downarrow$ ($t(14) = 6.40$, $p = 1.7\times10^{-5}$; $t(14) = 12.5$, $p = 5.7\times10^{-9}$) with controllability unchanged.\\
+    \textbf{D:} Effect of state on controller performance. Open- and closed-loop steady-state error (per-trial RMSE, $z$-scored within session) across quartiles of each state (low~$\rightarrow$~high) and two properties read from a session-aware mixed model on raw RMSE (RMSE $\sim$ condition${\times}$state, random per-session intercepts and open/closed-loop slopes, mouse intercept). \emph{Predictability} (P) is the open-loop error slope on state and \emph{regularizability} (R) the closed-loop error slope; arrows point in the direction of improvement or degradation and carry stars where significant (uncorrected; eight tests, Bonferroni threshold $p = 0.0063$; $t$ on $n_{\mathrm{sessions}} - 1$ degrees of freedom). Motion: P$\downarrow$ ($t(10) = 3.39$, $p = 0.0069$), R unchanged ($p = 0.24$)---the loop holds the output against an unanticipated disturbance. Relative 2--4\,Hz: P unchanged ($p = 0.36$), R$\downarrow$ ($t(14) = 4.22$, $p = 8.6\times10^{-4}$)---the loop loses the output. Initial deviation and absolute power: P$\downarrow$ and R$\downarrow$ together (initial deviation $p = 1.7\times10^{-5}$ and $3.5\times10^{-5}$; absolute power $p = 5.7\times10^{-9}$ and $1.2\times10^{-9}$).\\
     \textbf{E:} Contra$\rightarrow$ipsilateral kernel---ridge weights mapping contralateral pixels onto the ipsilateral control readout (representative session).\\
     \textbf{F:} The controlled response $A$ splits into the Global disturbance $G$ (predicted from the contralateral hemisphere with no controller input) and the Local component $L = A - G$ (laser and controller effect); trial average for a representative session ($R^2_{\mathrm{te}} = 0.75$).\\
     \textbf{G:} Closed-loop disturbance rejection. Per-session energy ratio $\mathrm{RR} = \|A-r\|^2/\|D\|^2$---residual energy of the actual response about the reference ($r = -5\%\,\Delta F/F$) over the energy of the disturbance $D$ (the contra-predicted excursion, leak-corrected), steady-state window 1--3\,s; $\mathrm{RR} < 1$ is rejection. Dots, per-session geometric mean $\pm$1 SD (log). Band, geometric-mean $\mathrm{RR} = 0.63$ (95\% CI $[0.48, 0.83]$), below one by a session-level mixed model ($\log\mathrm{RR} \sim 1 + (1|\mathrm{session})$; $t(10.8) = -3.69$, one-sided $p = 0.0018$, $n = 12$ sessions, 640 trials); 11 of 12 sessions lie below one. With a mouse-level term the model has 2.5 degrees of freedom and does not reach significance ($p = 0.16$, 4 mice). A session qualifies if a contralateral predictor can be fitted for it (13 of 15); of those, the one that never reaches the setpoint is excluded.}}}
@@ -162,47 +162,64 @@ and this composition is robust to how the low-frequency factor is defined
 Binning trials into quartiles of each state and fitting a session-aware mixed
 model made the two regimes explicit (RMSE regressed on condition, state and
 their interaction; $n = 15$ sessions from 4 mice, 1670 trials, or 11 sessions and
-1190 trials for motion; Fig.~\ref{fig:figure4}D). This reads two properties for
-each of four states, eight tests, which we report uncorrected; a Bonferroni
-threshold for the family would be $p = 0.0063$. We summarise
-each state by its effect on \emph{predictability}---the open-loop disturbance,
-read from the trend of the uncontrolled error---and on \emph{controllability},
-read from the trend of the open-minus-closed-loop gap, the condition-by-state
-interaction. Predictability here is a property of the trial, not of the
+1190 trials for motion; Fig.~\ref{fig:figure4}D). We summarise each state by two
+properties. \emph{Predictability} is read from the open-loop error: if it rises
+with the state, the disturbance is growing and a fixed feedforward input
+anticipates the trial less well. \emph{Regularizability} is read from the
+closed-loop error: if it stays flat as the state rises, the loop keeps the output
+regulated at the reference; if it rises, the loop is losing the output. Slopes
+are in $\%\,\Delta F/F$ of RMSE per within-session standard deviation of the
+state. Two properties for each of four states make eight tests, which we report
+uncorrected; a Bonferroni threshold for the family would be $p = 0.0063$.
+Predictability here is a property of the trial, not of the
 stimulus response: it asks how well a fixed feedforward input anticipates what
 that trial will do, whereas the prediction error of Fig.~\ref{fig:figure2}G asks
 how well the LTI model reproduces the response to the stimulus itself. The two
 need not move together, and for motion they do not---movement trials are better
 described by the impulse model and at the same time harder to hit open loop.
 Closed-loop control reduced error strongly at every state (open-minus-closed-loop
-gap at mean state $0.71$--$0.84$ within-session SD; $t = -7.6$ to $-11.9$,
+gap at mean state $0.71$--$0.84\,\%\,\Delta F/F$; $t = -7.6$ to $-11.9$,
 $p = 3.3\times10^{-8}$ to $3.7\times10^{-5}$ across the four states), but the
-states differed in how that benefit moved. Motion made the disturbance less
-predictable---open-loop error rose with it ($+0.14$ SD per SD of motion, 95\% CI
-$[0.05, 0.23]$; $t(10) = 3.39$, $p = 0.0069$)---yet more controllable: the loop
-rejected a growing share and the gap widened ($-0.20$, $[-0.33, -0.06]$;
-$t(10) = -3.19$, $p = 0.0097$; $n = 11$ sessions), the signature of feedback
-rejecting an unanticipated disturbance. Neither motion term clears the
-Bonferroni threshold on its own, but the same effect is visible in a separate
-per-session test: regressing per-trial RMSE on motion within each session, with
+states differed in what the loop could hold. Motion made the disturbance less
+predictable---open-loop error rose with it ($+0.14$ per SD of motion, 95\% CI
+$[0.05, 0.23]$; $t(10) = 3.39$, $p = 0.0069$; $n = 11$ sessions)---yet the
+output stayed regulated: closed-loop error did not rise ($-0.06$,
+$[-0.16, 0.04]$; $t(10) = -1.25$, $p = 0.24$), so the loop absorbed the extra
+disturbance, the signature of feedback rejecting an unanticipated input. The
+open-loop slope falls just short of the Bonferroni threshold on its own, but the
+same contrast is visible in a separate per-session test: regressing per-trial RMSE on motion within each session, with
 both quantities $z$-scored within session and condition, open-loop error rose
 with motion (median slope $+0.13$; Wilcoxon signed-rank $V = 65$, $p = 0.0020$)
 while under closed-loop control the dependence was abolished (median slope
 $-0.05$; $V = 24$, $p = 0.46$), and the open-loop slope exceeded the
 closed-loop slope in all 11 sessions ($V = 66$, $p = 9.8\times10^{-4}$).
-Relative 2--4\,Hz power left the open loop unaffected ($+0.04$, $[-0.05, 0.13]$;
-$t(14) = 0.95$, $p = 0.36$) while closed-loop error tended to climb with it, a
-suggestive loss of controllability that did not reach significance ($+0.12$,
-$[-0.00, 0.24]$; $t(14) = 2.14$, $p = 0.050$). The initial deviation and
-absolute 1--4\,Hz power lowered predictability (open-loop error rose: $+0.24$,
-$[0.16, 0.33]$, $t(14) = 6.40$, $p = 1.7\times10^{-5}$; and $+0.44$,
-$[0.37, 0.52]$, $t(14) = 12.5$, $p = 5.7\times10^{-9}$; both clear the corrected
-threshold) but left controllability unchanged ($p = 0.75$ and $0.25$)---disturbances
-that scale both conditions together. The controller therefore behaves as an
-internal model whose rejection is steerable for the unanticipated motor
-disturbance; for the ongoing low-frequency fluctuation, which carries the largest
-share of the steady-state error (Fig.~\ref{fig:figure4}C), we find no evidence
-that feedback gains ground, and a suggestive trend that it loses it.
+Relative 2--4\,Hz power showed the opposite pattern. It left the open loop
+unaffected ($+0.04$, $[-0.05, 0.13]$; $t(14) = 0.95$, $p = 0.36$), so it does not
+enlarge the disturbance a feedforward input faces, yet closed-loop error rose with
+it ($+0.16$, $[0.08, 0.24]$; $t(14) = 4.22$, $p = 8.6\times10^{-4}$, clearing the
+corrected threshold): at high relative 2--4\,Hz power the loop loses the output
+it otherwise holds. The initial deviation and absolute 1--4\,Hz power raised both
+errors together---open loop ($+0.24$, $[0.16, 0.33]$, $t(14) = 6.40$,
+$p = 1.7\times10^{-5}$; $+0.44$, $[0.37, 0.52]$, $t(14) = 12.5$,
+$p = 5.7\times10^{-9}$) and closed loop ($+0.23$, $[0.15, 0.31]$, $t(14) = 5.96$,
+$p = 3.5\times10^{-5}$; $+0.50$, $[0.43, 0.58]$, $t(14) = 14.1$,
+$p = 1.2\times10^{-9}$), all four clearing the corrected threshold---disturbances
+large enough that the loop reduces them but cannot hold the output against them.
+
+Regularizability is an absolute property: a closed-loop error that rises with the
+state could still be a constant fraction of a growing open-loop error. We
+therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop
+error ratio against state (log scale; a separate family of four tests,
+Bonferroni threshold $p = 0.0125$). Motion improved attenuation---the
+closed-loop error fell as a fraction of open-loop error, by 7\% per SD of motion
+($[2, 12]\%$; $t(10) = -2.92$, $p = 0.015$)---whereas relative 2--4\,Hz and
+absolute 1--4\,Hz power degraded it ($+6\%$, $[2, 11]\%$, $t(14) = 2.89$,
+$p = 0.012$; $+8\%$, $[4, 13]\%$, $t(14) = 4.20$, $p = 8.9\times10^{-4}$), and the
+initial deviation left it unchanged ($p = 0.88$): the loop removes the same
+fraction of a large initial deviation as of a small one. The low-frequency
+fluctuation, which carries the largest share of the steady-state error
+(Fig.~\ref{fig:figure4}C), is therefore the one state that the loop can neither
+regulate nor attenuate as it grows.
 
 
 % ------------------------------------------------------------
