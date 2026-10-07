@@ -52,12 +52,25 @@ are in Table~\ref{tab:cohort}.
 %% preparation, taken from Matveev et al. 2024 (bioRxiv 2024.11.01.621418), in
 %% which AL_0033 and AL_0034 appear as Subjects 1 and 3. Both are male/female
 %% respectively, tetO-GCaMP8s, injected with 1.6e12 GC in 100 uL PBS.
-%% FILL: sex, indicator line and titer for AL_0039, AL_0041, AL_0048 and AL_0051,
-%% which postdate that paper. Add them to Table~\ref{tab:cohort}.
-%% FILL: age range at the first recording session, housing and light cycle.
+%% SEX + INDICATOR FILLED 2026-10-06 from Alyx (alyx.steinmetzlab.net, via the
+%% DataBrowser token). Every animal is C57BL/6J carrying tetO-g8s and tTA, i.e.
+%% GCaMP8s: AL_0033 M, AL_0034 F, AL_0039 F, AL_0041 F, AL_0048 M, AL_0051 F.
+%% (AL_0039 and AL_0041 also list eGFP at zygosity 0, i.e. absent -- not an
+%% indicator, do not report it.)
+%% FILL: TITER for AL_0039, AL_0041, AL_0048 and AL_0051 -- Alyx does not carry
+%% it. Only AL_0034 has an injection note ('20 uL DLX Chrimson 2.0 04/08/24').
+%% Take titers from the lab's own injection records.
+%% FILL: housing and light cycle (not in Alyx).
 %% CHECK: Matveev et al. gives the titer as 1.6e13 GC in the Surgery text but
 %% 1.6e12 GC in Table 1 for these animals. One is a typo in that paper. Use the
 %% value from the lab's own injection records rather than either.
+
+Animals were 5--14 months old over the sessions reported here.
+%% AGE FILLED 2026-10-06 from Alyx birth dates against the session dates in
+%% Table~\ref{tab:cohort}: AL_0033 b.2024-02-16 -> 11.1 months at its first
+%% session and 14.1 at its last; AL_0039 b.2024-11-23 -> 4.9; AL_0048
+%% b.2026-01-12 -> 6.5; AL_0051 b.2026-01-27 -> 6.0; AL_0034 b.2024-02-16 ->
+%% 8.0; AL_0041 b.2025-07-04 -> 5.0. Range quoted as 5-14 months.
 
 Mice were acclimated to handling and head fixation for at least two days before
 recording. To maintain an alert state, animals were lightly water restricted for
@@ -71,9 +84,14 @@ Two mice (AL\_0048 and AL\_0051) additionally expressed a second, spectrally
 distinct opsin and were stimulated at 638 and 594\,nm respectively. The control
 loop accommodates either polarity through a feedback sign (see below), so both
 animals were driven toward the same suppression target.
-%% FILL: name the second construct and give one sentence on why the two mice were
-%% driven at different wavelengths. Otherwise the 594 nm session reads as an
-%% unexplained deviation.
+%% FILL (PARTIALLY ANSWERED 2026-10-06 from Alyx): AL_0051's subject record
+%% describes the construct as 'PHP S5E2 C1V1' -- i.e. a PHP capsid carrying the
+%% S5E2 interneuron enhancer driving C1V1, which is consistent with it being the
+%% 594 nm animal, since C1V1 is excited in that band and exciting interneurons
+%% suppresses the pyramidal output, the same target as the 638 nm inhibitory
+%% actuation. CONFIRM THIS WITH THE INJECTION RECORDS before writing it into the
+%% body -- the wavelength pairing is inferred here, not read off Alyx. AL_0048
+%% has NO construct description in Alyx, so its second opsin is still unnamed.
 
 Table~\ref{tab:cohort} lists every animal and session and the analyses each
 contributed to. All counts in the Results refer to this table.
@@ -86,11 +104,11 @@ contributed to. All counts in the Results refer to this table.
         Mouse & Sex & Indicator & Sessions & Dates & Trials/session & Contributes to \\
         \hline
         AL\_0033 & M & GCaMP8s & 9 & 2025-01-20 to 2025-04-19 & 30--200 & Closed- vs open-loop \\
-        AL\_0039 & \textbf{--} & \textbf{--} & 4 & 2025-04-19 to 2025-04-30 & 100 & Closed- vs open-loop \\
-        AL\_0048 & \textbf{--} & \textbf{--} & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
-        AL\_0051 & \textbf{--} & \textbf{--} & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
-        AL\_0034 & F & GCaMP8s & 1 & 2025-10-17 & \textbf{--} & Gain-grid sweep only \\
-        AL\_0041 & \textbf{--} & \textbf{--} & 2 & 2025-12-02 & \textbf{--} & Impulse characterization only \\
+        AL\_0039 & F & GCaMP8s & 4 & 2025-04-19 to 2025-04-30 & 100 & Closed- vs open-loop \\
+        AL\_0048 & M & GCaMP8s & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
+        AL\_0051 & F & GCaMP8s & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
+        AL\_0034 & F & GCaMP8s & 1 & 2024-10-17 & \textbf{--} & Gain-grid sweep only \\
+        AL\_0041 & F & GCaMP8s & 2 & 2025-12-02 & \textbf{--} & Impulse characterization only \\
         \hline
     \end{tabular}
     \caption{Animals and sessions. The closed- versus open-loop comparison rests

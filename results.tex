@@ -114,7 +114,7 @@ The validity of these results depends on the trial-averaging assumption holding 
     \includegraphics[width=0.9\linewidth]{images/Figure4.pdf}
     % ===========================================================================
     \caption{\small{\textbf{Closed-loop feedback decouples the controlled response from a state-dependent disturbance carried by the contralateral hemisphere.}\\
-    \small{Open loop red, closed loop blue; steady-state window 1--3\,s after laser onset. Decomposition (C) uses the 11 sessions carrying a usable motion trace (613 closed-loop trials); the state-quartile panel (D) uses all 15 sessions from 4 mice (1670 trials), except for motion, which uses the 11 sessions carrying a usable motion trace (1190 trials); the rejection panel (G) the 11 of 13 sessions that reach the setpoint (595 trials). Single-trial and single-session insets from a representative session (AL\_0033).\\
+    \small{Open loop red, closed loop blue; steady-state window 1--3\,s after laser onset. Decomposition (C) uses the 11 sessions carrying a usable motion trace (613 closed-loop trials); the state-quartile panel (D) uses all 15 sessions from 4 mice (1670 trials), except for motion, which uses the 11 sessions carrying a usable motion trace (1190 trials); the rejection panel (G) the 11 of 13 sessions that reach the setpoint (595 trials; the remaining 2 of the 15 admit no contralateral predictor, see Results). Single-trial and single-session insets from a representative session (AL\_0033).\\
     \textbf{A:} State exemplars. Representative closed-loop trials chosen for high initial deviation (blue), motion (orange), relative 2--4\,Hz power (green), and absolute 1--4\,Hz power (purple)---the four state factors used throughout, measured from $-2$\,s to $+3$\,s around stimulus onset (initial deviation at onset).\\
     \textbf{B:} Error-decomposition model. Per-trial steady-state tracking error (RMSE) is regressed on the four state factors, $\mathrm{RMSE}\approx\beta_0+\sum_i\beta_i X_i$; predictor colours match A.\\
     \textbf{C:} Unique $R^2$ of each factor for the closed-loop error, resolved by window (transient 0--1\,s, light; steady-state 1--3\,s, dark): initial deviation owns the transient ($0.41\rightarrow0.03$), relative 2--4\,Hz and absolute 1--4\,Hz power carry the steady-state window ($0.15\rightarrow0.19$ and $0.28\rightarrow0.44$), motion neither ($<0.01$).\\
@@ -230,10 +230,15 @@ counters. Closed-loop control rejected the disturbance across the population:
 the geometric-mean ratio was $\mathrm{RR} = 0.58$ (95\% CI $[0.48, 0.71]$),
 below one by a session-aware mixed model ($\log\mathrm{RR} \sim 1 +
 (1|\mathrm{mouse}) + (1|\mathrm{mouse{:}session})$; one-sided
-$p = 2.1\times10^{-8}$, $n = 11$ sessions; Fig.~\ref{fig:figure4}G). Two sessions
-in which the controller never reached the setpoint---so the residual is
-dominated by a standing setpoint error rather than by disturbance
-rejection---were excluded.
+$p = 2.1\times10^{-8}$, $n = 11$ sessions; Fig.~\ref{fig:figure4}G).
+Two of the fifteen sessions could not enter this analysis at all, because the
+contralateral predictor could not be fitted for them: one has no decomposed
+full-frame widefield recording, and in the other the online readout is not
+frame-aligned to the imaging timebase, so its response cannot be expressed on
+the same scale as the reference. Of the thirteen that remain, two more were
+excluded because the controller never reached the setpoint---there the residual
+is dominated by a standing setpoint error rather than by disturbance
+rejection---leaving eleven.
 % % ------------------------------------------------------------
 \subsection*{Feedforward control for variable reference tracking}
 % ------------------------------------------------------------
