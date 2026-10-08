@@ -114,14 +114,14 @@ The validity of these results depends on the trial-averaging assumption holding 
     \includegraphics[width=0.9\linewidth]{images/Figure4.pdf}
     % ===========================================================================
     \caption{\small{\textbf{Closed-loop feedback decouples the controlled response from a state-dependent disturbance carried by the contralateral hemisphere.}\\
-    \small{Open loop red, closed loop blue; steady-state window 1--3\,s after laser onset. Decomposition (C) uses the 11 motion-tracked sessions (613 closed-loop trials); the state-quartile panel (D) uses all 15 sessions from 4 mice (1670 trials), except for motion, which uses the same 11 motion-tracked sessions (1190 trials); the rejection panel (G) uses the 12 qualifying sessions that reached the setpoint (640 trials, 4 mice), out of the 13 that qualify, the other 2 of the 15 admitting no contralateral predictor (see Results). Single-trial and single-session insets from a representative session (AL\_0033).\\
+    \small{Open loop red, closed loop blue; steady-state window 1--3\,s after laser onset. Decomposition (C) uses the 11 motion-tracked sessions (613 closed-loop trials); the state-quartile panel (D) uses all 15 sessions from 4 mice (1670 trials), except for motion, which uses the same 11 motion-tracked sessions (1190 trials); the rejection panel (G) uses 11 sessions (595 trials, 3 mice), out of the 13 that admit a contralateral predictor, the other 2 of the 15 admitting none (see Results). Single-trial and single-session insets from a representative session (AL\_0033).\\
     \textbf{A:} State exemplars. Representative closed-loop trials chosen for high initial deviation (blue), motion (orange), relative 2--4\,Hz power (green), and absolute 1--4\,Hz power (purple)---the four state factors used throughout, measured from $-2$\,s to $+3$\,s around stimulus onset (initial deviation at onset).\\
     \textbf{B:} Error-decomposition model. Per-trial steady-state tracking error (RMSE) is regressed on the four state factors, $\mathrm{RMSE}\approx\beta_0+\sum_i\beta_i X_i$; predictor colours match A.\\
     \textbf{C:} Unique $R^2$ of each factor for the closed-loop error, resolved by window (transient 0--1\,s, light; steady-state 1--3\,s, dark): initial deviation owns the transient ($0.41\rightarrow0.03$), relative 2--4\,Hz and absolute 1--4\,Hz power carry the steady-state window ($0.15\rightarrow0.19$ and $0.28\rightarrow0.44$), motion neither ($<0.01$).\\
     \textbf{D:} Effect of state on controller performance. Open- and closed-loop steady-state error (per-trial RMSE, $z$-scored within session) across quartiles of each state (low~$\rightarrow$~high) and two properties read from a session-aware mixed model on raw RMSE (RMSE $\sim$ condition${\times}$state, random per-session intercepts and open/closed-loop slopes, mouse intercept). \emph{Predictability} (P) is the open-loop error slope on state and \emph{regularizability} (R) the closed-loop error slope; arrows point in the direction of improvement or degradation and carry stars where significant (uncorrected; eight tests, Bonferroni threshold $p = 0.0063$; $t$ on $n_{\mathrm{sessions}} - 1$ degrees of freedom). Motion: P$\downarrow$ ($t(10) = 3.39$, $p = 0.0069$), R unchanged ($p = 0.24$)---the loop holds the output against an unanticipated disturbance. Relative 2--4\,Hz: P unchanged ($p = 0.36$), R$\downarrow$ ($t(14) = 4.22$, $p = 8.6\times10^{-4}$)---the loop loses the output. Initial deviation and absolute power: P$\downarrow$ and R$\downarrow$ together (initial deviation $p = 1.7\times10^{-5}$ and $3.5\times10^{-5}$; absolute power $p = 5.7\times10^{-9}$ and $1.2\times10^{-9}$).\\
     \textbf{E:} Contra$\rightarrow$ipsilateral kernel---ridge weights mapping contralateral pixels onto the ipsilateral control readout (representative session).\\
     \textbf{F:} The controlled response $A$ splits into the Global disturbance $G$ (predicted from the contralateral hemisphere with no controller input) and the Local component $L = A - G$ (laser and controller effect); trial average for a representative session ($R^2_{\mathrm{te}} = 0.75$).\\
-    \textbf{G:} Closed-loop disturbance rejection. Per-session energy ratio $\mathrm{RR} = \|A-r\|^2/\|D\|^2$---residual energy of the actual response about the reference ($r = -5\%\,\Delta F/F$) over the energy of the disturbance $D$ (the contra-predicted excursion, leak-corrected), steady-state window 1--3\,s; $\mathrm{RR} < 1$ is rejection. Dots, per-session geometric mean $\pm$1 SD (log). Band, geometric-mean $\mathrm{RR} = 0.63$ (95\% CI $[0.48, 0.83]$), below one by a session-level mixed model ($\log\mathrm{RR} \sim 1 + (1|\mathrm{session})$; $t(10.8) = -3.69$, one-sided $p = 0.0018$, $n = 12$ sessions, 640 trials); 11 of 12 sessions lie below one. With a mouse-level term the model has 2.5 degrees of freedom and does not reach significance ($p = 0.16$, 4 mice). A session qualifies if a contralateral predictor can be fitted for it (13 of 15); of those, the one that never reaches the setpoint is excluded.}}}
+    \textbf{G:} Closed-loop disturbance rejection. Per-session energy ratio $\mathrm{RR} = \|A-r\|^2/\|D\|^2$---residual energy of the actual response about the reference ($r = -5\%\,\Delta F/F$) over the energy of the disturbance $D$ (the contra-predicted excursion, leak-corrected), steady-state window 1--3\,s; $\mathrm{RR} < 1$ is rejection. Dots, per-session geometric mean $\pm$1 SD (log). Band, geometric-mean $\mathrm{RR} = 0.58$ (95\% CI $[0.46, 0.72]$), below one by a session-level mixed model ($\log\mathrm{RR} \sim 1 + (1|\mathrm{session})$; $t(9.3) = -5.69$, one-sided $p = 1.3\times10^{-4}$, $n = 11$ sessions, 595 trials); all 11 lie below one. With a mouse-level term the model has 1.2 degrees of freedom and we do not rest the claim on it ($p = 0.049$, 3 mice). A session enters if a contralateral predictor can be fitted for it (13 of 15) and its standing setpoint offset supplies no more than a third of its settled residual energy (11 of those 13).}}}
     \label{fig:figure4}
 \end{figure}
 % ------------------------------------------------------------
@@ -261,22 +261,24 @@ fitted for it, which thirteen of the fifteen can. The other two cannot: one has
 no decomposed full-frame widefield recording, and in the other the online
 readout is not frame-aligned to the imaging timebase, so its response cannot be
 expressed on the same scale as the reference. Of the thirteen qualifying
-sessions, twelve reached the setpoint; the one that did not is excluded as
-well, because there the residual is dominated by a standing setpoint error
-rather than by disturbance rejection.
+sessions, eleven are informative about rejection. The other two are excluded
+because their settled residual is dominated by a standing setpoint error rather
+than by unrejected disturbance: over the steady-state window the residual energy
+splits exactly into a standing-offset term and a fluctuation term,
+$\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and in those two the
+offset supplies $38\%$ and $59\%$ of the total against $17\%$ or less everywhere
+else (Materials and Methods).
 
-Across those twelve, closed-loop control rejected the disturbance at the session
-level: the geometric-mean ratio was $\mathrm{RR} = 0.63$ (95\% CI
-$[0.48, 0.83]$; mixed model with a session random intercept, $t(10.8) = -3.69$,
-one-sided $p = 0.0018$; $n = 12$ qualifying sessions that reached the setpoint,
-640 trials, 4 mice; Fig.~\ref{fig:figure4}G), and the median ratio was below one
-in 11 of the 12 sessions (one-sided Wilcoxon signed-rank $V = 10$, $p = 0.010$).
-The exception is the single session from one animal (median $\mathrm{RR} =
-1.94$). The evidence is therefore at the level of sessions, not animals: with a
-mouse-level term the model has only 2.5 degrees of freedom and the effect does
-not reach significance ($\mathrm{RR} = 0.73$, $[0.29, 1.82]$; $t(2.5) = -1.24$,
-one-sided $p = 0.16$), because two of the four mice contribute a single session
-each.
+Across those eleven, closed-loop control rejected the disturbance at the session
+level: the geometric-mean ratio was $\mathrm{RR} = 0.58$ (95\% CI
+$[0.46, 0.72]$; mixed model with a session random intercept, $t(9.3) = -5.69$,
+one-sided $p = 1.3\times10^{-4}$; $n = 11$ sessions, 595 trials, 3 mice;
+Fig.~\ref{fig:figure4}G), and the median ratio was below one in all eleven
+(one-sided Wilcoxon signed-rank $V = 0$, $p = 4.9\times10^{-4}$). The evidence is
+at the level of sessions rather than animals: a mouse-level term leaves the model
+1.2 degrees of freedom ($\mathrm{RR} = 0.57$, $[0.22, 1.50]$; $t(1.2) = -4.65$,
+one-sided $p = 0.049$), because two of the three mice contribute a single session
+each, so we do not rest the claim on it.
 % % ------------------------------------------------------------
 \subsection*{Feedforward control for variable reference tracking}
 % ------------------------------------------------------------

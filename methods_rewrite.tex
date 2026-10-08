@@ -929,11 +929,22 @@ here.
           $-2$ to $+3$\,s window differed from the session mean by more than 1.5
           standard deviations in either direction were excluded, removing $30$ of
           $1190$ trials.
-    \item \emph{Tracking failure.} For the disturbance-rejection analysis only,
-          two sessions whose settled mean never came within
-          $1.5\%\,\Delta F/F$ of the reference were excluded, because their
-          residual is dominated by a standing setpoint error rather than by
-          rejection. These were AL\_0033 2025-02-12 and AL\_0051 2026-07-29.
+    \item \emph{Standing setpoint offset.} For the disturbance-rejection analysis
+          only, two sessions were excluded because their settled residual is
+          dominated by a standing setpoint error rather than by unrejected
+          disturbance. Over the steady-state window the residual energy splits
+          exactly into the two,
+          $\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and we
+          excluded a session when the first term, the standing offset, supplied
+          more than one third of the total. These were AL\_0033 2025-02-12
+          ($38\%$) and AL\_0051 2026-07-29 ($59\%$); every remaining session is at
+          $17\%$ or below, and any threshold between $20\%$ and $37\%$ selects
+          the same eleven sessions.
+          We gate on this share rather than on the settled mean itself because the
+          two are not interchangeable: AL\_0048 2026-07-29 sits a comparable
+          $1.33\%\,\Delta F/F$ from the reference but faces a disturbance large
+          enough that its offset is only $17\%$ of the residual, so its rejection
+          ratio remains a measurement of rejection.
     \item \emph{Contralateral predictor.} No session was excluded on predictor
           quality. The controller analysis needs only a stimulation-blind estimate
           of the disturbance, not a certified model of it, so rather than gating on
