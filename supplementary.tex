@@ -134,3 +134,39 @@
     motion contributes little.}
     \label{fig:f4_exemplars}
 \end{figure}
+
+\begin{figure}
+    \centering
+    %% ASSEMBLY PENDING. Place the four panels from
+    %% paper/figures_final/panels/supp_reject/ (each 11.15 x 5.33 cm, stack as four
+    %% rows A-D) and export as images/supplementary/S4.pdf, then uncomment the line
+    %% below. Caption, label and the Discussion cross-reference are already live, so
+    %% the draft builds with a caption-only float until the artwork lands.
+    % \includegraphics[width=\linewidth]{images/supplementary/S4.pdf}
+    \caption{\textbf{Single trials behind the rejection ratio.} Each tile is one
+    trial from a closed-loop session, drawn in absolute $\Delta F/F$. Grey, the
+    stimulation-blind contralateral prediction $G$: before laser onset it is a
+    prediction of the ipsilateral site, and after onset it is the counterfactual,
+    the disturbance the controller faces. Color, the measured response $A$ (red,
+    open loop; blue, closed loop). Dashed line, the reference
+    $r = -5\%\,\Delta F/F$; shading, the 3\,s stimulation window. Each panel shows
+    one session as two rows, open loop above and closed loop below, with three
+    trials drawn at the 10th, 50th and 90th percentiles of that session's
+    rejection ratio, so each row spans the session's range rather than its best
+    trials. All six tiles in a panel share one $y$-range. $\mathrm{RR}$ is computed
+    exactly as in Fig.~\ref{fig:figure4}G---settled window 1--3\,s, disturbance
+    referenced to its own pre-stimulus baseline and leak-corrected---so a tile
+    labelled $\mathrm{RR} = 0.25$ is one of the trials inside that statistic.
+    \textbf{A--C:} Three sessions from the analysed pool, one per mouse (AL\_0033
+    2025-02-26, AL\_0039 2025-04-20, AL\_0048 2026-07-29; session-median
+    $\mathrm{RR} = 0.72$, $0.74$ and $0.75$ closed loop against $1.26$, $1.25$ and
+    $0.84$ open loop). Before onset $A$ and $G$ lie close together on single trials,
+    which is what makes the disturbance estimate credible without averaging. After
+    onset they separate, and the separation is the laser plus, in closed loop, the
+    controller's own action. \textbf{D:} AL\_0051 2026-07-29, the session excluded
+    because its standing setpoint offset supplies $59\%$ of its settled residual
+    (Materials and Methods). Its closed-loop response sits persistently away from
+    the reference rather than following the disturbance, which is the failure the
+    exclusion criterion is meant to identify and is visible here directly.}
+    \label{fig:reject_trials}
+\end{figure}
