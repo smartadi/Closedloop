@@ -1134,8 +1134,13 @@ Each state measure (Section~\ref{sec:disturbance}, $[-1, 0)$\,s window) was
 converted to a within-session percentile, so that every session spans the same
 axis, and trials were binned into quartiles of that percentile. The effect size
 is the ratio of the standard deviation of $z$ in the top quartile to that in the
-bottom quartile, with a 95\% confidence interval from 2000 bootstrap resamples of
-trials, re-binning each resample. The panel shows the same quantity in
+bottom quartile. Its 95\% confidence interval comes from a hierarchical bootstrap
+that matches the session-level test: each of 10{,}000 resamples draws four sessions
+with replacement, then resamples trials with replacement within each drawn session,
+and re-bins the pooled resample. Resampling trials alone would treat the 1767 trials
+as independent and give an interval too narrow for a four-session design. With four
+sessions the interval is approximate, so we also report how many sessions show the
+effect individually. The panel shows the same quantity in
 interpretable units: the standard deviation of $d_{j}$ within each
 (session $\times$ amplitude) cell, pooled across cells within a quartile and
 divided by the session's own pooled within-cell standard deviation, so that 1 is
