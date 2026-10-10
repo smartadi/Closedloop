@@ -1,159 +1,84 @@
 \section*{Discussion}
 
-In this study, we demonstrate that closed-loop optogenetic stimulation driven by real-time wide-field calcium imaging can regulate mesoscale cortical population activity more reliably than open-loop stimulation. By dynamically adjusting optogenetic input using the PI feedback controller (Equation~\ref{eq:pi}), we drove cortical population activity toward a predefined reference trajectory across experimental sessions and animals. Closed-loop feedback improved tracking accuracy, reduced root-mean-squared tracking error, and reduced trial-to-trial variability. Collectively, these results demonstrate that the approximately linear, stationary structure of trial-averaged cortical dynamics captured by Assumption~\ref{assm:trial_avg} can be exploited to design simple but effective output-feedback controllers for mesoscale neural regulation.
+In this study we show that closed-loop optogenetic stimulation, driven by real-time wide-field calcium imaging, regulates mesoscale cortical activity more reliably than open-loop stimulation. By adjusting the optogenetic input with a PI feedback controller (Equation~\ref{eq:pi}), we drove cortical activity toward a predefined reference across sessions and animals. Closed-loop feedback reduced tracking error (RMSE) and trial-to-trial variability. The error left under feedback depended on brain state: the loop held the output as movement increased but not as 2--4\,Hz power increased, and it partially rejected a disturbance predicted from the opposite hemisphere. With a moving reference, feedback and preview corrected separate parts of the tracking error. Together, these results show that the approximately linear, stationary structure of trial-averaged cortical dynamics (Assumption~\ref{assm:trial_avg}) can be used to design simple, effective output-feedback controllers for mesoscale neural regulation.
 
 \subsection*{Linear approximation of mesoscale cortical dynamics enables controller design}
 
-A central result enabling our framework was the empirical demonstration that trial-averaged cortical responses to optogenetic stimulation are well approximated by a linear input--output map. The theoretical basis for this is that the underlying dynamics are nonlinear and depend on ongoing brain state, which fluctuates across trials with arousal, behavior, and network activity. Under \textbf{trial-averaging} Assumption~\ref{assm:trial_avg}, averaging over brain state and over unobserved disturbances yields the nominal LTI system $(\bar{A}, \bar{B}, C)$, whose input--output behavior corresponds to the observed trial-averaged dynamics. This explains why linearity is observed in expectation even when individual trials reflect the richer dynamics of
-Equations~\eqref{eq:nl_state}--\eqref{eq:nl_out}: the brain-state and disturbance contributions average out when drawn from stationary distributions. 
+A central result of this work is that trial-averaged cortical responses to optogenetic stimulation are well approximated by a linear input--output map. The underlying dynamics are nonlinear and depend on ongoing brain state, which fluctuates across trials with arousal, behavior, and network activity. Under the trial-averaging Assumption~\ref{assm:trial_avg}, averaging over brain state and over unobserved disturbances gives the nominal LTI system $(\bar{A}, \bar{B}, C)$, whose input--output behavior matches the observed trial-averaged dynamics. This explains why linearity holds in expectation even when single trials reflect the richer dynamics of
+Equations~\eqref{eq:nl_state}--\eqref{eq:nl_out}: the brain-state and disturbance contributions average out when they are drawn from stationary distributions.
 
-The fitted models needed more than one pole pair, not to predict held-out trials---a single damped oscillation predicted them nearly as well (pooled held-out $R^2 = 0.84$ against $0.86$)---but to separate two components of the response: a dip whose timescale is conserved across sessions (${\approx}0.145$\,s) and a rebound whose timescale varies several-fold. The conserved dip is the component a controller acting within a trial has to anticipate, whereas the session-specific rebound is consistent with the per-session differences in fitted dynamics (Figure~\ref{fig:figure2}E) and with tuning gains per session.
+The fitted models needed more than one pole pair. A single damped oscillation predicted held-out trials nearly as well (pooled held-out $R^2 = 0.84$ against $0.86$), but the extra poles separate two components of the response: a dip whose timescale is conserved across sessions (${\approx}0.145$\,s) and a rebound whose timescale varies several-fold. A controller acting within a trial has to anticipate the conserved dip, while the session-specific rebound is consistent with the per-session differences in fitted dynamics (Figure~\ref{fig:figure2}E) and with tuning the gains per session.
 
-This finding is consistent with a broader literature demonstrating that complex nonlinear neural population dynamics often admit locally low-dimensional or approximately linear representations when viewed through population-level measurements~\citep{Churchland2012, Cunningham2014, Stringer2019}. Identifying this structure at the mesoscale, using trial averaging to suppress the influence of spontaneous variability, provides a tractable basis for controller design without requiring explicit system identification. Crucially, inaccuracies in the feedforward gain $K_r$ (Equation~\ref{eq:kr}) arising from session-to-session differences in opsin expression, spatial alignment, external stimulus, or brain state are compensated online by the integral term of Equation~\eqref{eq:pi}, making the approach robust to moderate model mismatch.
+This is consistent with work showing that nonlinear neural population dynamics often have locally low-dimensional or approximately linear descriptions at the population level~\citep{Churchland2012, Cunningham2014, Stringer2019}. At the mesoscale, trial averaging suppresses spontaneous variability and exposes this structure, which gives a tractable basis for controller design without full system identification. Errors in the feedforward gain $K_r$ (Equation~\ref{eq:kr}) from session-to-session differences in opsin expression, spatial alignment, external stimulus, or brain state are compensated online by the integral term of Equation~\eqref{eq:pi}, which makes the approach robust to moderate model mismatch.
 
-The trial-averaged step responses did not definitively converge to a steady state within the 3-second trial window, varying across sessions in overshoot and offset. But the traces remain within an invariant set around the activity mean. We interpret this as a property of marginally stable dynamics of biologically bounded cortical circuits, in which activity remains close to a stationary mean rather than decaying to a fixed equilibrium~\citep{hespanha2018linear}, rather than as evidence against linearity. 
+The trial-averaged step responses did not clearly settle within the 3\,s trial, and they varied across sessions in overshoot and offset. The traces did, however, stay within a bounded set around the activity mean. We read this as a property of marginally stable, biologically bounded cortical dynamics, in which activity stays close to a stationary mean instead of decaying to a fixed equilibrium~\citep{hespanha2018linear}, and not as evidence against linearity.
 
 %Consistent with the brain-state analysis in the Results, trials recorded during desynchronized, low-power epochs~\citep{Harris2011} exhibited more predictable and monotonic input--output responses, whereas synchronized states yielded less reliable behavior. These observations highlight the importance of monitoring arousal state in future closed-loop experiments and suggest that adaptive mechanisms for detecting and responding to brain-state transitions could substantially improve controller robustness.
 
 \subsection*{Disturbance rejection underlies variability reduction}
 
-The reduction in trial-to-trial variability observed under closed-loop stimulation has a natural interpretation within this framework. Under Assumption~\ref{assm:trial_avg}, individual
-trial responses are perturbations of the nominal trial-averaged trajectory, driven by the unobserved disturbance
-and by trial-to-trial variation in brain state. These perturbations are zero-mean in expectation but nonzero on
-individual trials, and they constitute the primary source of cross-trial variance under open-loop conditions. The PI
-controller (Equation~\ref{eq:pi}) suppresses these deviations through two complementary mechanisms: the
-proportional term $K_p(y_{\mathrm{ref}} - y_t)$ provides immediate timestep-level correction, while the integral term
-accumulates error across time to eliminate persistent offsets arising from bias in $K_r$ or slow drift in the latent
-state. Together, these terms implement active disturbance rejection within the closed-loop system.
+The reduction in trial-to-trial variability under closed-loop stimulation has a natural interpretation in this framework. Under Assumption~\ref{assm:trial_avg}, single-trial responses are perturbations of the nominal trial-averaged trajectory, driven by the unobserved disturbance and by trial-to-trial variation in brain state. These perturbations are zero-mean in expectation but nonzero on individual trials, and they are the main source of cross-trial variance in open loop. The PI controller (Equation~\ref{eq:pi}) suppresses them in two ways: the proportional term $K_p(y_{\mathrm{ref}} - y_t)$ corrects at every time step, and the integral term accumulates error over time to remove persistent offsets caused by bias in $K_r$ or slow drift in the latent state. Together, these terms implement active disturbance rejection.
 
-From a control-theoretic standpoint, this mechanism does not require knowledge of the disturbance structure---only that
-the input--output relationship is approximately monotonic in expectation~\citep{astrom1995pid}, which the impulse response
-characterization confirmed. The convergence $\hat{J}(K) \to J(K)$ guaranteed by Trial-averaging Assumption~\ref{assm:trial_avg}
-further implies that variance reduction will be most reliable when brain state is approximately stationary across the
-session, consistent with the empirical observations and with the convergence of the variance estimate in Fig.~\ref{fig:spatial_spread}C.
+In control terms, this mechanism does not need a model of the disturbance, only an input--output relationship that is approximately monotonic in expectation~\citep{astrom1995pid}, which the impulse-response characterization confirmed. The convergence $\hat{J}(K) \to J(K)$ under the trial-averaging Assumption~\ref{assm:trial_avg} also implies that variance reduction will be most reliable when brain state is approximately stationary across the session, consistent with our observations and with the convergence of the variance estimate in Figure~\ref{fig:spatial_spread}C.
 
-The state dependence of Fig.~\ref{fig:figure4}D can be read through the internal
-model principle~\citep{francis1976internal}: a feedback loop regulates its output
-against a class of disturbances only to the extent that it embeds a model of
-the signals generating them. A PI controller embeds exactly one such model, a
-constant, through its integrator, and its proportional term adds broadband but
-finite rejection up to the loop bandwidth. Read this way, regularizability
-asks, state by state, whether the disturbance that accompanies that state falls
-within what the loop models. Movement-related disturbance does: open-loop error
-rose with motion while closed-loop error did not, and the loop removed a growing
-fraction of it. The 2--4\,Hz fluctuation does not: it left the open loop
-unchanged but degraded closed-loop regulation, consistent with a disturbance
-whose frequency content lies near or beyond the bandwidth the loop's latency
-allows (see below), and which a constant-plus-proportional model cannot
-represent. The trend of the open-minus-closed-loop gap, the quantity usually
-used to summarise how much feedback helps, tells the same story only in part.
-The gap widened with motion ($-0.20\,\%\,\Delta F/F$ per SD, $[-0.33, -0.06]$;
-$t(10) = -3.19$, $p = 0.0097$) and did not change significantly with any other
-state, including relative 2--4\,Hz power ($p = 0.050$), because a widening gap
-can come from a rising open loop as much as from a holding closed loop. We
-therefore do not use the gap trend to assess what the controller can regulate.
-An internal model of the low-frequency fluctuation---for example, a resonant
-mode at the dominant 2--4\,Hz frequency in place of the plain integrator---is the
-direct prediction of this reading, and a test of it.
+The state dependence in Figure~\ref{fig:figure4}D can be understood through the internal model principle~\citep{francis1976internal}: a feedback loop regulates its output against a class of disturbances only to the extent that it contains a model of the signals generating them. A PI controller contains exactly one such model, a constant, through its integrator, and its proportional term adds broadband but finite rejection up to the loop bandwidth. In this view, regularizability asks, state by state, whether the disturbance that comes with that state falls within what the loop models. Movement-related disturbance does: open-loop error rose with motion while closed-loop error did not, and the loop removed a growing fraction of it. The 2--4\,Hz fluctuation does not. It left the open loop unchanged but degraded closed-loop regulation, consistent with a disturbance whose frequency content lies near or beyond the bandwidth that the loop latency allows (see below), and which a constant-plus-proportional model cannot represent. The trend in the open-minus-closed-loop gap, the usual summary of how much feedback helps, captures only part of this. The gap widened with motion ($-0.20\,\%\,\Delta F/F$ per SD, $[-0.33, -0.06]$; $t(10) = -3.19$, $p = 0.0097$) and did not change significantly with any other state, including relative 2--4\,Hz power ($p = 0.050$), because a widening gap can come from a rising open loop as much as from a holding closed loop. We therefore do not use the gap trend to judge what the controller can regulate. This reading makes a direct, testable prediction: an internal model of the low-frequency fluctuation, for example a resonant mode at the dominant 2--4\,Hz frequency in place of the plain integrator, should restore regulation in this band.
 
 \subsection*{Feedback and preview address separable components of tracking error}
 
-Extending the controller from a constant reference to a time-varying one separates two failures that a
-regulator does not have to distinguish. Tracking a moving target requires both that the response follow the
-reference in time and that it not wander between trials, and these are limited by different things. The phase lag
-of the response is a property of the plant: the cortical impulse response has a finite rise time, so a causal
-controller driven by the instantaneous error necessarily trails a moving reference, and increasing feedback gain
-cannot remove that lag without destabilizing the loop. Trial-to-trial dispersion, by contrast, is driven by the
-disturbance $d_t$ and is exactly what the integral action of Equation~\eqref{eq:pi} suppresses. Preview
-addresses the first and feedback the second, and the sinusoidal experiments show each acting on its own component
-with little interaction: preview reduced the error at the drive frequency in both comparisons, 3.5-fold from
-open loop to open loop with preview and 1.5-fold from closed loop to closed loop with preview, while leaving
-broadband error unchanged, and feedback reduced broadband error while leaving the phase relationship
-largely intact.
+Moving from a constant to a time-varying reference separates two failures that a regulator does not need to tell apart. To track a moving target, the response has to follow the reference in time and must not wander between trials, and these two are limited by different things. The phase lag is a property of the plant: the cortical impulse response has a finite rise time, so a causal controller driven by the instantaneous error must trail a moving reference, and raising the feedback gain cannot remove that lag without destabilizing the loop. Trial-to-trial dispersion, in contrast, is driven by the disturbance $d_t$ and is what the integral action of Equation~\eqref{eq:pi} suppresses. Preview handles the first and feedback the second, and the sinusoidal experiments show each acting on its own component with little interaction. Preview reduced the error at the drive frequency in both comparisons, 3.5-fold from open loop to open loop with preview and 1.5-fold from closed loop to closed loop with preview, and left broadband error unchanged. Feedback reduced broadband error and left the phase relationship largely intact.
 
-This separation has a practical consequence for how such controllers should be specified. Root-mean-square error,
-the metric that quantifies regulation performance in the constant-reference case, is a poor summary once the
-reference moves, because it sums contributions that different design choices control. In our data the majority of
-total error power sat in a constant-offset term that neither mechanism targets, which is why preview---an
-unambiguous improvement in phase---produced no detectable change in RMSE. A tracking controller is better
-specified by reporting the error at the reference frequency and the broadband error separately, and we suggest
-that studies extending closed-loop neural control to time-varying targets adopt this decomposition rather than
-report a single error norm.
+This has a practical consequence for how such controllers should be evaluated. RMSE, which summarizes regulation performance for a constant reference, is a poor summary once the reference moves, because it adds together contributions that different design choices control. In our data most of the total error power sat in a constant-offset term that neither mechanism targets, which is why preview, a clear improvement in phase, produced no detectable change in RMSE. A tracking controller is better described by reporting the error at the reference frequency and the broadband error separately, and we suggest that studies extending closed-loop neural control to time-varying targets use this decomposition instead of a single error norm.
 
-We deliberately did not tune the preview horizon. The lookahead was fixed at five samples ($143$\,ms at 35\,Hz),
-chosen to approximate the measured response delay, and the resulting correction matched that value closely
-($51.4^\circ$ at the 1\,Hz drive). Because the horizon was fixed rather than fitted, closed-loop preview slightly
-overcorrected---feedback had already removed part of the lag, so the same lookahead carried the response into
-phase lead. A horizon scheduled on the loop configuration, or estimated online from the residual phase error,
-would be a direct extension. More generally, preview here is the simplest member of a family: knowing the
-reference in advance is precisely the information a model-predictive controller exploits over a receding horizon,
-and the fact that a single fixed-lag shift already removes most of the at-frequency error suggests that the
-predictable component of the tracking problem is largely captured by the plant delay.
+We did not tune the preview horizon. The lookahead was fixed at five samples ($143$\,ms at 35\,Hz), chosen to approximate the measured response delay, and the resulting correction matched that value closely ($51.4^\circ$ at the 1\,Hz drive). Because the horizon was fixed and not fitted, closed-loop preview slightly overcorrected: feedback had already removed part of the lag, so the same lookahead pushed the response into phase lead. A horizon set according to the loop configuration, or estimated online from the residual phase error, would be a direct extension. More generally, preview is the simplest member of a larger family. Knowing the reference in advance is exactly the information a model-predictive controller uses over a receding horizon, and the fact that a single fixed-lag shift already removes most of the error at the drive frequency suggests that the predictable part of the tracking problem is mostly the plant delay.
 
-Two limitations bound these conclusions. The tracking experiments come from a single mouse and a single
-hemisphere, at one drive frequency, so the frequency dependence that would characterize the closed-loop
-bandwidth is not established; the measured loop latency (Fig.~\ref{fig:figure1}F) predicts that both effects
-should weaken as the reference frequency approaches the loop bandwidth, which remains to be tested. And with
-three sessions we report the four modes descriptively rather than testing them, so the across-session
-claim rests on the consistency of the direction across sessions, not on a significance test.
+Two limitations apply. The tracking experiments come from a single mouse and hemisphere at one drive frequency, so the frequency dependence that would characterize the closed-loop bandwidth is not established. The measured loop latency (Figure~\ref{fig:figure1}F) predicts that both effects should weaken as the reference frequency approaches the loop bandwidth, which remains to be tested. And with three sessions we report the four modes descriptively, so the across-session claim rests on a consistent direction across sessions, not on a significance test.
 
 \subsection*{Relation to prior closed-loop neural control work}
 
-These results contribute to a growing literature demonstrating the feasibility of closed-loop optogenetic control for manipulating neural circuit dynamics. \citep{newman2015optogenetic} introduced a PI ``optoclamp'' that locked single-neuron firing rates to stationary targets in cultured networks and the anesthetized rat thalamus, establishing the feasibility of the PI control structure used here. \citep{bolus2021state} demonstrated state-space optimal feedback control of single-neuron firing rates in awake mice using linear-quadratic (LQ) design strategies requiring explicit system identification~\citep{van2012subspace} and disturbance identification. Our approach differs in that the underlying system is not identified step-by-step; instead, Assumption~\ref{assm:trial_avg} is exploited to bypass full identification, and the integral term of Equation~\eqref{eq:pi} compensates for model inaccuracies online. This makes the framework accessible in settings where the non-stationarity and parameter dependence of the cortical response render classical identification methods infeasible within the given experimental time-frame.
+These results add to a growing literature on closed-loop optogenetic control of neural circuit dynamics. \citet{newman2015optogenetic} introduced a PI ``optoclamp'' that locked single-neuron firing rates to fixed targets in cultured networks and the anesthetized rat thalamus, establishing the PI control structure used here. \citet{bolus2021state} demonstrated state-space optimal feedback control of single-neuron firing rates in awake mice, using linear-quadratic (LQ) designs that required explicit system identification~\citep{van2012subspace} and disturbance identification. Our approach does not identify the system step by step. Instead, it uses Assumption~\ref{assm:trial_avg} to avoid full identification, and the integral term of Equation~\eqref{eq:pi} compensates for model errors online. This makes the framework usable where the non-stationarity and parameter dependence of the cortical response make classical identification infeasible within the time of an experiment.
 
-At the network level, closed-loop optogenetic stimulation has been used to modulate oscillatory dynamics in brain slices and non-human primates~\citep{Zaaimi2022}, and \citet{clancy2014volitional} demonstrated that activity-dependent feedback could shape motor cortex dynamics in behaving mice.
+At the network level, closed-loop optogenetic stimulation has been used to modulate oscillatory dynamics in brain slices and non-human primates~\citep{Zaaimi2022}, and \citet{clancy2014volitional} showed that activity-dependent feedback could shape motor cortex dynamics in behaving mice.
 % CITATION FIXED 2026-09-30: this cited a fabricated reference, "Clancy et al. 2014,
 % Closed-loop optogenetic control of neural circuits", which does not exist. Repointed to
 % the real Clancy et al. 2014 Nat Neurosci paper (volitional modulation of calcium signals),
 % which does support this sentence. Confirm the claim still reads correctly.
- Our work differs from this literature on the mesoscale, by using population-level $\Delta F/F$ as the feedback signal rather than electro-physiological recordings. Unlike many brain--computer interface (BCI) paradigms that regulate neural activity indirectly via behavioral outputs, the present framework directly targets cortical population dynamics, enabling closed-loop manipulation of the trajectories most relevant to distributed cortical computation~\citep{grosenick2015closed}.
+ Our work differs from this literature in working at the mesoscale, with population-level $\Delta F/F$ as the feedback signal instead of electrophysiological recordings. Unlike many brain--computer interface (BCI) paradigms that regulate neural activity indirectly through behavior, our framework targets cortical population dynamics directly, which allows closed-loop manipulation of the activity patterns most relevant to distributed cortical computation~\citep{grosenick2015closed}.
 
 
 \subsection*{Sources of variability and experimental limitations}
 
-Several factors shaped and limited closed-loop performance. First, the empirical cost $\hat{J}(K)$ is only a
-finite-sample estimate of the expected cost, and its sampling error shrinks with trial count only if trials are
-independently drawn from a stationary brain-state distribution. In practice, if cortical state drifts during evaluation of one candidate controller and shifts during
-evaluation of another, the resulting estimates of $\hat{J}(K)$ can be biased in opposite directions, inflating the
-apparent performance difference between controllers. This risk was mitigated by randomly interleaving open-loop and
-closed-loop trials, but cannot be eliminated entirely given the non-stationarity of awake, behaving animals. Episodes
-of sustained locomotion or drowsiness represent the most likely sources of such bias, as they correspond to brain-state
-regimes in which Assumption~\ref{assm:trial_avg} is least likely to hold.
+Several factors shaped and limited closed-loop performance. First, the empirical cost $\hat{J}(K)$ is a finite-sample estimate of the expected cost, and its sampling error shrinks with trial count only if trials are drawn independently from a stationary brain-state distribution. If cortical state drifts while one controller is evaluated and shifts while another is, the two estimates of $\hat{J}(K)$ can be biased in opposite directions, inflating the apparent difference between controllers. Randomly interleaving open-loop and closed-loop trials reduces this risk but cannot remove it in awake, behaving animals. Sustained locomotion or drowsiness are the most likely sources of such bias, because these are the brain-state regimes in which Assumption~\ref{assm:trial_avg} is least likely to hold.
 
-Second, the actuator saturation enforced at 36\,mW (5\,V; see Section~\ref{sec:pi_controller_design}) constrained the
-controller's ability to track $y_{\mathrm{ref}}$ during epochs of high spontaneous activity that demanded large
-corrective inputs. Future implementations could benefit from adaptive reference trajectories that adjust
-$y_{\mathrm{ref}}$ based on the estimated current cortical state, or from optogenetic actuators with a wider dynamic
-range.
+Second, the actuator saturation at 36\,mW (5\,V; see Section~\ref{sec:pi_controller_design}) limited the controller's ability to track $y_{\mathrm{ref}}$ during epochs of high spontaneous activity that needed large corrective inputs. Adaptive reference trajectories that adjust $y_{\mathrm{ref}}$ to the estimated cortical state, or actuators with a wider dynamic range, could help.
 
 Third, loop latency bounds the bandwidth over which feedback can act, and that bound falls close to the band
 whose disturbance the controller failed to reject. A pure delay contributes a phase lag of $\omega\tau$ without
 attenuating gain, so it consumes phase margin at every frequency without being visible in the gain response. The
-measured end-to-end latency is at most $47$\,ms (Fig.~\ref{fig:figure1}F), to which the 35\,Hz sample-and-hold adds
+measured end-to-end latency is at most $47$\,ms (Figure~\ref{fig:figure1}F), to which the 35\,Hz sample-and-hold adds
 an effective half-sample ($14$\,ms), giving $\tau_{\mathrm{eff}} \approx 61$\,ms. The delay alone therefore reaches a
 quarter cycle of lag near $4$\,Hz. Taking the standard
 crossover criterion $\omega_c \tau_{\mathrm{eff}} \lesssim 1$\,rad gives an achievable closed-loop bandwidth of
-${\sim}2.6$\,Hz. That this coincides with the 2--4\,Hz band identified above (Fig.~\ref{fig:figure4}C) is
-suggestive rather than conclusive---we did not sweep reference frequency, and the margin calculation uses a
-worst-case latency---but it points to the residual low-frequency error being set by the loop's own timing rather
-than by the form of the control law. Reducing onboard computation and communication latency, and compensating the
+${\sim}2.6$\,Hz. This coincidence with the 2--4\,Hz band identified above (Figure~\ref{fig:figure4}C) is
+suggestive but not conclusive, since we did not sweep the reference frequency and the margin calculation uses a
+worst-case latency. It does point to the residual low-frequency error being set by the loop's own timing and not
+by the form of the control law. Reducing onboard computation and communication latency, and compensating the
 remaining delay with a predictor rather than fixed preview, are the direct routes to extending the rejection
 bandwidth past this band.
 
 \subsection*{Future directions}
 
-We proposed a low-level control algorithm for regulating local cortical activity. The controller was a good regulator of local dynamics. The implications of this work are that such controllers can be used to drive the dynamics precisely to a specific target trajectory. The direct implication of this work is that we can extend this work to be paired with a model-predictive control, where a this internal PI control can reliably track the high level dynamics. We propose that this controller can be paired with a latent dynamics prediction setup, to reliably track behavior inducing activity.
+We proposed a low-level control algorithm for regulating local cortical activity, and it regulated local dynamics well. Such controllers could be used to drive cortical dynamics precisely along a chosen target trajectory. A direct extension is to pair this controller with model-predictive control, with the inner PI loop reliably tracking the trajectory set by the higher-level controller. The same inner loop could also be paired with a latent-dynamics model, to track activity patterns that drive behavior.
 
 A model-predictive controller (MPC) that predicts cortical activity and plans the laser ahead of the loop delay
-improved on PI in simulation (Fig.~\ref{fig:mpc_direct}). We modelled the controlled site jointly with 100 sites
+improved on PI in simulation (Figure~\ref{fig:mpc_direct}). We modelled the controlled site jointly with 100 sites
 across dorsal cortex and the laser command as a linear vector autoregressive process, consistent with the
 evidence that macroscopic cortical dynamics are well described by linear models~\citep{Nozari2024}. On held-out
 open-loop trials this model predicted the controlled signal 200\,ms ahead with $R^2 = 0.42$, against $0.10$ for
 the last observed value and $0.02$ for a univariate autoregressive model of the kind benchmarked on spontaneous
-widefield activity~\citep{lu2025benchmarking} (Fig.~\ref{fig:mpc_direct}G). Used as the MPC's predictor over a
+widefield activity~\citep{lu2025benchmarking} (Figure~\ref{fig:mpc_direct}G). Used as the MPC's predictor over a
 1\,s horizon, it lowered the settled-window RMSE from a median of $1.46$ to $0.82\%\,\Delta F/F$ relative to the
 PI controller as it actually ran, on all 108 trials of the session, and cut the variance across trials by about
-40\% (Fig.~\ref{fig:mpc_direct}C--F). Given the future of the simulated cortex, the same controller reached
+40\% (Figure~\ref{fig:mpc_direct}C--F). Given the future of the simulated cortex, the same controller reached
 $0.27\%$, so most of the remaining error lies in activity that cannot be predicted from the past rather than in
 information the controller left unused. These figures are an upper bound: the simulated cortex is linear, shares
 its model family with the controller, and comes from a single session. They indicate nonetheless that part of the
@@ -181,5 +106,5 @@ as the abnormal synchrony associated with epilepsy or neuropsychiatric disorders
 control with simultaneous electrophysiology could further bridge the gap between the population-level feedback signals
 used here and the single-neuron mechanisms that give rise to them.
 
-The existing PI controller can also be further enhanced by implementing a parameter dependent multi-modal design. The existing controller relies heavily on the trial-averaging assumption, and assumes that brain states are not being identified. If the stimulation has significant difference in effect with respect to brain states, then a gain scheduled controller can be employed such that the controller switches to states specific gains.
-Another avenue for improvement of regulation would be consideration of a data-driven model for controller design where, using data from a finite horizon in the past, a controller strategy is devised so that the predicted tracking error over a future horizon is minimized.
+The PI controller could also be extended to a parameter-dependent, multi-modal design. The current controller relies on the trial-averaging assumption and does not identify brain state. If stimulation effects differ substantially between brain states, a gain-scheduled controller could switch to state-specific gains.
+Another route is a data-driven controller design, in which data from a finite past horizon are used to choose the control strategy that minimizes the predicted tracking error over a future horizon.
