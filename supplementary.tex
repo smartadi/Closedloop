@@ -179,15 +179,16 @@
     directly outperforms the recorded PI controller in simulation.} One session
     (AL\_0033 2025-02-26, 108 closed-loop trials). All values come from simulation
     and are descriptive; no statistical tests were applied.
-    \textbf{A:} The problem solved at every frame (35\,Hz). Over a horizon
-    $H = 1$\,s, the planned laser commands minimize the squared deviation of the
-    predicted controlled signal $\hat y$ from the reference $r$, with small
-    penalties on departures from the steady-state command $u_{ss}$ and on command
-    changes $\Delta u$, within the rig's command limits. $\hat y$ comes from a
-    vector autoregressive model with exogenous laser input (VARX): the controlled
-    site and 100 sites spread over dorsal cortex ($z$), ten lags (286\,ms), the
-    laser command as input, fitted by ridge regression. Only the first planned
-    command is applied, and the problem is solved again at the next frame.
+    \textbf{A:} The controller. At every frame (35\,Hz) the MPC reads $\Delta F/F$
+    at the controlled site and at 100 sites spread over dorsal cortex ($z_t$),
+    predicts the controlled signal $\hat y$ over a horizon $H = 1$\,s for a
+    candidate plan of laser commands, and chooses the plan that minimizes the
+    squared deviation from the target $r$ plus a penalty $\lambda$ on command
+    changes $\Delta u$ (with a small penalty on departures from the steady-state
+    command and within the rig's command limits; $\lambda = 0.1$). It applies the
+    first command and solves again at the next frame. The predictor is a vector
+    autoregressive model with exogenous laser input (VARX; ten lags, 286\,ms),
+    fitted by ridge regression.
     \textbf{B:} One MPC step on a closed-loop trial, 2.0\,s after stimulus onset.
     Purple, the controlled signal and laser command up to that moment; dashed,
     the predicted signal and the planned command over the next 1\,s (shaded);
