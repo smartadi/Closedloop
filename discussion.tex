@@ -17,9 +17,7 @@ The trial-averaged step responses did not definitively converge to a steady stat
 
 The reduction in trial-to-trial variability observed under closed-loop stimulation has a natural interpretation within this framework. Under Assumption~\ref{assm:trial_avg}, individual
 trial responses are perturbations of the nominal trial-averaged trajectory, driven by the unobserved disturbance
-and by trial-to-trial variation in brain state. Because the contralateral predictor makes that disturbance
-visible trial by trial (Fig.~\ref{fig:reject_trials}), the argument below rests on measured single-trial
-disturbances rather than on an inferred residual. These perturbations are zero-mean in expectation but nonzero on
+and by trial-to-trial variation in brain state. These perturbations are zero-mean in expectation but nonzero on
 individual trials, and they constitute the primary source of cross-trial variance under open-loop conditions. The PI
 controller (Equation~\ref{eq:pi}) suppresses these deviations through two complementary mechanisms: the
 proportional term $K_p(y_{\mathrm{ref}} - y_t)$ provides immediate timestep-level correction, while the integral term
@@ -45,11 +43,7 @@ fraction of it. The 2--4\,Hz fluctuation does not: it left the open loop
 unchanged but degraded closed-loop regulation, consistent with a disturbance
 whose frequency content lies near or beyond the bandwidth the loop's latency
 allows (see below), and which a constant-plus-proportional model cannot
-represent. Single trials make the distinction concrete
-(Fig.~\ref{fig:reject_trials}): where the predicted disturbance drifts slowly,
-the closed-loop response holds at the reference while the prediction wanders,
-and where it carries a large low-frequency swing the response follows it
-instead, which is the same failure the rejection ratio reports as a number. The trend of the open-minus-closed-loop gap, the quantity usually
+represent. The trend of the open-minus-closed-loop gap, the quantity usually
 used to summarise how much feedback helps, tells the same story only in part.
 The gap widened with motion ($-0.20\,\%\,\Delta F/F$ per SD, $[-0.33, -0.06]$;
 $t(10) = -3.19$, $p = 0.0097$) and did not change significantly with any other
