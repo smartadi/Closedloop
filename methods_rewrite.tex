@@ -230,12 +230,11 @@ live image.
 %% mouse or as a range, and how the pair was chosen. The rig default is
 %% [2, -1] mm, which is a starting point rather than the value used.
 
-We placed the stimulation target in a region neighboring the readout site, close
-enough that the spatial spread of activation covered the readout
-(Fig.~\ref{fig:spatial_spread}A,B). Laser power was calibrated with a power meter
-(Thorlabs PM100D with an S130C sensor) at the objective focal plane. Power is
-linear in the modulation voltage over the laser's 0--5\,V range and stable across
-sessions \citep{Matveev2024}.
+We placed the stimulation target adjacent to the readout site. Suppression
+spread beyond the stimulation spot (Fig.~\ref{fig:spatial_spread}A,B) and lowered
+$\Delta F/F$ at the readout. Laser power was calibrated with a power meter
+(Thorlabs PM100D with an S130C sensor) at the objective focal plane
+\citep{Matveev2024}.
 %% FILL: whether power was re-measured before every session or taken from a
 %% standing calibration. The lab paper reports 14 measurements across 0-5 V.
 
@@ -247,18 +246,35 @@ sessions \citep{Matveev2024}.
 %% paper will look for it.
 
 Commands reached the stimulation hardware over a serial link to a
-microcontroller at 2\,Mbaud. [RIG] Each command was transmitted as an 8-bit index
-equal to the controller output voltage in hundredths of a volt, so the command was
-quantized to 0.01\,V and limited to 2.45\,V at the microcontroller output. A
-downstream voltage amplifier scales that output to the laser drive range, so the
-2.45\,V figure is a controller-side limit and not the delivered drive. Light power
-was linear in the command over the range used and was capped at 36\,mW to stay
-within the unsaturated range of the opsin.
-%% FILL: the amplifier gain, so a reader can map the command voltages quoted in
-%% this paper to delivered drive voltage and to mW. Give the command-voltage range
-%% used and the corresponding mW, measured at the focal plane. Whatever convention
-%% you pick, use the same one for the impulse amplitudes below and in the Results,
-%% and say once which domain the quoted volts live in.
+microcontroller at 2\,Mbaud. [RIG] The controller computed its command in volts,
+so $K_r$ and $K_p$ in Table~\ref{tab:gains} are in volts per $\%\,\Delta F/F$,
+$K_i$ in volts per $\%\,\Delta F/F$ per second, and the limit $u_{\max}$ is in
+volts. Each command was sent as an 8-bit index in hundredths of a volt, which
+quantized it to 0.01\,V and limited it to 2.45\,V. In the first two sessions
+(AL\_0033, 2025-01-20 and 2025-02-12) the logged command was not clipped and
+reached 4.1\,V, but the laser input saturated at the equivalent of 2.45\,V. The
+microcontroller turned each command into an analog voltage at the laser's
+modulation input, and we recorded this voltage on every session. The ratio of
+modulation voltage to command depended on the rig configuration: about 2.0 in
+the first two sessions, about 1.5 in the later AL\_0033 sessions, where the
+modulation voltage saturated near 2.7\,V, and 1.3 in the AL\_0039 sessions.
+Light power was linear in the modulation voltage above a small turn-on
+threshold. We converted the recorded voltage to power at the focal plane and
+report every stimulation amplitude in mW. Values are peak power: in the AL\_0033
+closed-loop sessions the modulation voltage was a 50\,Hz waveform whose mean was
+half its peak, and impulse amplitudes are the peak of each pulse. The laser's
+power setting changed between experimental periods, so the conversion changed
+too. For the impulse sessions and the 2025 closed-loop sessions we used a single
+ratio, 0.37\,mW per volt (1.8\,mW at 4.9\,V), from a linear fit to the
+calibration measured in April 2025, after most of these sessions; this ratio
+overstates power below about 1\,V, where the laser turns on. For the 2026
+closed-loop and sinusoidal-tracking sessions we used the calibration measured
+closest before each session. In most 2025 closed-loop sessions the most power
+the laser could deliver was about 1\,mW (1.8\,mW in the first two).
+%% CHECK (units): 1.8 mW at 4.9 V matches the 2025-04 calibration files (laser
+%% at 18% power). The files in force for AL_0041 (2025-12-02; file 2025-11-17,
+%% laser at 100%) and the AL_0048 impulse session (2026-07-15; file 2026-07-09)
+%% give about 2.1 and 1.7 mW per volt. Confirm the laser setting on those days.
 
 Stimulus waveforms were
 %% FILL: constant-power steps or pulse trains? The old draft said "pulse trains
@@ -373,7 +389,7 @@ independently with probability one half, so open- and closed-loop trials were
 interleaved in random order and were balanced only approximately within a
 session. Interleaving means the two conditions sampled the same distribution of
 brain states. Each session began with a tuning phase
-(Section~\ref{sec:gain_opt}); in AL\_0048 and AL\_0051 that phase swept $K_p$,
+(\nameref{sec:gain_opt}); in AL\_0048 and AL\_0051 that phase swept $K_p$,
 and only the final 100 trials, recorded with $K_p$ held fixed, entered the
 comparison. Sessions lasted roughly one hour.
 %% The old draft said "half were randomly designated as closed-loop and half as
@@ -416,7 +432,7 @@ nominal linear time-invariant model of the trial-averaged response,
 in which $C$ is the fixed spatial averaging kernel of \eqref{eq:dff} and
 $(\bar A, \bar B)$ are the trial-averaged dynamics. We obtained
 $(\bar A, \bar B, C)$ by discretizing the transfer function fitted to the
-measured impulse responses at 35\,Hz (Section~\ref{sec:tf_fitting}), which gives
+measured impulse responses at 35\,Hz (\nameref{sec:tf_fitting}), which gives
 $n = 2$.
 
 \subsubsection*{Trial-averaging assumption}
@@ -516,8 +532,8 @@ amplitude on measured output, which is the direction an actuator command needs,
 and is therefore not the reciprocal of the forward dose-response slope.
 
 Some sessions instead took $K_{r}$ from the rig's online calibration block, which
-runs 20 open-loop steps at different command voltages and fits settled
-$\Delta F/F$ against voltage with a second-order polynomial. That route is faster
+runs 20 open-loop steps at different command levels and fits settled
+$\Delta F/F$ against the command with a second-order polynomial. That route is faster
 to run at the start of a session and returns a slightly different scalar. Either
 is acceptable here, because the feedforward term supplies only a nominal command:
 correcting bias in $K_{r}$ is exactly what the feedback term is for, and within a
@@ -680,19 +696,17 @@ then across sessions.
 
 The impulse characterization was run on an earlier version of the control
 system, before the loop described above. Its acquisition and readout parameters
-are therefore stated separately here, and the command voltages it delivered are
-not subject to the controller-side limit given above.
+are therefore stated separately here.
 %% FILL: for that earlier system, state the frame rate, the readout kernel, the
 %% baseline window, and the command-to-power mapping, in the same terms as the
 %% controller sessions. If any of them match, say so explicitly rather than
 %% leaving the reader to assume it.
 
 To test whether the input--output relation was linear and monotonic, we delivered
-brief stimuli at amplitudes drawn from a discrete set (0, 0.8, 1.6, 2.4, 2.7\,V)
-in pseudorandom order with randomized inter-trial intervals. All five levels were
-delivered as commanded. Each amplitude was summarized by its mean evoked
+brief stimuli at discrete amplitudes from 0 to 1.8\,mW (three to nine nonzero
+levels per session) in pseudorandom order with randomized inter-trial intervals. Each amplitude was summarized by its mean evoked
 suppression
-(Section~\ref{sec:inhib_energy}), and we regressed suppression on amplitude to
+(\nameref{sec:inhib_energy}), and we regressed suppression on amplitude to
 test linearity. Amplitudes with fewer than 20 trials were excluded from the fit.
 
 \subsubsection*{Evoked suppression}
@@ -775,13 +789,12 @@ re-tune; gain is re-tuned per session in any case. The diagonal is each model's
 fit to its own session.
 
 \emph{Time constants} (Fig.~\ref{fig:figure2}F). Each continuous-time pole $p$
-gives $\tau = -1/\mathrm{Re}(p)$; we report the slowest and fastest distinct
-values per session. Confidence intervals come from 300 bootstrap resamples of
-trials within amplitude, each rebuilding $h(t)$ and refitting at the selected
-order. A resample whose slowest $\tau$ exceeded the 0.5\,s fit window was
-discarded, because a time constant longer than the window cannot be identified
-from it, and the discarded fraction is reported. Intervals are the 2.5th and 97.5th percentiles of the
-retained resamples. To separate session from drive range, we also refitted every
+gives $\tau = -1/\mathrm{Re}(p)$; we report the decay of the fastest (dip) and
+slowest (rebound) modes per session. To check identifiability we refitted 300
+bootstrap resamples of trials within amplitude, each rebuilding $h(t)$ and
+refitting at the selected order, and report the fraction whose slowest $\tau$
+exceeded the 0.5\,s fit window. Because that fraction was large, we do not show
+intervals. To separate session from drive range, we also refitted every
 session over the amplitude range common to all four.
 
 The controller was designed on an earlier transfer-function fit to the primary
@@ -848,8 +861,8 @@ $K_i \in [0,\,0.3]$. The node list was chosen per session rather than from a
 common lattice, so the sweeps are not a single replicated design. Cost was
 scored over $t = 0$ to $+3$\,s, or $0$ to $+4$\,s for the one session run with a
 4\,s stimulus. The per-session minima fell at $(K_p, K_i) = (0.30,\,0.10)$,
-$(0.05,\,0.10)$, $(0.30,\,0.10)$ and $(0.02,\,0.02)$, with
-$\hat{J} = 23.7$, $17.4$, $16.1$ and $30.2$. In two of the four the minimum sits
+$(0.05,\,0.10)$, $(0.05,\,0.10)$ and $(0.02,\,0.02)$, with
+$\hat{J} = 23.7$, $17.4$, $16.1$ and $30.2$. In one of the four the minimum sits
 on the upper $K_p$ edge of the swept range, so those sweeps bound the optimum
 from one side only; we therefore read the grid as showing that the cost surface
 is smooth and has an interior basin in $K_i$, not as locating a global optimum.
@@ -870,15 +883,18 @@ samples.
 Four auto-tuning sessions were run, two in AL\_0034 (2024-10-25, two
 experiments) and two in AL\_0033 (2024-12-19 and 2025-03-17), of 136, 135, 100
 and 136 trials. All four started from $K_p = K_i = 0$ and ended at
-$(K_p, K_i) = (0.20,\,0.20)$, $(0.05,\,0.002)$, $(0.16,\,0.05)$ and
-$(0.02,\,0.04)$. The spread across runs is wide and only the first ends near any
-grid minimum, so we report the online search as a feasibility demonstration,
+$(K_p, K_i) = (0.20,\,0.20)$, $(0,\,0)$, $(0.16,\,0.05)$ and
+$(0.07,\,0.06)$.
+%% CHECK (verify 2026-10-10): end gains must come from the accepted gains in
+%% Kdata.npy, not input_params. (0,0) for AL_0034 10-25 e2 and (0.07,0.06) for
+%% AL_0033 03-17 are from controller-tuning/CLAUDE.md and the S2B star; re-read
+%% the other two runs and the iteration count ('ran 5 iterations'; S2C shows 9).
+The spread across runs is wide, so we report the online search as a feasibility demonstration,
 not as a reliable optimizer; the gains used for the validation blocks
 (Table~\ref{tab:gains}) were set by hand within the range the grid had explored.
 Grid sweeps and auto-tuning runs were done in separate sessions within each
-mouse, so agreement between the grid minimum and the independently auto-tuned
-gains is a cross-check rather than a restatement
-(Fig.~\ref{fig:cost_landscape}A--C). Before starting a validation block we
+mouse. In AL\_0033 the auto-tuned gains ended inside the low-cost region of
+the grid measured twelve days earlier (Fig.~\ref{fig:cost_landscape}A,B). Before starting a validation block we
 required the tuned controller to satisfy $\hat{J}(K) \leq \hat{J}(0)$, that is,
 to be no worse than the feedforward-only baseline.
 %% CHECK: with 5 iterations of 5 trials the search evaluates 5 candidates. Say so
@@ -918,8 +934,7 @@ to be no worse than the feedforward-only baseline.
 %% number of trials or sessions removed, so every n in the Results can be
 %% reconstructed from one place.
 
-All exclusions were defined before the analyses they affect and are collected
-here.
+All exclusions are collected here.
 
 \begin{itemize}
     \item \emph{Opsin expression.} Sessions were included only with confirmed
@@ -930,28 +945,33 @@ here.
           standard deviations in either direction were excluded, removing $30$ of
           $1190$ trials.
     \item \emph{Standing setpoint offset.} For the disturbance-rejection analysis
-          only, two sessions were excluded because their settled residual is
-          dominated by a standing setpoint error rather than by unrejected
-          disturbance. Over the steady-state window the residual energy splits
-          exactly into the two,
+          only, we excluded two sessions whose closed-loop response stayed well
+          above the reference throughout stimulation. In both, the feedforward
+          input left the open-loop response $2.6$ and $1.9\%\,\Delta F/F$ above
+          the reference, and feedback brought the closed-loop response down only
+          to $2.2$ and $1.4\%\,\Delta F/F$ above it (settled means, 1--3\,s).
+          This standing offset then makes up a large part of the residual, and
+          the rejection ratio would count it as unrejected disturbance. Over the
+          steady-state window the residual energy splits exactly into the two,
           $\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and we
           excluded a session when the first term, the standing offset, supplied
           more than one third of the total. These were AL\_0033 2025-02-12
           ($38\%$) and AL\_0051 2026-07-29 ($59\%$); every remaining session is at
-          $17\%$ or below, and any threshold between $20\%$ and $37\%$ selects
-          the same eleven sessions.
-          We gate on this share rather than on the settled mean itself because the
-          two are not interchangeable: AL\_0048 2026-07-29 sits a comparable
-          $1.33\%\,\Delta F/F$ from the reference but faces a disturbance large
-          enough that its offset is only $17\%$ of the residual, so its rejection
-          ratio remains a measurement of rejection.
+          $17\%$ or below. We chose this threshold after inspecting the sessions;
+          any threshold between $20\%$ and $37\%$ selects the same eleven.
+          We gate on this share and not on the settled mean because AL\_0051
+          settled only slightly further from the reference than AL\_0048
+          2026-07-29 under closed loop ($1.44$ against $1.33\%\,\Delta F/F$),
+          and we keep AL\_0048. AL\_0048
+          faced a disturbance large enough that its offset is only $17\%$ of the
+          residual, so its rejection ratio remains a measurement of rejection.
     \item \emph{Contralateral predictor.} No session was excluded on predictor
           quality. The controller analysis needs only a stimulation-blind estimate
           of the disturbance, not a certified model of it, so rather than gating on
           a fixed $R^{2}$ we report the predictor's held-out performance directly
           and reference the predicted disturbance to its own no-laser baseline,
           leak-corrected, which sets its zero level
-          (Section~\ref{sec:disturbance_decomp}).
+          (\nameref{sec:disturbance_decomp}).
     \item \emph{Behavioral video.} Motion analyses used the $11$ of $15$ sessions
           with a usable motion trace ($1190$ trials).
           %% FILL: take this count, and every other n in this subsection, from the
@@ -1101,8 +1121,8 @@ one absorb the variance the other shares with it. In the main panel
 three-factor model on the same base, $\{\text{initial deviation}, \text{motion},
 \text{relative}\}$ and $\{\text{initial deviation}, \text{motion},
 \text{absolute}\}$; the unique $R^2$ of initial deviation and motion are taken
-from the first. Per-session points repeat the same fit within each session with at
-least 12 closed-loop trials, z-scoring within session. Fig.~\ref{fig:f4_exemplars}B--D repeats
+from the first. Error bars are the SD across sessions of the same fit repeated within each
+session with at least 12 closed-loop trials, z-scoring within session. Fig.~\ref{fig:f4_exemplars}B--D repeats
 the decomposition with both power terms in one model, and with each alone.
 
 The exemplar trials (Fig.~\ref{fig:figure4}A) illustrate each state as cleanly
@@ -1130,7 +1150,7 @@ its within-amplitude standard deviation, $z_{j} = d_{j} / \mathrm{SD}_{s,a}(d)$.
 The question concerns the spread of responses rather than their mean, so we
 test $\lvert z_{j} \rvert$, a Levene-type scale statistic.
 
-Each state measure (Section~\ref{sec:disturbance}, $[-1, 0)$\,s window) was
+Each state measure (\nameref{sec:disturbance}, $[-1, 0)$\,s window) was
 converted to a within-session percentile, so that every session spans the same
 axis, and trials were binned into quartiles of that percentile. The effect size
 is the ratio of the standard deviation of $z$ in the top quartile to that in the
@@ -1305,9 +1325,9 @@ counterpart of the sensitivity function---changes with state. For the rejection 
 $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{mouse}) +
 (1 \mid \mathrm{mouse}\!:\!\mathrm{session})$, one-sided on the intercept, and
 report the geometric mean of $\mathrm{RR}$ with its 95\% confidence interval.
-Because the intercept of that model is a between-mouse quantity and only four
-mice contribute, two of them with a single session, its degrees of freedom are
-${\approx}2.5$ and the mouse and session variances cannot be separated. We
+Because the intercept of that model is a between-mouse quantity and only three
+mice contribute, one of them with a single session, its degrees of freedom are
+${\approx}1.2$ and the mouse and session variances cannot be separated. We
 therefore test rejection at the session level, $\log \mathrm{RR} \sim 1 +
 (1 \mid \mathrm{session})$, corroborate it with a one-sided signed-rank test on
 the per-session median ratios, and report the mouse-nested model alongside as
