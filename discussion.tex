@@ -146,7 +146,23 @@ bandwidth past this band.
 
 \subsection*{Future directions}
 
-We proposed a low-level control algorithm for regulating local cortical activity. The controller was a good regulator of local dynamics. The implications of this work are that such controllers can be used to drive the dynamics precisely to a specific target trajectory. The direct implication of this work is that we can extend this work to be paired with a model-predictive control, where a this internal PI control can reliably track the high level dynamics. We propose that this controller can be paired with a latent dynamics prediction setup, to reliably track behavior inducing activity. 
+We proposed a low-level control algorithm for regulating local cortical activity. The controller was a good regulator of local dynamics. The implications of this work are that such controllers can be used to drive the dynamics precisely to a specific target trajectory. The direct implication of this work is that we can extend this work to be paired with a model-predictive control, where a this internal PI control can reliably track the high level dynamics. We propose that this controller can be paired with a latent dynamics prediction setup, to reliably track behavior inducing activity.
+
+A model-predictive controller (MPC) that predicts cortical activity and plans the laser ahead of the loop delay
+improved on PI in simulation (Fig.~\ref{fig:mpc_direct}). We modelled the controlled site jointly with 100 sites
+across dorsal cortex and the laser command as a linear vector autoregressive process, consistent with the
+evidence that macroscopic cortical dynamics are well described by linear models~\citep{Nozari2024}. On held-out
+open-loop trials this model predicted the controlled signal 200\,ms ahead with $R^2 = 0.42$, against $0.10$ for
+the last observed value and $0.02$ for a univariate autoregressive model of the kind benchmarked on spontaneous
+widefield activity~\citep{lu2025benchmarking} (Fig.~\ref{fig:mpc_direct}G). Used as the MPC's predictor over a
+1\,s horizon, it lowered the settled-window RMSE from a median of $1.46$ to $0.82\%\,\Delta F/F$ relative to the
+PI controller as it actually ran, on all 108 trials of the session, and cut the variance across trials by about
+40\% (Fig.~\ref{fig:mpc_direct}C--F). Given the future of the simulated cortex, the same controller reached
+$0.27\%$, so most of the remaining error lies in activity that cannot be predicted from the past rather than in
+information the controller left unused. These figures are an upper bound: the simulated cortex is linear, shares
+its model family with the controller, and comes from a single session. They indicate nonetheless that part of the
+low-frequency error left by the PI loop is predictable, and that a predictor which compensates the loop delay is a
+more direct route to reducing it than further tuning of the feedback gains.
 
 % The model-free zeroth-order gain optimization (Algorithm~\ref{alg:zeroth_order}) demonstrated that a well-performing
 % gain region is reachable within a physiologically feasible number of trials. This algorithm can be further optimized by using approximate gradient which can be computed from data, to exploit 'momentum' update direction. Using offline model information can further aid in approximating update direction.  

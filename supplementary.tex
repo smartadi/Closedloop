@@ -171,3 +171,53 @@
     the failure the exclusion criterion is meant to identify.}
     \label{fig:reject_trials}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{images/supplementary/S_mpc.pdf}
+    \caption{\textbf{A model-predictive controller that predicts the cortical signal
+    directly outperforms the recorded PI controller in simulation.} One session
+    (AL\_0033 2025-02-26, 108 closed-loop trials). All values come from simulation
+    and are descriptive; no statistical tests were applied.
+    \textbf{A:} The problem solved at every frame (35\,Hz). Over a horizon
+    $H = 1$\,s, the planned laser commands minimize the squared deviation of the
+    predicted controlled signal $\hat y$ from the reference $r$, with small
+    penalties on departures from the steady-state command $u_{ss}$ and on command
+    changes $\Delta u$, within the rig's command limits. $\hat y$ comes from a
+    vector autoregressive model with exogenous laser input (VARX): the controlled
+    site and 100 sites spread over dorsal cortex ($z$), ten lags (286\,ms), the
+    laser command as input, fitted by ridge regression. Only the first planned
+    command is applied, and the problem is solved again at the next frame.
+    \textbf{B:} One MPC step on a closed-loop trial, 2.0\,s after stimulus onset.
+    Purple, the controlled signal and laser command up to that moment; dashed,
+    the predicted signal and the planned command over the next 1\,s (shaded);
+    grey, what happened next. The upward excursion that follows within the horizon
+    is not predicted.
+    \textbf{C:} The trial at the median of the per-trial MPC improvement. Blue, the
+    recorded PI trial; purple, MPC; light purple, the same MPC given the future
+    residuals of the simulated cortex (perfect prediction). Lower traces, laser
+    command. Grey band, stimulation; dashed line, reference ($-5\%\,\Delta F/F$).
+    \textbf{D:} Trial average $\pm$ SD over the 108 trials.
+    \textbf{E:} Per-trial RMSE over the settled window (1--3\,s). Lines join the
+    same trial; black bars, medians ($1.46$, $0.82$ and $0.27\%\,\Delta F/F$). The
+    MPC error is below the PI error on all 108 trials.
+    \textbf{F:} Variance across trials over time. Before onset the three traces
+    coincide because they are the same recorded trials; after the stimulation
+    ends the simulated laser is off.
+    \textbf{G:} Prediction $R^2$ of the controlled signal against lead time on 92
+    held-out open-loop trials (five folds), for the VARX, a univariate
+    autoregressive model (order 35, chosen on validation data), as benchmarked on
+    spontaneous widefield activity by \citet{lu2025benchmarking}, and the last
+    observed value (naive). Dotted lines, 200\,ms and 1\,s. The autoregressive
+    model sees neither the laser nor other cortical sites, which is why it fails on
+    stimulated trials.
+    \textbf{H:} Median ratio of MPC to PI RMSE against the command-smoothness
+    penalty $\lambda$; circle, the value used ($\lambda = 0.1$); dashed line, MPC
+    with perfect prediction.
+    The simulated cortex is the VARX fitted to all data and driven by each trial's
+    recorded one-step residuals. Under the recorded laser it reproduces the recorded
+    trial exactly, so the PI baseline is the recorded trial itself and needs no
+    model of the PI loop. The MPC's own VARX was fitted with that trial's fold held
+    out (five folds).}
+    \label{fig:mpc_direct}
+\end{figure}
