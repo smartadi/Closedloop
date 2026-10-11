@@ -1092,9 +1092,11 @@ state separately for open- and closed-loop trials and compared slopes across
 sessions; a positive slope means tracking error depends on state, and a slope
 near zero under closed loop means feedback has decoupled performance from it.
 Second, because a linear slope assumes a form we did not want to impose, we
-binned trials into quartiles of each state, z-scored per-trial RMSE within
-session using the pooled open- and closed-loop distribution, and compared the
-two conditions across quartiles. Pooling the conditions for the z-score
+binned each session's trials into quartiles of that session's state
+distribution (open- and closed-loop trials together), z-scored per-trial RMSE
+within session using the pooled open- and closed-loop distribution, averaged
+it within each quartile and condition, and averaged these session means across
+sessions (Fig.~\ref{fig:figure4}D, mean $\pm$ SEM across sessions). Pooling the conditions for the z-score
 preserves the level difference between them while removing session-to-session
 differences in scale.
 
@@ -1199,14 +1201,12 @@ from a grid of contralateral pixels to the ipsilateral readout, sampling pixels
 inside the contralateral cortical mask with the boundary eroded and z-scoring
 each pixel on the training partition. The ridge penalty was chosen stim-blind,
 from catch windows only, so no stimulation trial informs the regularization.
-Pixels near the homotopic stimulation site
-were excluded, because direct optical cross-talk contaminates their apparent
-coupling. The predictor was fitted on a target-independent train-test split of
+The predictor used every pixel of the contralateral grid. The predictor was fitted on a target-independent train-test split of
 spontaneous frames, and we confirmed that it generalized to held-out
 pre-stimulus windows.
 
 On each stimulation trial we applied the fixed predictor to concurrent
-contralateral activity. This gives the \emph{Global} component $G(t)$, the
+contralateral activity. This gives the \emph{Global} component $G(t)$, an estimate of the
 ipsilateral activity expected with no controller input, and by subtraction the
 \emph{Local} component $L(t) = A(t) - G(t)$, where $A(t)$ is the measured
 response. We checked the decomposition by reconstructing $A$ as $G$ plus the
@@ -1226,7 +1226,12 @@ We quantified rejection per trial as the energy ratio
 where the numerator is the energy of the measured response about the reference
 $r = -5\%\,\Delta F/F$ and the denominator the energy of the disturbance, taken
 as the contralaterally predicted excursion referenced to its own no-laser
-baseline and leak-corrected. Both were evaluated over the steady-state window,
+baseline and leak-corrected. Contralateral activity also changes during
+stimulation, so $G$ dips with the laser: in open loop its mean over 0--3\,s was
+$6$--$42\%$ of the readout's (median $23\%$; 13 sessions). The leak correction
+removes this by subtracting, from each trial's $G$ referenced to the 1\,s before
+onset, the session's mean open-loop $G$ over the same window, so that $D$ keeps
+only the trial-to-trial excursion. Both were evaluated over the steady-state window,
 1--3\,s, which excludes the laser-evoked transient. Referencing the disturbance
 to its own baseline rather than to the target keeps the fixed setpoint offset
 from being counted as disturbance, so $\mathrm{RR} < 1$ means the controlled
