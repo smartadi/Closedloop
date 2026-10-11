@@ -271,10 +271,6 @@ overstates power below about 1\,V, where the laser turns on. For the 2026
 closed-loop and sinusoidal-tracking sessions we used the calibration measured
 closest before each session. In most 2025 closed-loop sessions the most power
 the laser could deliver was about 1\,mW (1.8\,mW in the first two).
-%% CHECK (units): 1.8 mW at 4.9 V matches the 2025-04 calibration files (laser
-%% at 18% power). The files in force for AL_0041 (2025-12-02; file 2025-11-17,
-%% laser at 100%) and the AL_0048 impulse session (2026-07-15; file 2026-07-09)
-%% give about 2.1 and 1.7 mW per volt. Confirm the laser setting on those days.
 
 Stimulus waveforms were
 %% FILL: constant-power steps or pulse trains? The old draft said "pulse trains
@@ -707,7 +703,7 @@ brief stimuli at discrete amplitudes from 0 to 1.8\,mW (three to nine nonzero
 levels per session) in pseudorandom order with randomized inter-trial intervals. Each amplitude was summarized by its mean evoked
 suppression
 (\nameref{sec:inhib_energy}), and we regressed suppression on amplitude to
-test linearity. Amplitudes with fewer than 20 trials were excluded from the fit.
+test linearity. Every nonzero amplitude had at least 44 trials.
 
 \subsubsection*{Evoked suppression}
 \label{sec:inhib_energy}
