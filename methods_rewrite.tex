@@ -719,7 +719,10 @@ We summarized the response to each impulse as the mean $\Delta F/F$ over the
 %
 where $j$ indexes trials, $t_{\mathrm{on}}$ is the onset sample, and $W$ spans
 the eight samples from 0 to 200\,ms after onset at 35\,Hz, inclusive of the
-onset sample. We used a window mean rather than the instantaneous
+onset sample. Each trial's trace $y_{j,t}$ is referenced to its value at the
+onset sample, so $y_{j,t_{\mathrm{on}}} = 0$; in AL\_0048 (Mouse 3 in
+Fig.~\ref{fig:figure2}) it is referenced instead to the mean of the 18 samples
+(0.51\,s) before onset. We used a window mean rather than the instantaneous
 trough because the mean is less sensitive to single-sample noise and reflects the
 cumulative effect of a short input. Amplitude levels are reported as medians
 with 2.5th--97.5th percentile bounds, or as means with SEM, as stated in each
@@ -1126,8 +1129,7 @@ one absorb the variance the other shares with it. In the main panel
 three-factor model on the same base, $\{\text{initial deviation}, \text{motion},
 \text{relative}\}$ and $\{\text{initial deviation}, \text{motion},
 \text{absolute}\}$; the unique $R^2$ of initial deviation and motion are taken
-from the first. We report the mean and SEM over sessions and test the session
-values of each factor against zero with a one-sided Wilcoxon signed-rank test. Fig.~\ref{fig:f4_exemplars}B--D repeats
+from the first. We report the mean and SEM over sessions. Fig.~\ref{fig:f4_exemplars}B--D repeats
 the decomposition with both power terms in one model, and with each alone.
 
 The exemplar trials (Fig.~\ref{fig:figure4}A) illustrate each state as cleanly
@@ -1180,16 +1182,19 @@ $\lvert z \rvert$ and state has the sign of the trial-weighted mean correlation.
 For relative power, whose quartile ratio is close to one, we also report the
 pooled Spearman correlation as a continuous effect.
 
-\emph{Stimulus-free control.} Every test was repeated on a matched quantity that
-contains no stimulus: the mean $\Delta F/F$ over a seven-sample window, the same
-length as the response window, from $-1.20$ to $-1.03$\,s, expressed as a
-deviation from its amplitude mean and scaled in the same way. This window lies
-before the state window, so it shares no samples with any state measure, and
-outside the $-0.5$ to $0$\,s interval used to baseline the impulse traces, which
-would otherwise constrain it toward zero. A state that predicts the spread of
-this control as strongly as the spread of the response acts on the amplitude of
-ongoing activity rather than on the response to the stimulus, and we attribute
-an effect to the stimulus only when it exceeds its control.
+\emph{Stimulus-free control.} The quartile ratio and the pooled Spearman
+correlation were repeated on a matched quantity that contains no stimulus:
+Eq.~\eqref{eq:inhib_energy} evaluated over the eight samples from $-1.23$ to
+$-1.03$\,s instead of 0 to 200\,ms, with the trace referenced to the first sample
+of that window (in AL\_0048, to the mean of the 18 samples before it), so that
+response and control are the same statistic and share no samples. The control is
+then expressed as a deviation from its amplitude mean and scaled in the same way.
+Its window and reference lie before the state window. The response window does
+not overlap the state window either, but in AL\_0048 the response's reference
+falls within it. A state that predicts the spread of this control as strongly as
+the spread of the response acts on the amplitude of ongoing activity rather than
+on the response to the stimulus, and we attribute an effect to the stimulus only
+when it exceeds its control on both the quartile ratio and the correlation.
 
 \subsubsection*{Contralateral prediction and disturbance decomposition}
 \label{sec:disturbance_decomp}
@@ -1351,11 +1356,11 @@ mouse, then session, then trial.
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D
 reads two properties (predictability and regularizability) for each of four
 state factors, eight tests in all; attenuation is a separate family of four
-tests, the error decomposition of Fig.~\ref{fig:figure4}C is a family of eight
-one-sided tests (four factors in two windows), and the impulse-response analysis
-of Fig.~\ref{fig:figure2}G tests three states. We report these $p$-values uncorrected and state the size of each
+tests, and the impulse-response analysis of Fig.~\ref{fig:figure2}G tests three
+states. We report these $p$-values uncorrected and state the size of each
 family; Bonferroni thresholds would be $0.05/8 = 0.0063$ for the
-Fig.~\ref{fig:figure4}D properties and the Fig.~\ref{fig:figure4}C decomposition, and $0.05/4 = 0.0125$ for attenuation; we
+Fig.~\ref{fig:figure4}D properties, $0.05/4 = 0.0125$ for attenuation and
+$0.05/3 = 0.017$ for Fig.~\ref{fig:figure2}G; we
 say in the Results which effects clear them. The open- versus closed-loop comparisons of
 Fig.~\ref{fig:figure3} are pre-specified, one per metric and window, and are
 not corrected.
@@ -1366,11 +1371,10 @@ Wilcoxon signed-rank test. Unpaired comparisons of pooled trial distributions,
 such as open versus closed loop within a motion quartile, used the Wilcoxon
 rank-sum test.
 
-\emph{Regression.} Trend and dependence relations, including RMSE
-against pre-stimulus variance and RMSE against motion energy, were quantified by ordinary least-squares slopes with $t$-test
-$p$-values and corroborated by Spearman rank correlation. Where several sessions
-were tested in parallel we report
-Bonferroni-corrected significance.
+\emph{Regression.} Per-session slopes of RMSE on motion energy (Results) were
+fitted by ordinary least squares and summarized across sessions with the
+Wilcoxon signed-rank test. The error decomposition of Fig.~\ref{fig:figure4}C is
+descriptive and carries no test.
 
 % -----------------------------------------------------------------------------
 \subsection*{Data and code availability}
