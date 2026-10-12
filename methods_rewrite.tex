@@ -265,12 +265,12 @@ closed-loop sessions the modulation voltage was a 50\,Hz waveform whose mean was
 half its peak, and impulse amplitudes are the peak of each pulse. The laser's
 power setting changed between experimental periods, so the conversion changed
 too. For the impulse sessions and the 2025 closed-loop sessions we used a single
-ratio, 0.37\,mW per volt (1.8\,mW at 4.9\,V), from a linear fit to the
-calibration measured in April 2025, after most of these sessions; this ratio
+ratio, 1\,mW per 3\,V (1.6\,mW at 4.9\,V); %% FILL: source of the 1 mW per 3 V convention (the April 2025 linear fit gave 0.37 mW/V).
+this ratio
 overstates power below about 1\,V, where the laser turns on. For the 2026
 closed-loop and sinusoidal-tracking sessions we used the calibration measured
 closest before each session. In most 2025 closed-loop sessions the most power
-the laser could deliver was about 1\,mW (1.8\,mW in the first two).
+the laser could deliver was about 1\,mW (1.6\,mW in the first two).
 
 Stimulus waveforms were
 %% FILL: constant-power steps or pulse trains? The old draft said "pulse trains
@@ -699,7 +699,7 @@ are therefore stated separately here.
 %% leaving the reader to assume it.
 
 To test whether the input--output relation was linear and monotonic, we delivered
-brief stimuli at discrete amplitudes from 0 to 1.8\,mW (three to nine nonzero
+brief stimuli at discrete amplitudes from 0 to 1.6\,mW (three to nine nonzero
 levels per session) in pseudorandom order with randomized inter-trial intervals. Each amplitude was summarized by its mean evoked
 suppression
 (\nameref{sec:inhib_energy}), and we regressed suppression on amplitude to
@@ -765,8 +765,9 @@ assumption the fit then tests. We fitted $h(t)$ with \textsc{tfest} (MATLAB
 System Identification Toolbox), sweeping 1--5 poles, 0--4 zeros with the number
 of zeros kept below the number of poles (strictly proper, so $h(0) = 0$), and
 0--3 samples of pure delay (0--85.7\,ms at 35\,Hz). We selected across orders
-by the Akaike Information Criterion, escalating to a higher order when the
-selected model reproduced $h(t)$ with $R^{2} < 0.98$.
+by the Akaike Information Criterion. When the selected model reproduced $h(t)$
+with $R^{2} < 0.98$, we instead took the model with the fewest parameters among those within
+0.002 of the best $R^{2}$ in the sweep.
 
 \emph{Held-out validation} (Fig.~\ref{fig:figure2}C,D). For each of 100 random
 splits, trials were divided in half within each amplitude, so that both halves
@@ -786,7 +787,7 @@ fit to its own session.
 
 \emph{Time constants} (Fig.~\ref{fig:figure2}F). Each continuous-time pole $p$
 gives $\tau = -1/\mathrm{Re}(p)$; we report the decay of the fastest (dip) and
-slowest (rebound) modes per session. To check identifiability we refitted 300
+slowest (rebound) modes per session. A time constant longer than the 0.5\,s fit window is not resolved by the fit, so Fig.~\ref{fig:figure2}F marks it at the window edge instead of plotting its fitted value. To check identifiability we refitted 300
 bootstrap resamples of trials within amplitude, each rebuilding $h(t)$ and
 refitting at the selected order, and report the fraction whose slowest $\tau$
 exceeded the 0.5\,s fit window. Because that fraction was large, we do not show
@@ -1048,7 +1049,7 @@ and absolute power) are taken over the same strictly pre-stimulus window,
 $[-1, 0)$\,s, the 35 samples before onset. An impulse is a single brief input, so
 the question there is how the state in which the stimulus arrives alters its
 response, and a pre-stimulus window measures that state without overlapping the
-29--200\,ms response window. In Fig.~\ref{fig:figure4} all three are taken over
+0--200\,ms response window. In Fig.~\ref{fig:figure4} all three are taken over
 one common window, $[-2, +3)$\,s, the 175 samples from 2\,s before onset to the
 end of the 3\,s stimulation. Tracking performance over a trial depends both on
 the state the trial begins in and on activity that develops while the controller
@@ -1100,31 +1101,37 @@ differences in scale.
 \label{sec:f4_decomp}
 
 To ask which state accounts for closed-loop tracking error, and when within the
-trial, we pooled the closed-loop trials of the 11 sessions with motion capture
-(613 trials). The outcome was per-trial RMSE about the reference in two windows,
+trial, we analyzed the closed-loop trials of the 11 sessions with motion capture
+(613 trials; 16 to 108 per session) one session at a time. The outcome was
+per-trial RMSE about the reference in two windows,
 the transient (0--1\,s after onset) and the steady state (1--3\,s). The four
-state measures were z-scored over the pool, with absolute power entered as its
-logarithm. For each window we fitted ordinary least-squares models with an
-intercept and report each factor's \emph{unique} $R^2$, the drop in $R^2$ when
+state measures were z-scored within session, with absolute power entered as its
+logarithm. For each session and window we fitted ordinary least-squares models with an
+intercept and report each factor's \emph{unique} $R^2$, the drop in adjusted $R^2$ when
 that factor is removed from the model,
 %
 \begin{equation}
-    R^{2}_{\mathrm{unique},j} = R^{2}(\mathcal{M}) - R^{2}(\mathcal{M} \setminus j).
+    R^{2}_{\mathrm{unique},j} = \bar{R}^{2}(\mathcal{M}) - \bar{R}^{2}(\mathcal{M} \setminus j),
+    \qquad \bar{R}^{2} = 1 - (1 - R^{2})\,\frac{n - 1}{n - p - 1},
     \label{eq:uniqueR2}
 \end{equation}
 %
+for a model with $p$ factors fitted to $n$ trials. In-sample $R^2$ cannot fall when a
+factor is added, so at these trial counts the unadjusted difference sits above zero
+even for a factor with no effect (0.01--0.03 under a within-session permutation of
+that factor); the adjustment removes this floor.
 Relative and absolute power are correlated, and a single four-factor model lets
 one absorb the variance the other shares with it. In the main panel
 (Fig.~\ref{fig:figure4}C) each power measure therefore enters its own
 three-factor model on the same base, $\{\text{initial deviation}, \text{motion},
 \text{relative}\}$ and $\{\text{initial deviation}, \text{motion},
 \text{absolute}\}$; the unique $R^2$ of initial deviation and motion are taken
-from the first. Error bars are the SD across sessions of the same fit repeated within each
-session with at least 12 closed-loop trials, z-scoring within session. Fig.~\ref{fig:f4_exemplars}B--D repeats
+from the first. We report the mean and SEM over sessions and test the session
+values of each factor against zero with a one-sided Wilcoxon signed-rank test. Fig.~\ref{fig:f4_exemplars}B--D repeats
 the decomposition with both power terms in one model, and with each alone.
 
 The exemplar trials (Fig.~\ref{fig:figure4}A) illustrate each state as cleanly
-as the data allow. With $z_{ij}$ the z-scored value of state $j$ on trial $i$,
+as the data allow. With $z_{ij}$ the value of state $j$ on trial $i$, z-scored over the trials from which the exemplar is drawn,
 the exemplar for state $j$ is the trial that maximizes the margin
 $z_{ij} - \max_{k \neq j} z_{ik}$ among trials with $z_{ij} > 1$, so that it is
 high in that state and as low as possible in the other three. Exemplars are
@@ -1297,12 +1304,12 @@ rather than by pooling trials. The model for condition effects was
 fitted to per-trial values, with random per-session intercepts and condition
 slopes so that each session contributes its own open-to-closed-loop gap. The
 same model was applied to per-trial windowed variance. For state dependence we
-added the state and its interaction with condition,
+added the state, its interaction with condition and a per-session random state slope,
 $\mathrm{RMSE} \sim \mathrm{condition} \times \mathrm{state} + (1 +
-\mathrm{condition} \mid \mathrm{session}) + (1 \mid \mathrm{mouse})$, with the
+\mathrm{condition} \mid \mathrm{session}) + (\mathrm{state} - 1 \mid \mathrm{session}) + (1 \mid \mathrm{mouse})$, with the
 state centered within session and scaled by its pooled standard deviation, and
 RMSE in $\%\,\Delta F/F$, so every slope is in $\%\,\Delta F/F$ of RMSE per
-within-session standard deviation of the state. From this model we read two
+within-session standard deviation of the state. The term $(\mathrm{state} - 1 \mid \mathrm{session})$ gives each session its own state slope, uncorrelated with its intercept and condition slope, so that state effects are tested against session-to-session rather than trial-to-trial variation: in 200 simulated data sets per state at our design, the model without this term rejected a true null on the open-loop state slope in $0.115$--$0.645$ of runs at $\alpha = 0.05$, against $0.025$--$0.045$ with it. We leave its correlations out because 11 to 15 sessions cannot estimate them reliably (with them, one correlation reached $-0.95$). Had a fit failed, we would have dropped the state slope and then the condition slope; all twelve fits used the full structure. From this model we read two
 properties of each state. \emph{Predictability} is the slope of open-loop error
 against state (the state main effect with open loop as the reference level): a
 positive slope means the uncontrolled disturbance grows with the state, so a
@@ -1344,10 +1351,11 @@ mouse, then session, then trial.
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D
 reads two properties (predictability and regularizability) for each of four
 state factors, eight tests in all; attenuation is a separate family of four
-tests, and the impulse-response analysis of Fig.~\ref{fig:figure2}G tests three
-states. We report these $p$-values uncorrected and state the size of each
+tests, the error decomposition of Fig.~\ref{fig:figure4}C is a family of eight
+one-sided tests (four factors in two windows), and the impulse-response analysis
+of Fig.~\ref{fig:figure2}G tests three states. We report these $p$-values uncorrected and state the size of each
 family; Bonferroni thresholds would be $0.05/8 = 0.0063$ for the
-Fig.~\ref{fig:figure4}D properties and $0.05/4 = 0.0125$ for attenuation, and we
+Fig.~\ref{fig:figure4}D properties and the Fig.~\ref{fig:figure4}C decomposition, and $0.05/4 = 0.0125$ for attenuation; we
 say in the Results which effects clear them. The open- versus closed-loop comparisons of
 Fig.~\ref{fig:figure3} are pre-specified, one per metric and window, and are
 not corrected.
