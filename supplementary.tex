@@ -167,12 +167,11 @@
     first command and solves again at the next frame. The predictor is a vector
     autoregressive model with exogenous laser input (VARX; ten lags, 286\,ms),
     fitted by ridge regression.
-    \textbf{B:} One MPC step on a closed-loop trial, 2.0\,s after stimulus onset.
-    Purple, the controlled signal and laser command up to that moment. Over the
-    next 1\,s (shaded) the model makes two predictions from the same moment:
-    light purple dashed, the signal if stimulation stopped (laser off); purple
-    dashed, the signal under the planned laser commands (lower panel), which hold
-    it at the reference. Grey, what happened next.
+    \textbf{B:} One MPC step on a closed-loop trial, 2.17\,s after stimulus onset,
+    during an upward excursion of the controlled signal. Purple, the controlled
+    signal and laser command up to that moment; dashed, the predicted signal and
+    the planned laser commands over the prediction horizon (shaded, 1\,s), which
+    bring the signal back to the reference. Grey, what happened next.
     \textbf{C:} The trial at the median of the per-trial MPC improvement. Blue, the
     recorded PI trial; purple, MPC; light purple, the same MPC given the future
     residuals of the simulated cortex (perfect prediction). Lower traces, laser
