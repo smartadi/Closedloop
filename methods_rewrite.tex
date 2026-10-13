@@ -93,8 +93,9 @@ animals were driven toward the same suppression target.
 %% body -- the wavelength pairing is inferred here, not read off Alyx. AL_0048
 %% has NO construct description in Alyx, so its second opsin is still unnamed.
 
-Table~\ref{tab:cohort} lists every animal and session and the analyses each
-contributed to. All counts in the Results refer to this table.
+Table~\ref{tab:cohort} lists every animal, its validation sessions, and the
+analyses each contributed to; the impulse, tuning and sinusoidal-reference
+sessions are named in its caption. All counts in the Results refer to this table.
 
 \begin{table}[h]
     \centering
@@ -107,14 +108,15 @@ contributed to. All counts in the Results refer to this table.
         AL\_0039 & F & GCaMP8s & 4 & 2025-04-19 to 2025-04-30 & 100 & Closed- vs open-loop \\
         AL\_0048 & M & GCaMP8s & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
         AL\_0051 & F & GCaMP8s & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
-        AL\_0034 & F & GCaMP8s & 1 & 2024-10-17 & \textbf{--} & Gain-grid sweep only \\
         AL\_0041 & F & GCaMP8s & 2 & 2025-12-02 & \textbf{--} & Impulse characterization only \\
         \hline
     \end{tabular}
     \caption{Animals and sessions. The closed- versus open-loop comparison rests
-        on 15 sessions from 4 mice. Two further animals contributed only to
-        controller tuning (AL\_0034) or to input--output characterization
-        (AL\_0041) and are not part of the 15-session cohort. The impulse-response
+        on 15 sessions from 4 mice. One further animal (AL\_0041) contributed only
+        to input--output characterization and is not part of the 15-session
+        cohort. The gain-grid and online-search sessions of
+        Fig.~\ref{fig:cost_landscape} are AL\_0033 2025-03-05 and 2025-03-17, in
+        addition to the sessions counted above. The impulse-response
         sessions of Fig.~\ref{fig:figure2} are AL\_0041 2025-12-02 (Mice 1a and 1b),
         AL\_0033 2025-01-29 (Mouse 2) and AL\_0048 2026-07-15 (Mouse 3); the last two
         are in addition to the sessions counted above.}
@@ -123,7 +125,7 @@ contributed to. All counts in the Results refer to this table.
 %% Session list taken from controller-analysis/load_sessions.m (m1-m15), which is
 %% the registry every analysis script loads. The old draft said 13 sessions from
 %% two mice, which disagreed with the Results.
-%% FILL: trials/session for AL_0034 and AL_0041. In AL_0048 and AL_0051 only the
+%% FILL: trials/session for AL_0041. In AL_0048 and AL_0051 only the
 %% last 100 trials (Kp held fixed) are the validation block; earlier trials were
 %% the tuning sweep.
 
@@ -886,64 +888,41 @@ panel C reports both windows), because it excludes the laser-evoked transient. T
 
 Gradient-based optimization of the cost is not available here, since gradients
 require a model and the number of trials available to estimate the cost is
-limited. We mapped the cost surface directly instead. A session cycled through a fixed list of PI gain pairs, grouping trials by
-pair to estimate $\hat{J}(K)$ at each node (Fig.~\ref{fig:cost_landscape}A,D,
-for AL\_0033 on 2025-03-05). We
-ran four such sweeps in two mice: AL\_0033 on 2025-01-10, 2025-03-03 and
-2025-03-05, and AL\_0034 on 2024-10-17, with 5,
-13, 10 and 17 occupied nodes respectively over $K_p \in [0,\,0.3]$ and
-$K_i \in [0,\,0.3]$. The node list was chosen per session rather than from a
-common lattice, so the sweeps are not a single replicated design. Cost was
-scored over $t = 0$ to $+3$\,s, or $0$ to $+4$\,s for the one session run with a
-4\,s stimulus. The per-session minima fell at $(K_p, K_i) = (0.30,\,0.10)$,
-$(0.05,\,0.10)$, $(0.05,\,0.10)$ and $(0.02,\,0.02)$, with
-$\hat{J} = 23.7$, $17.4$, $16.1$ and $30.2$. In one of the four the minimum sits
-on the upper $K_p$ edge of the swept range, so those sweeps bound the optimum
-from one side only; we therefore read the grid as showing that the cost surface
-is smooth and has an interior basin in $K_i$, not as locating a global optimum.
-A fifth sweep (AL\_0034, 2024-10-18) was logged in an earlier file format with
-no stimulus-onset column and could not be scored.
+limited. We mapped the cost surface directly instead. In one session (AL\_0033,
+2025-03-05) the controller cycled through a fixed list of 10 PI gain pairs, and
+we grouped trials by pair to estimate $\hat{J}(K)$ at each node
+(Fig.~\ref{fig:cost_landscape}A,D). Cost was scored over $t = 0$ to $+3$\,s. The
+minimum fell at $(K_p, K_i) = (0.05,\,0.10)$, with $\hat{J} = 16.1$. We read the
+grid as showing that the cost surface is smooth with a low-cost basin, not as
+locating a global optimum.
 
 \subsubsection*{Online gain search}
 
-In separate sessions the controller tuned its own gains during the experiment
+In a separate session of the same mouse twelve days later (AL\_0033,
+2025-03-17; 136 trials) the controller tuned its own gains during the experiment
 with the zeroth-order search in Algorithm~\ref{alg:zo}. The search started
 from $K_p = K_i = 0$, proposed each candidate by a random-walk step of 0.1 in
-$K_p$ and 0.01 in $K_i$, ran 5 trials per candidate, annealed the step size by a
-factor of 0.8 after each iteration, and ran 5 iterations. A candidate was
+$K_p$ and 0.01 in $K_i$, ran 15 trials per candidate, annealed the step size by
+a factor of 0.8 after each iteration, and ran 9 iterations. A candidate was
 accepted only if it lowered the running best cost; otherwise the previous gains
 were restored. The cost was evaluated over the stimulation window less two
-samples.
-
-Four auto-tuning sessions were run, two in AL\_0034 (2024-10-25, two
-experiments) and two in AL\_0033 (2024-12-19 and 2025-03-17), of 136, 135, 100
-and 136 trials. All four started from $K_p = K_i = 0$ and ended at
-$(K_p, K_i) = (0.20,\,0.20)$, $(0,\,0)$, $(0.16,\,0.05)$ and
-$(0.07,\,0.06)$.
-%% CHECK (verify 2026-10-10): end gains must come from the accepted gains in
-%% Kdata.npy, not input_params. (0,0) for AL_0034 10-25 e2 and (0.07,0.06) for
-%% AL_0033 03-17 are from controller-tuning/CLAUDE.md and the S2B star; re-read
-%% the other two runs and the iteration count ('ran 5 iterations'; S2C shows 9).
-The spread across runs is wide, so we report the online search as a feasibility demonstration,
-not as a reliable optimizer; the gains used for the validation blocks
-(Table~\ref{tab:gains}) were set by hand within the range the grid had explored.
-Grid sweeps and auto-tuning runs were done in separate sessions within each
-mouse. In AL\_0033 the auto-tuned gains ended inside the low-cost region of
-the grid measured twelve days earlier (Fig.~\ref{fig:cost_landscape}A,B). Before starting a validation block we
-required the tuned controller to satisfy $\hat{J}(K) \leq \hat{J}(0)$, that is,
-to be no worse than the feedforward-only baseline.
-%% CHECK: with 5 iterations of 5 trials the search evaluates 5 candidates. Say so
-%% plainly; describing it as convergence of an optimizer would overstate it. If
-%% the reported sessions used more iterations than the code default, give the
-%% values used.
+samples. Two candidates were accepted, lowering the online cost from $16.6$ to
+$12.3$, and the search ended at $(K_p, K_i) = (0.07,\,0.06)$, inside the
+low-cost region of the grid (Fig.~\ref{fig:cost_landscape}A--C). We report this
+run as a feasibility demonstration, not as a reliable optimizer: the gains used
+for the validation blocks (Table~\ref{tab:gains}) were set by hand within the
+range the grid had explored.
+%% 2026-10-13 (user): Methods describes only the grid and auto-tune run shown in S2.
+%% Facts from the rig logs: input_params runs of 15 trials per candidate, 9 live
+%% Kval rows; accepted path (0,0) 16.56 -> (0.047,0.018) 15.13 -> (0.068,0.064) 12.27.
 
 \begin{algorithm}[h]
 \caption{Zeroth-order controller gain search}
 \label{alg:zo}
 \begin{algorithmic}[1]
 \State \textbf{Initialize:} $K_{\text{best}} = [0,\,0]$; step
-       $\mathbf{r} = [0.1,\,0.01]$; anneal $\gamma = 0.8$; $N = 5$ trials;
-       $I = 5$ iterations
+       $\mathbf{r} = [0.1,\,0.01]$; anneal $\gamma = 0.8$; $N = 15$ trials;
+       $I = 9$ iterations
 \For{$i = 1$ \textbf{to} $I$}
     \State Sample a unit direction $\mathbf{v}$ uniformly on the circle
     \State Propose $K \leftarrow K_{\text{best}} + \mathbf{r}\odot\mathbf{v}$
