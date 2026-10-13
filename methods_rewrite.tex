@@ -1211,17 +1211,19 @@ error. The panel draws the stimulus-free control (below) in the same units. Each
 session's control is divided by the control's own root mean square, and the four
 sessions are averaged with equal weight.
 
-Inference respects the session structure. We fitted
-$z \sim \mathrm{state} + (1 \mid \mathrm{session})$ by
-restricted maximum likelihood; a random slope is not identifiable from four
-sessions, and two of the four sessions come from one mouse. Session agreement is
-the number of sessions whose within-session Spearman correlation between
-$z$ and state has the sign of the trial-weighted mean correlation.
-For relative power, whose quartile ratio is close to one, we also report the
-pooled Spearman correlation as a continuous effect.
+Inference treats the session, not the trial, as the unit. Within each session
+we fitted the ordinary least-squares slope of $z$ on state, with state
+standardized within that session, and tested the four slopes against zero with a
+one-sample $t$-test (three degrees of freedom). This is the summary-statistic
+form of a random-slope model; a model with a session random intercept only
+estimates the slope from trials and, by the simulation below, is
+anti-conservative. Session agreement is the number of sessions whose slope has
+the sign of the mean slope. Two of the four sessions come from one mouse.
+Pooled Spearman correlations are reported as effect sizes only, without
+$p$-values, because trials within a session are not independent.
 
 \emph{Stimulus-free control.} The quartile ratio and the pooled Spearman
-correlation were repeated on a matched quantity that contains no stimulus:
+correlation (effect sizes) were repeated on a matched quantity that contains no stimulus:
 Eq.~\eqref{eq:l2_error} evaluated over the 18 samples from $-1.51$ to
 $-1.03$\,s instead of 0 to 0.49\,s, with the trace referenced to the first sample
 of that window and compared with the mean trace of that window at the same
@@ -1382,11 +1384,10 @@ therefore test rejection at the session level, $\log \mathrm{RR} \sim 1 +
 (1 \mid \mathrm{session})$, corroborate it with a one-sided signed-rank test on
 the per-session median ratios, and report the mouse-nested model alongside as
 the mouse-level result. For the impulse-response state analysis
-(Fig.~\ref{fig:figure2}G) the scaled L2 error (Eq.~\eqref{eq:l2_error}) was regressed on the
-within-session state rank with a session random intercept, $z \sim
-\mathrm{state} + (1 \mid \mathrm{session})$; with four sessions this test has
-three degrees of freedom, and we report the number of sessions agreeing in sign
-next to it.
+(Fig.~\ref{fig:figure2}G) the scaled L2 error (Eq.~\eqref{eq:l2_error}) was regressed on
+state separately in each session, and the four per-session slopes were tested
+against zero with a one-sample $t$-test (three degrees of freedom); we report the
+number of sessions agreeing in sign next to it.
 Per-session slope differences were corroborated by a hierarchical bootstrap over
 mouse, then session, then trial.
 
