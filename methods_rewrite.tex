@@ -561,7 +561,8 @@ $t$ was
 \end{equation}
 %
 where $g = 1$ on closed-loop trials and $g = 0$ on open-loop trials,
-$u_{\max} = 2.45$\,V, and the proportional and integral terms are clamped
+$u_{\max} = 2.45$\,V (enforced by the laser rather than the command in the
+first two sessions; see above), and the proportional and integral terms are clamped
 separately at $p = q = 5$ by default. The integral is a trailing boxcar
 rather than an unbounded sum,
 %
@@ -573,9 +574,10 @@ rather than an unbounded sum,
 %
 which for a 3\,s stimulus spans the whole trial. The accumulator and the filter
 states were reset during every inter-trial interval, so no error from one trial
-carries into the next. Clamping the integral term is the anti-windup mechanism:
-while the actuator is saturated the accumulated error cannot keep raising the
-command.
+carries into the next. This finite, reset window is what bounds integral windup:
+the integral can never hold more than 3\,s of error. The term clamps
+($p = q = 5$) lie above $u_{\max}$, so the output saturation, not the term
+clamps, is what limits the command.
 %% CHECK: the old draft wrote the integral as a sum from k = 0 to t with no
 %% window and no term-level clamps, and stated the output range as [0, 5] V.
 %% Equations \eqref{eq:pi} and \eqref{eq:integral} are the implemented loop.
@@ -969,10 +971,9 @@ All exclusions are collected here.
     \item \emph{Opsin expression.} Sessions were included only with confirmed
           expression at the stimulation site.
           %% FILL: how confirmed, and how many sessions this removed.
-    \item \emph{Motion.} Trials whose mean $z$-scored motion energy over the
-          $-2$ to $+3$\,s window differed from the session mean by more than 1.5
-          standard deviations in either direction were excluded, removing $30$ of
-          $1190$ trials.
+    \item \emph{Motion.} No trial was excluded on motion. Motion enters the
+          analyses only as a state variable, so every trial of every analysis
+          is kept regardless of movement.
     \item \emph{Standing setpoint offset.} For the disturbance-rejection analysis
           only, we excluded two sessions whose closed-loop response stayed well
           above the reference throughout stimulation. In both, the feedforward
@@ -994,6 +995,11 @@ All exclusions are collected here.
           and we keep AL\_0048. AL\_0048
           faced a disturbance large enough that its offset is only $17\%$ of the
           residual, so its rejection ratio remains a measurement of rejection.
+    \item \emph{Predictor availability.} The disturbance analysis
+          (Fig.~\ref{fig:figure4}E--G) needs a contralateral predictor, which
+          could be fitted in 13 of the 15 sessions. One session has no decomposed
+          full-frame wide-field recording, and in the other the online readout
+          is not frame-aligned to the imaging timebase.
     \item \emph{Contralateral predictor.} No session was excluded on predictor
           quality. The controller analysis needs only a stimulation-blind estimate
           of the disturbance, not a certified model of it, so rather than gating on
@@ -1036,14 +1042,8 @@ Absolute RMSE is not strictly comparable between the 2025 sessions and the two
 therefore report within-session contrasts and ratios for all cross-session
 comparisons, and note where an absolute value is pooled across builds.
 
-\subsubsection*{Power spectra}
-
-We estimated power spectral density per trial by Welch's method
-%% FILL: window length, overlap, and taper.
-and report absolute units of $(\Delta F/F)^{2}\,\mathrm{Hz}^{-1}$. No z-scoring
-or relative normalization was applied at any stage, so differences in absolute
-power between conditions are preserved. Spectra were averaged within session and
-then across sessions.
+%% 2026-10-12: the "Power spectra" (Welch) subsection was removed -- no figure reports a
+%% Welch spectrum; every band power comes from the Hann periodogram under Spectral estimation.
 
 \subsubsection*{Brain-state measures}
 \label{sec:disturbance}
@@ -1189,8 +1189,8 @@ $\Delta F/F$ trace referenced to its value at the onset sample and the sum runs
 over the $N = 18$ samples from 0 to 0.49\,s, the LTI fit window. Unlike the
 evoked suppression (Eq.~\eqref{eq:inhib_energy}), which averages the response to
 one number, $e_{j}$ counts a dip that arrives early or late, or a rebound of the
-wrong size, as error. Only nonzero amplitudes were analyzed, and amplitude levels
-with fewer than eight trials were excluded (1516 trials in four sessions). To
+wrong size, as error. Only nonzero amplitudes were analyzed; every amplitude
+level had at least 44 trials, so none was excluded (1516 trials in four sessions). To
 pool amplitudes we scaled the error by its within-amplitude root mean square,
 $z_{j} = e_{j} / \mathrm{RMS}_{s,a}(e)$.
 
@@ -1389,8 +1389,10 @@ the mouse-level result. For the impulse-response state analysis
 state separately in each session, and the four per-session slopes were tested
 against zero with a one-sample $t$-test (three degrees of freedom); we report the
 number of sessions agreeing in sign next to it.
-Per-session slope differences were corroborated by a hierarchical bootstrap over
-mouse, then session, then trial.
+The confidence intervals on the Fig.~\ref{fig:figure2}G quartile ratios come from
+the two-level bootstrap described there (sessions, then trials within session);
+four sessions allow only 35 distinct session draws, so these intervals are
+approximate and are read together with the per-session slopes.
 
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D
 reads two properties (predictability and regularizability) for each of four
