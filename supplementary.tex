@@ -163,14 +163,16 @@
     candidate plan of laser commands, and chooses the plan that minimizes the
     squared deviation from the target $r$ plus a penalty $\lambda$ on command
     changes $\Delta u$ (with a small penalty on departures from the steady-state
-    command and within the rig's command limits; $\lambda = 0.1$). It applies the
+    command, and within the range of commands the rig delivered; $\lambda = 0.1$). It applies the
     first command and solves again at the next frame. The predictor is a vector
     autoregressive model with exogenous laser input (VARX; ten lags, 286\,ms),
     fitted by ridge regression.
     \textbf{B:} One MPC step on a closed-loop trial, 2.0\,s after stimulus onset.
-    Purple, the controlled signal and laser command up to that moment; dashed,
-    the predicted signal and the planned command over the next 1\,s (shaded);
-    grey, what happened next.
+    Purple, the controlled signal and laser command up to that moment. Over the
+    next 1\,s (shaded) the model makes two predictions from the same moment:
+    light purple dashed, the signal if stimulation stopped (laser off); purple
+    dashed, the signal under the planned laser commands (lower panel), which hold
+    it at the reference. Grey, what happened next.
     \textbf{C:} The trial at the median of the per-trial MPC improvement. Blue, the
     recorded PI trial; purple, MPC; light purple, the same MPC given the future
     residuals of the simulated cortex (perfect prediction). Lower traces, laser
