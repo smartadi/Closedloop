@@ -46,8 +46,8 @@ DLX2.0-ChrimsonR-tdTomato packaged in a PHP.eB-serotype AAV, produced from
 pAAV-Syn-ChrimsonR-tdT (Addgene \#59171). The DLX2.0 promoter restricts
 expression to forebrain inhibitory interneurons, so driving the opsin suppresses
 local activity focally, and the red-shifted excitation spectrum of ChrimsonR
-keeps actuation clear of the GCaMP excitation band. Titers and per-animal details
-are in Table~\ref{tab:cohort}.
+keeps actuation clear of the GCaMP excitation band. Per-animal details are in
+Table~\ref{tab:cohort}.
 %% Mouse lines, promoter, construct and injection age are the lab standard
 %% preparation, taken from Matveev et al. 2024 (bioRxiv 2024.11.01.621418), in
 %% which AL_0033 and AL_0034 appear as Subjects 1 and 3. Both are male/female
@@ -80,10 +80,11 @@ at least one day before imaging began and received 10\% sucrose rewards at rando
 %% not restricted. Matveev et al. restricted 7 of 9 animals, so it was not
 %% universal in that cohort.
 
-Two mice (AL\_0048 and AL\_0051) additionally expressed a second, spectrally
-distinct opsin and were stimulated at 638 and 594\,nm respectively. The control
-loop accommodates either polarity through a feedback sign (see below), so both
-animals were driven toward the same suppression target.
+Two mice (AL\_0048 and AL\_0051) were stimulated at 638 and 594\,nm
+respectively, in each case through an opsin expressed in inhibitory
+interneurons, so that stimulation suppressed local activity as in the other
+mice and both were driven toward the same suppression target.
+%% 2026-10-13 (user): do NOT mention AL_0048's excitatory second opsin anywhere.
 %% FILL (PARTIALLY ANSWERED 2026-10-06 from Alyx): AL_0051's subject record
 %% describes the construct as 'PHP S5E2 C1V1' -- i.e. a PHP capsid carrying the
 %% S5E2 interneuron enhancer driving C1V1, which is consistent with it being the
@@ -480,22 +481,19 @@ which is what the trial-averaging step requires. Second, across-trial variance i
 inflated by the stimulus itself: in open-loop trials it falls during
 stimulation and recovers afterwards (Fig.~\ref{fig:spatial_spread}D).
 
-\subsubsection*{Tracking error and feedback sign}
+\subsubsection*{Tracking error}
 
-Light output is positive only, and the two opsin polarities require
-opposite corrective directions, so the loop was written with an explicit
-feedback sign $\sigma$: $\sigma = +1$ for inhibitory actuation, which drives
-$y_t$ down toward a negative reference, and $\sigma = -1$ for excitatory
-actuation. With $R = \lvert y_{\mathrm{ref}} \rvert$, the tracking error driving
-the controller is
+Light output is positive only and stimulation suppresses activity, so the
+command must rise when activity is above a negative reference. With
+$R = \lvert y_{\mathrm{ref}} \rvert$, the tracking error driving the controller
+is
 %
 \begin{equation}
-    e_{t} = \sigma\,y_{t} + R .
+    e_{t} = y_{t} + R = y_{t} - y_{\mathrm{ref}} ,
     \label{eq:error}
 \end{equation}
 %
-For the inhibitory case reported here this is $e_t = y_t - y_{\mathrm{ref}}$, so
-$e_t > 0$ means the cortex is not yet suppressed enough and the controller
+so $e_t > 0$ means the cortex is not yet suppressed enough and the controller
 raises the command.
 %% CHECK: the old draft defined the error as y_ref - y_t, which is the opposite
 %% sign and, with positive gains and a positive-only actuator, would drive the
@@ -668,7 +666,7 @@ reference before it reaches the controller,
 %
 and the previewed setpoint replaces $y_{\mathrm{ref}}$ in both the feedforward
 term and the error: $\bar{u}_{k} = K_{r}\,\tilde{r}_{k}$ in Eq.~\eqref{eq:ff} and
-$e_{k} = \sigma y_{k} + \tilde{r}_{k}$ in Eq.~\eqref{eq:error}. In every session
+$e_{k} = y_{k} + \tilde{r}_{k}$ in Eq.~\eqref{eq:error}. In every session
 reported here $K_{v} = K_{a} = 0$ and $K_{\mathrm{pv}} = 1$, so
 $\tilde{r}_{k} = r_{k+d}$, a pure lookahead of $d = 5$ samples (143\,ms, or
 $51.4^{\circ}$ at 1\,Hz), chosen to match the lag of the open-loop response.
@@ -1021,7 +1019,7 @@ Table~\ref{tab:cohort}. Because conditions were interleaved within session, each
 session contributes a matched pair of conditions.
 
 Absolute RMSE is not strictly comparable between the 2025 sessions and the two
-2026 sessions, which used a different rig build and different opsins. We
+2026 sessions, which used a different rig build and stimulation wavelength. We
 therefore report within-session contrasts and ratios for all cross-session
 comparisons, and note where an absolute value is pooled across builds.
 
