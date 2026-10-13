@@ -113,14 +113,17 @@ sessions are named in its caption. All counts in the Results refer to this table
         AL\_0041 & F & GCaMP8s & 2 & 2025-12-02 & \textbf{--} & Impulse characterization only \\
         \hline
     \end{tabular}
-    \caption{Animals and sessions. The closed- versus open-loop comparison rests
+    \caption{Animals and sessions. Mice are numbered 1--5 in the order listed
+        (Mouse 1 = AL\_0033 to Mouse 5 = AL\_0041), and these numbers are used in
+        every figure; a letter marks a session when a mouse contributes more than
+        one. The closed- versus open-loop comparison rests
         on 15 sessions from 4 mice. One further animal (AL\_0041) contributed only
         to input--output characterization and is not part of the 15-session
         cohort. The gain-grid and online-search sessions of
         Fig.~\ref{fig:cost_landscape} are AL\_0033 2025-03-05 and 2025-03-17, in
         addition to the sessions counted above. The impulse-response
-        sessions of Fig.~\ref{fig:figure2} are AL\_0041 2025-12-02 (Mice 1a and 1b),
-        AL\_0033 2025-01-29 (Mouse 2) and AL\_0048 2026-07-15 (Mouse 3); the last two
+        sessions of Fig.~\ref{fig:figure2} are AL\_0041 2025-12-02 (Mice 5a and 5b),
+        AL\_0033 2025-01-29 (Mouse 1) and AL\_0048 2026-07-15 (Mouse 3); the last two
         are in addition to the sessions counted above.}
     \label{tab:cohort}
 \end{table}
@@ -822,13 +825,13 @@ in-sample fit to its own session.
 gives $\tau = -1/\mathrm{Re}(p)$; we report the decay of the fastest (dip) and
 slowest (rebound) modes per session. In every session the fastest mode is a damped
 oscillatory pair (2.4--4.2\,Hz). The modes overlap in time, so neither time constant maps
-onto one feature of the response alone; in Mice 1b and 2, for example, the slower mode
-contributes 60--68\% of the trough. In Mouse 1a the slowest pole lies near the origin and
+onto one feature of the response alone; in Mice 5b and 1, for example, the slower mode
+contributes 60--68\% of the trough. In Mouse 5a the slowest pole lies near the origin and
 adds a small sustained suppression (6\% of the trough); in Mouse 3 it is the pole near the
 origin described above, and the slowest mode with appreciable amplitude has $\tau = 0.50$\,s.
 A time constant longer than the 0.5\,s fit window is not resolved by the fit, so Fig.~\ref{fig:figure2}F marks it at the window edge instead of plotting its fitted value. The dip time constant also depends on the selected order: the one other swept model whose
 $R^{2}$ was within 0.005 of the selected model's gave 0.117\,s instead of 0.106\,s in
-Mouse 1a and 0.154\,s instead of 0.114\,s in Mouse 2 (Mice 1b and 3 had no such model).
+Mouse 5a and 0.154\,s instead of 0.114\,s in Mouse 1 (Mice 5b and 3 had no such model).
 To check identifiability we refitted 300
 bootstrap resamples of trials within amplitude, each rebuilding $h(t)$ and
 refitting at the selected order, and report the fraction of the 300 refits whose slowest
