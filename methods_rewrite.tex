@@ -700,13 +700,18 @@ then across sessions.
 
 \subsubsection*{Impulse-response protocol}
 
-The impulse characterization was run on an earlier version of the control
-system, before the loop described above. Its acquisition and readout parameters
-are therefore stated separately here.
-%% FILL: for that earlier system, state the frame rate, the readout kernel, the
-%% baseline window, and the command-to-power mapping, in the same terms as the
-%% controller sessions. If any of them match, say so explicitly rather than
-%% leaving the reader to assume it.
+All impulse experiments were run open loop under the same conditions, with
+the acquisition of the controller sessions (blue frames at 35\,Hz). Each
+stimulus was a single laser pulse about one imaging frame long (23--28\,ms),
+and pulses were separated by randomized inter-trial intervals of several seconds
+(median 5.7--9.8\,s across sessions). The response was read out offline from
+the hemodynamically corrected movie over the readout region of the controller
+sessions, as $\Delta F/F$ relative to the session mean image of that region
+(Fig.~\ref{fig:figure2}; no online baseline is needed offline). Command voltages
+were converted to power at the focal plane with the rig calibration.
+%% 2026-10-13: measured from the data -- Timeline light-command pulse width (2 kHz):
+%% 28.5/28.5/23.0/27.5 ms; ITI medians 5.77/6.11/5.74/9.80 s; fs 35.0-35.1 Hz;
+%% logged params.kernel = 10. User: do not mention earlier/later system versions.
 
 To test whether the input--output relation was linear and monotonic, we delivered
 brief stimuli at discrete amplitudes from 0 to 1.6\,mW (three to nine nonzero
