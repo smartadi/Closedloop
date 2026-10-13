@@ -205,10 +205,11 @@ atlas, and stimulation timestamps were aligned to the imaging stream.
 %% FILL: name the registration method or cite it, and confirm the number of SVD
 %% components retained for these sessions (the lab paper keeps 50, accounting for
 %% 98.2 +/- 0.2% of variance).
-%% FILL: one sentence stating which of the two signals each figure uses. This is
-%% the most likely referee question about the 2-4 Hz result, because uncorrected
-%% hemodynamics fall in that band, and the controller acted on the uncorrected
-%% signal by necessity. Saying so plainly is stronger than leaving it implicit.
+The impulse analysis (Fig.~\ref{fig:figure2}) used the hemodynamically corrected
+signal. Every closed-loop analysis (Figs.~\ref{fig:figure3}--\ref{fig:figure5}),
+including the band-power state measures of Fig.~\ref{fig:figure4}, used the
+uncorrected blue-channel signal, the signal the controller fed back on, so that
+these analyses describe what the loop regulated (see Discussion).
 
 % -----------------------------------------------------------------------------
 \subsection*{Optogenetic stimulation}
