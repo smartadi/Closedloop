@@ -1227,13 +1227,19 @@ the stimulus. We used that prediction as a stimulation-blind estimate of the
 disturbance the controller has to reject.
 
 On spontaneous, no-laser frames we fitted a ridge-regularized linear predictor
-from a grid of contralateral pixels to the ipsilateral readout, sampling pixels
-inside the contralateral cortical mask with the boundary eroded and z-scoring
-each pixel on the training partition. The ridge penalty was chosen stim-blind,
-from catch windows only, so no stimulation trial informs the regularization.
-The predictor used every pixel of the contralateral grid. The predictor was fitted on a target-independent train-test split of
-spontaneous frames, and we confirmed that it generalized to held-out
-pre-stimulus windows.
+from contralateral pixels to the ipsilateral readout. Predictors were a uniform
+lattice of about 500 pixels inside the contralateral cortical mask, eroded by
+12 pixels at its edge to drop low-signal boundary pixels, each z-scored on the
+training partition; every lattice pixel was used. Spontaneous frames were split
+in time, the first two thirds for training and the last third for testing, and
+we report the held-out $R^{2}$. The ridge penalty was chosen without reference
+to any stimulation trial. Held-out $R^{2}$ is maximal near zero penalty and so
+cannot set the shrinkage; instead we passed 200 catch windows, windows of trial
+shape drawn entirely from laser-off frames and baselined like a real trial,
+through the predictor at each of 28 penalties log-spaced from $10^{-8}$ to 10
+(relative to the mean diagonal of the training Gram matrix), and took the
+penalty at which the predictor's spurious deflection on those windows stopped
+falling.
 
 On each stimulation trial we applied the fixed predictor to concurrent
 contralateral activity. This gives the \emph{Global} component $G(t)$, an estimate of the
@@ -1330,7 +1336,11 @@ rather than by pooling trials. The model for condition effects was
 \end{equation*}
 fitted to per-trial values, with random per-session intercepts and condition
 slopes so that each session contributes its own open-to-closed-loop gap. The
-same model was applied to per-trial windowed variance. For state dependence we
+same model was applied to the log of each trial's mean squared deviation from
+its condition's trial-averaged trace within the window, the per-trial
+contribution to the across-trial variance. Because 9 of the 15 sessions come
+from one mouse, inference is over sessions; we also report that the effect had
+the same direction in every mouse. For state dependence we
 added the state, its interaction with condition and a per-session random state slope,
 $\mathrm{RMSE} \sim \mathrm{condition} \times \mathrm{state} + (1 +
 \mathrm{condition} \mid \mathrm{session}) + (\mathrm{state} - 1 \mid \mathrm{session}) + (1 \mid \mathrm{mouse})$, with the
