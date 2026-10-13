@@ -114,7 +114,10 @@ contributed to. All counts in the Results refer to this table.
     \caption{Animals and sessions. The closed- versus open-loop comparison rests
         on 15 sessions from 4 mice. Two further animals contributed only to
         controller tuning (AL\_0034) or to input--output characterization
-        (AL\_0041) and are not part of the 15-session cohort.}
+        (AL\_0041) and are not part of the 15-session cohort. The impulse-response
+        sessions of Fig.~\ref{fig:figure2} are AL\_0041 2025-12-02 (Mice 1a and 1b),
+        AL\_0033 2025-01-29 (Mouse 2) and AL\_0048 2026-07-15 (Mouse 3); the last two
+        are in addition to the sessions counted above.}
     \label{tab:cohort}
 \end{table}
 %% Session list taken from controller-analysis/load_sessions.m (m1-m15), which is
@@ -427,9 +430,9 @@ nominal linear time-invariant model of the trial-averaged response,
 %
 in which $C$ is the fixed spatial averaging kernel of \eqref{eq:dff} and
 $(\bar A, \bar B)$ are the trial-averaged dynamics. We obtained
-$(\bar A, \bar B, C)$ by discretizing the transfer function fitted to the
-measured impulse responses at 35\,Hz (\nameref{sec:tf_fitting}), which gives
-$n = 2$.
+$(\bar A, \bar B, C)$ by discretizing at 35\,Hz an earlier two-pole transfer
+function fitted to the primary session's impulse responses
+(\nameref{sec:tf_fitting}), which gives $n = 2$.
 
 \subsubsection*{Trial-averaging assumption}
 
@@ -720,9 +723,7 @@ We summarized the response to each impulse as the mean $\Delta F/F$ over the
 where $j$ indexes trials, $t_{\mathrm{on}}$ is the onset sample, and $W$ spans
 the eight samples from 0 to 200\,ms after onset at 35\,Hz, inclusive of the
 onset sample. Each trial's trace $y_{j,t}$ is referenced to its value at the
-onset sample, so $y_{j,t_{\mathrm{on}}} = 0$; in AL\_0048 (Mouse 3 in
-Fig.~\ref{fig:figure2}) it is referenced instead to the mean of the 18 samples
-(0.51\,s) before onset. We used a window mean rather than the instantaneous
+onset sample, so $y_{j,t_{\mathrm{on}}} = 0$. We used a window mean rather than the instantaneous
 trough because the mean is less sensitive to single-sample noise and reflects the
 cumulative effect of a short input. Amplitude levels are reported as medians
 with 2.5th--97.5th percentile bounds, or as means with SEM, as stated in each
@@ -771,6 +772,21 @@ of zeros kept below the number of poles (strictly proper, so $h(0) = 0$), and
 by the Akaike Information Criterion. When the selected model reproduced $h(t)$
 with $R^{2} < 0.98$, we instead took the model with the fewest parameters among those within
 0.002 of the best $R^{2}$ in the sweep.
+In Mouse 3, whose onset-referenced response stayed offset from zero through the fit window,
+\textsc{tfest} did not reach a good fit from its default initialization at any order (best
+$R^{2} = 0.94$). We therefore added one candidate per session, built from that session's own
+data. We ran the same sweep, limited to four poles and three zeros, on $h(t)$ referenced to its
+mean over the 0.5\,s before onset; added to its AIC-selected model one pole near the origin
+($s = -10^{-3}$\,s$^{-1}$), with a gain set by the offset between the two references; and used
+the result as the starting point for a fit to $h(t)$ itself, which therefore has at most five
+poles and four zeros. This candidate entered the same selection. It was selected only in
+Mouse 3 (five poles and four zeros, $R^{2} = 0.99$). In that fit the pole near the origin
+($\tau \approx 1800$\,s) contributes less than 0.2\% of the response, and removing it changes
+$R^{2}$ by less than 0.001: the better fit comes from the starting point, not from the added
+pole, which we do not interpret as a timescale. In that session the
+bootstrap refits started from the selected model, whereas each held-out refit rebuilt its
+starting point from the training trials alone (same construction, with the order of the
+offset-free model held at its full-data value), so that the held-out trials did not inform the fit.
 
 \emph{Held-out validation} (Fig.~\ref{fig:figure2}C,D). For each of 100 random
 splits, trials were divided in half within each amplitude, so that both halves
@@ -778,28 +794,39 @@ span the full dose range; $h(t)$ was rebuilt on one half, the model refitted at
 the session's selected order, and its prediction scored against the other half,
 in both directions (200 folds). The prediction carries the model's own gain, so
 a gain mismatch counts against it. We report the median and interquartile range
-of the held-out $R^{2}$. Model order was selected once on all trials and is not
-itself cross-validated.
+of the held-out $R^{2}$ over the folds whose refit succeeded (90\% in Mouse 3, at least
+98\% in the other sessions); the pooled value is the median over all such folds of the
+four sessions. Model order was selected once on all trials and is not itself cross-validated.
 
 \emph{Cross-session model swap} (Fig.~\ref{fig:figure2}E). Entry $(i,j)$ is the
 $R^{2}$ of session $i$'s fitted unit response against session $j$'s measured
 $h(t)$, after a single least-squares gain for that pair. The free gain restricts
 the comparison to the shape of the response, the property a controller cannot
 re-tune; gain is re-tuned per session in any case. The diagonal is each model's
-fit to its own session.
+in-sample fit to its own session.
 
 \emph{Time constants} (Fig.~\ref{fig:figure2}F). Each continuous-time pole $p$
 gives $\tau = -1/\mathrm{Re}(p)$; we report the decay of the fastest (dip) and
-slowest (rebound) modes per session. A time constant longer than the 0.5\,s fit window is not resolved by the fit, so Fig.~\ref{fig:figure2}F marks it at the window edge instead of plotting its fitted value. To check identifiability we refitted 300
+slowest (rebound) modes per session. In every session the fastest mode is a damped
+oscillatory pair (2.4--4.2\,Hz). The modes overlap in time, so neither time constant maps
+onto one feature of the response alone; in Mice 1b and 2, for example, the slower mode
+contributes 60--68\% of the trough. In Mouse 1a the slowest pole lies near the origin and
+adds a small sustained suppression (6\% of the trough); in Mouse 3 it is the pole near the
+origin described above, and the slowest mode with appreciable amplitude has $\tau = 0.50$\,s.
+A time constant longer than the 0.5\,s fit window is not resolved by the fit, so Fig.~\ref{fig:figure2}F marks it at the window edge instead of plotting its fitted value. The dip time constant also depends on the selected order: the one other swept model whose
+$R^{2}$ was within 0.005 of the selected model's gave 0.117\,s instead of 0.106\,s in
+Mouse 1a and 0.154\,s instead of 0.114\,s in Mouse 2 (Mice 1b and 3 had no such model).
+To check identifiability we refitted 300
 bootstrap resamples of trials within amplitude, each rebuilding $h(t)$ and
-refitting at the selected order, and report the fraction whose slowest $\tau$
-exceeded the 0.5\,s fit window. Because that fraction was large, we do not show
-intervals. To separate session from drive range, we also refitted every
-session over the amplitude range common to all four.
+refitting at the selected order, and report the fraction of the 300 refits whose slowest
+$\tau$ exceeded the length of the fit window (18 samples, 0.51\,s), counting refits that
+failed (fewer than 3\%) as not exceeding it. Because that fraction was large in three of
+four sessions, we do not show intervals for any session.
 
-The controller was designed on an earlier transfer-function fit to the primary
-session; its discretization provides $(\bar A, \bar B, C)$ for the design
-above.
+The controller was designed on an earlier two-pole transfer-function fit to the
+primary session; its discretization provides $(\bar A, \bar B, C)$ for the design
+above. The per-session fits described here characterize the plant and were not
+used for the design.
 
 % -----------------------------------------------------------------------------
 \subsection*{Controller tuning}
@@ -1151,8 +1178,8 @@ amplitude-to-response model, the LTI model included, predicts the same response
 for every trial at a given amplitude, so we took the per-trial prediction error
 as the deviation of the evoked suppression (Eq.~\eqref{eq:inhib_energy}) from
 its amplitude mean, $d_{j} = E_{j} - \bar{E}_{s,a}$, for trial $j$ at amplitude
-$a$ in session $s$. Amplitude levels with fewer than eight trials were excluded
-(1767 trials in four sessions). To pool amplitudes we scaled the deviation by
+$a$ in session $s$. Only nonzero amplitudes were analyzed, and amplitude levels
+with fewer than eight trials were excluded (1516 trials in four sessions). To pool amplitudes we scaled the deviation by
 its within-amplitude standard deviation, $z_{j} = d_{j} / \mathrm{SD}_{s,a}(d)$.
 The question concerns the spread of responses rather than their mean, so we
 test $\lvert z_{j} \rvert$, a Levene-type scale statistic.
@@ -1164,7 +1191,7 @@ is the ratio of the standard deviation of $z$ in the top quartile to that in the
 bottom quartile. Its 95\% confidence interval comes from a hierarchical bootstrap
 that matches the session-level test: each of 10{,}000 resamples draws four sessions
 with replacement, then resamples trials with replacement within each drawn session,
-and re-bins the pooled resample. Resampling trials alone would treat the 1767 trials
+and re-bins the pooled resample. Resampling trials alone would treat the 1516 trials
 as independent and give an interval too narrow for a four-session design. With four
 sessions the interval is approximate, so we also report how many sessions show the
 effect individually. The panel shows the same quantity in
@@ -1186,12 +1213,11 @@ pooled Spearman correlation as a continuous effect.
 correlation were repeated on a matched quantity that contains no stimulus:
 Eq.~\eqref{eq:inhib_energy} evaluated over the eight samples from $-1.23$ to
 $-1.03$\,s instead of 0 to 200\,ms, with the trace referenced to the first sample
-of that window (in AL\_0048, to the mean of the 18 samples before it), so that
+of that window, so that
 response and control are the same statistic and share no samples. The control is
 then expressed as a deviation from its amplitude mean and scaled in the same way.
-Its window and reference lie before the state window. The response window does
-not overlap the state window either, but in AL\_0048 the response's reference
-falls within it. A state that predicts the spread of this control as strongly as
+Its window and reference lie before the state window, and neither the response
+window nor its onset reference overlaps the state window. A state that predicts the spread of this control as strongly as
 the spread of the response acts on the amplitude of ongoing activity rather than
 on the response to the stimulus, and we attribute an effect to the stimulus only
 when it exceeds its control on both the quartile ratio and the correlation.
