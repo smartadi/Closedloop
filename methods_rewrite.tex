@@ -344,9 +344,13 @@ sample $t$,
 in percent, where $\bar{F}_{t}$ is a running mean of $F$ over the preceding
 40.0\,s (1400 control samples at 35\,Hz). This length is the controller's horizon
 parameter and was identical in every session.
-%% CHECK (kernel only): the old draft said a 21x21 pixel kernel; the rig uses a
-%% half-width of 5 pixels, given here as 10x10. Confirm on the rig. The baseline
-%% length is settled: d.params.horizon = 1400 samples = 40.0 s in all 15 sessions.
+For offline analysis we re-extracted this signal from the compressed movie; the
+re-extracted trace reproduced the logged online signal ($r = 0.995$ in a test
+session) and did not depend on the size of the averaging region between
+$10 \times 10$ and $21 \times 21$ pixels.
+%% Checked 2026-10-13 against the rig's states.csv (AL_0039 2025-04-19): 10x10, 11x11,
+%% 21x21 boxes all r = 0.995, high-pass r = 0.876, SD within 1% of the rig's.
+%% Baseline: d.params.horizon = 1400 samples = 40.0 s in all 15 sessions.
 
 The baseline was frozen at trial onset for the stimulated site and resumed
 updating at trial end. Freezing matters: if the evoked suppression were allowed
