@@ -187,8 +187,9 @@ feeding violet frames into the loop would have injected a reflectance signal int
 the controlled variable at half the frame rate. The violet channel was kept on
 disk and used for correction in offline analysis.
 
-Light power was kept below levels that cause photodamage or direct opsin
-activation.
+Imaging illumination was the same as in \citet{Matveev2024}, who used it with
+the same opsin without detectable activation, and was kept below levels that
+cause photodamage.
 %% FILL: measured illumination power density at the brain surface.
 
 Real-time and offline signals differ, and we state which was used wherever it
@@ -268,9 +269,9 @@ the first two sessions, about 1.5 in the later AL\_0033 sessions, where the
 modulation voltage saturated near 2.7\,V, and 1.3 in the AL\_0039 sessions.
 Light power was linear in the modulation voltage above a small turn-on
 threshold. We converted the recorded voltage to power at the focal plane and
-report every stimulation amplitude in mW. Values are peak power: in the AL\_0033
-closed-loop sessions the modulation voltage was a 50\,Hz waveform whose mean was
-half its peak, and impulse amplitudes are the peak of each pulse. The laser's
+report every stimulation amplitude in mW. Values are peak power: in the early
+sessions that used sinusoidal modulation (below) the mean power was half the
+peak, and impulse amplitudes are the peak of each pulse. The laser's
 power setting changed between experimental periods, so the conversion changed
 too. For the impulse sessions and the 2025 closed-loop sessions we used a single
 ratio, 1\,mW per 3\,V (1.6\,mW at 4.9\,V); %% FILL: source of the 1 mW per 3 V convention (the April 2025 linear fit gave 0.37 mW/V).
@@ -280,13 +281,12 @@ closed-loop and sinusoidal-tracking sessions we used the calibration measured
 closest before each session. In most 2025 closed-loop sessions the most power
 the laser could deliver was about 1\,mW (1.6\,mW in the first two).
 
-Stimulus waveforms were
-%% FILL: constant-power steps or pulse trains? The old draft said "pulse trains
-%% or constant-power steps", which leaves the actuator undefined. The control
-%% loop writes one command per 28.6 ms sample, which is a sampled constant-power
-%% command, so "constant power, updated every control sample" is probably right.
-%% Confirm and delete the alternative.
-delivered for the durations given under Trial structure.
+The controller wrote one command per control sample (28.6\,ms), which set the
+laser power for that sample. In a few early sessions the laser was instead
+modulated by a 40\,Hz sine whose peak amplitude the controller set at each
+sample. Stimuli were delivered for the durations given under Trial structure.
+%% 2026-10-13 (user): 40 Hz sine in a few early sessions, peak set per 28.6 ms sample
+%% (the old text said 50 Hz).
 
 % -----------------------------------------------------------------------------
 \subsection*{Behavioral monitoring}
