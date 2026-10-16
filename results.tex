@@ -42,12 +42,12 @@ This delay limits the bandwidth over which feedback can act (see Discussion).
 
 The controller combines a proportional--integral (PI) feedback term with open-loop (feedforward) compensation (Figure~\ref{fig:figure1}E).
 The feedforward term supplies the nominal stimulus needed to reach the reference, scaled by a gain calibrated from open-loop stimulation experiments.
-The PI term corrects the remaining error in real time,accounting for the current brain-state, compensating for an inaccurate feedforward gain, residual nonlinearities, and spontaneous trial-to-trial fluctuations.
+The PI term corrects the remaining error in real time as the brain state changes, compensating for an inaccurate feedforward gain, residual nonlinearities, and spontaneous trial-to-trial fluctuations.
 % ------------------------------------------------------------
 \subsection*{Trial-averaged cortical dynamics are well approximated by a linear system}
 % ------------------------------------------------------------
-To characterize input-output relationship, we delivered brief optogenetic impulses at discrete amplitudes, randomly interleaved across trials within each session. 
-The Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these amplitudes in a particular session.
+To characterize the input--output relationship, we delivered brief optogenetic impulses at discrete amplitudes, randomly interleaved across trials, in four sessions from three mice.
+Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these amplitudes in one session.
 
 \begin{figure}[!ht]
     \centering
@@ -56,8 +56,8 @@ The Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of the
     \small{
     \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses for one representative session (Mouse 5b) at three of the delivered stimulation amplitudes (0.23--0.87\,mW); shading, $\pm$1\,SD across trials for the lowest and highest amplitudes. Gray band, $-0.2$ to $0.5$\,s, spanning the $0$--$0.5$\,s model-fit window; red dot, stimulation onset.\\
     \textbf{B:} Evoked suppression (mean $\Delta F/F$ over the 200\,ms after onset) versus stimulation amplitude for four sessions from three mice (Mice 5a and 5b are two sessions of one animal). Points, mean $\pm$ SEM across trials (19--84 trials per amplitude); lines, linear fits.\\
-    \textbf{C:} Measured trial-averaged response (solid) and the prediction of a low-order LTI model fit on the other half of the trials (dashed) at three amplitudes (Mouse 1), with the held-out $R^2$ for each.\\
-    \textbf{D:} Left, peak-normalized measured responses (solid; trough scaled to $-1$) and each session's held-out LTI prediction (dashed), one color per session. Right, held-out $R^2$ per session (median and interquartile range).\\
+    \textbf{C:} Measured trial-averaged response of held-out trials (solid) and the prediction of a low-order LTI model fit to the trial average of the other half (dashed) at three amplitudes (Mouse 1), with the held-out $R^2$ for each.\\
+    \textbf{D:} Left, peak-normalized measured responses (solid; trough scaled to $-1$) and each session's held-out LTI prediction (dashed), one color per session. Right, held-out $R^2$ per session (median and interquartile range over 100 random split-halves, stratified by amplitude and scored in both directions).\\
     \textbf{E:} Cross-session model swap: $R^2$ of each session's LTI model (rows) on every session's measured response (columns), with a gain fitted for each pair; diagonal entries are in-sample fits (Materials and Methods).\\
     \textbf{F:} Dip (open squares) and rebound (filled circles) time constants from the fitted poles, per session; dotted line, median dip time constant; filled triangles, rebound time constants beyond the $0.5$\,s fit window, drawn at its edge (Mice 5a, 5b and 3).\\
     \textbf{G:} Single-trial variability against pre-stimulus state. Trial-to-trial variability is the root-mean-square deviation of each trial's response from the trial-averaged response at the same amplitude over $0$--$0.5$\,s, normalized within each session and amplitude so that 1 marks a typical trial (dotted line). From left to right, panels group trials by quartile of motion energy, relative 2--4\,Hz ($\delta$) power and absolute 2--4\,Hz power over the 1\,s before onset (1516 trials, 4 sessions; Materials and Methods). Thin gray lines, sessions; bold black line, mean of sessions; dashed line with open circles, the same measure computed over an equally long stimulus-free window before the state window. Stars, one-sample $t$-test of whether the mean per-session slope of variability against state differs from zero ($n = 4$ sessions; not corrected for the three states tested; *$p < 0.05$, ***$p < 0.001$; n.s., $p \ge 0.05$); fractions, sessions whose slope has the same sign as the mean.
@@ -67,8 +67,8 @@ The Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of the
 
 The mean evoked suppression grew monotonically with stimulation amplitude: the stronger the stimulation, the deeper the trial-averaged suppression, even though single-trial responses varied (Figure~\ref{fig:figure2}B; Materials and Methods).
 This input--output relationship was approximately linear (slopes $-0.88$, $-1.32$, $-1.53$ and $-3.11\,\%\,\Delta F/F$ per mW; $R^2 = 0.97$, $0.73$, $0.88$ and $0.88$), which supports a linear feedforward controller calibrated from impulse-response data~\citep{astrom1995pid}.
-To capture the dynamics, we fit LTI model to the impulse-response data per session (Materials and Methods).
-Models fit to half of the trials predicted the held-out trials (Figure~\ref{fig:figure2}C), with a pooled median held-out $R^2$ of $0.85$ across the four sessions; per-session medians ranged from $0.56$ in Mouse 5a (interquartile range $0.09$--$0.79$) to $0.95$ in Mouse 1 (Figure~\ref{fig:figure2}D).
+To capture the response dynamics, we fit an LTI model to the impulse-response data of each session (Materials and Methods).
+Models fit to the trial-averaged response of a random half of the trials predicted the trial-averaged response of the other half (Figure~\ref{fig:figure2}C), with a pooled median held-out $R^2$ of $0.85$ across the four sessions; per-session medians ranged from $0.56$ in Mouse 5a (interquartile range $0.09$--$0.79$) to $0.95$ in Mouse 1 (Figure~\ref{fig:figure2}D).
 The spread of held-out $R^2$ within each session reflects trial-to-trial variability in the response, which we examine below.
 We allowed up to five poles and four zeros, selected the order once per session on all trials, and held it fixed when scoring held-out trials (Mouse 5a, three poles and one zero; Mice 5b and 1, four poles and three zeros; Mouse 3, five poles and four zeros).
 A two-pole model predicted held-out trials almost as well (pooled held-out $R^2 = 0.81$ against $0.85$; $0.87$ against $0.85$ in Mouse 3).
@@ -86,7 +86,8 @@ The dip, consistent across sessions, therefore sets how quickly stimulation can 
 \subsection*{Single-trial variability reflects state-dependent ongoing activity}
 The LTI model captured the trial-averaged response, but individual trials deviated from it, and the size of these deviations depended on brain state.
 We characterized the state before each stimulus with three measures, all taken over the 1\,s before onset (Materials and Methods): motion energy from face video, a measure of the animal's movement; relative 2--4\,Hz ($\delta$) power, the fraction of 0.4--10\,Hz cortical power in the $\delta$ band, which reflects how strongly the spectrum is concentrated in slow rhythms; and absolute 2--4\,Hz power, which reflects the overall amplitude of slow fluctuations.
-We quantified each trial's variability as the root-mean-square deviation of its response over the LTI fit window ($0$ to $0.5$\,s) from the trial-averaged response at its amplitude, which is the response the LTI model describes.We normalized this variability within each session and binned trials by quartile of each state measure (1516 trials, four sessions; Figure~\ref{fig:figure2}G).
+We quantified each trial's variability as the root-mean-square deviation of its response over the LTI fit window ($0$ to $0.5$\,s) from the trial-averaged response at its amplitude, which is the response the LTI model describes.
+We normalized this variability within each session and binned trials by quartile of each state measure (1516 trials, four sessions; Figure~\ref{fig:figure2}G).
 We computed the same measure over an equally long stimulus-free window just before the state window, to ask whether ongoing activity without stimulation shows the same state dependence (Materials and Methods).
 
 Single-trial responses were less variable on high-motion trials (top- versus bottom-quartile variability ratio $0.64$, 95\% CI $[0.47, 0.82]$; per-session slopes, $t(3) = -3.90$, $p = 0.030$, $n = 4$ sessions).
@@ -132,8 +133,9 @@ In the representative session, closed loop lowered both the typical RMSE and its
 Across all 15 sessions from 4 mice, RMSE over the full 3\,s window fell by $0.63\,\%\,\Delta F/F$ (95\% CI $[0.51, 0.76]$; linear mixed model on single-trial RMSE with condition as a fixed effect and session and mouse as random effects, so that inference is across sessions; $t(13.9) = -10.7$, $p = 4.0\times10^{-8}$), and it fell in every session.
 The gap, averaged over sessions, opened at stimulation onset and persisted for the rest of the trial (Figure~\ref{fig:figure3}G).
 Because the initial deviation settles within the first second, we split the window at 1\,s, so that the 1--3\,s window mainly reflects the response to ongoing disturbances.
-Closed loop lowered RMSE by $0.46\,\%\,\Delta F/F$ in the first second ($[0.31, 0.62]$; $t(14) = -6.39$, $p = 1.7\times10^{-5}$) and by $0.75\,\%\,\Delta F/F$ from 1 to 3\,s ($[0.58, 0.91]$; $t(13.8) = -9.87$, $p = 1.3\times10^{-7}$)(Figure~\ref{fig:figure3}H)).
-The open-loop/closed-loop RMSE ratio exceeded one during stimulation in all 15 sessions, but not before or after it (median $0.99$ and $1.01$; Wilcoxon signed-rank test across sessions, $p = 0.85$ and $0.76$; Figure~\ref{fig:figure3}H).
+Closed loop lowered RMSE by $0.46\,\%\,\Delta F/F$ in the first second ($[0.31, 0.62]$; $t(14) = -6.39$, $p = 1.7\times10^{-5}$) and by $0.75\,\%\,\Delta F/F$ from 1 to 3\,s ($[0.58, 0.91]$; $t(13.8) = -9.87$, $p = 1.3\times10^{-7}$).
+Figure~\ref{fig:figure3}H shows the same comparison per session as the ratio of open-loop to closed-loop RMSE, so that values above one mean closed loop tracked better.
+During stimulation, the ratio exceeded one in all 15 sessions (median $1.14$ in the first second and $1.39$ from 1 to 3\,s; Wilcoxon signed-rank test across sessions, $p = 6.1\times10^{-5}$ for both), whereas before and after stimulation it stayed at one (median $0.99$ and $1.01$; $p = 0.85$ and $0.76$).
 
 % ------------------------------------------------------------
 \subsection*{Closed-loop control reduces trial-to-trial variability}
@@ -142,8 +144,8 @@ Feedback also made responses more repeatable.
 In the representative session, the variance across trials was the same in both conditions before stimulation (Figure~\ref{fig:figure3}D).
 During stimulation, open-loop variance fell only slightly, because a fixed input cannot respond to the deviations of individual trials, whereas closed-loop variance fell much further, because feedback acts on each trial's deviation as it develops.
 Across all 15 sessions, the gap between conditions likewise opened at stimulation onset and closed after it (Figure~\ref{fig:figure3}E).
-Closed loop lowered across-trial variance by 24\% in the first second (95\% CI 15--32\%; mixed model on log variance, as above; $t(14) = -5.28$, $p = 1.2\times10^{-4}$) and by 41\% from 1 to 3\,s (32--49\%; $t(14) = -7.84$, $p = 1.7\times10^{-6}$), whereas the open-loop/closed-loop variance ratio did not differ from one before or after stimulation (median $0.99$ and $1.00$; Wilcoxon signed-rank test across sessions, $p = 0.85$ and $0.76$; Figure~\ref{fig:figure3}I).
-The reduction is therefore confined to the period in which feedback is active.
+Closed loop lowered across-trial variance by 24\% in the first second (95\% CI 15--32\%; mixed model on log variance, as above; $t(14) = -5.28$, $p = 1.2\times10^{-4}$) and by 41\% from 1 to 3\,s (32--49\%; $t(14) = -7.84$, $p = 1.7\times10^{-6}$).
+In the per-session open-loop/closed-loop variance ratio (Figure~\ref{fig:figure3}I), values were above one during stimulation (median $1.60$ in the first second and $1.87$ from 1 to 3\,s; Wilcoxon signed-rank test across sessions, $p = 4.3\times10^{-4}$ and $6.1\times10^{-5}$) and at one before and after it (median $0.99$ and $1.00$; $p = 0.85$ and $0.76$), so the reduction is confined to the period in which feedback is active.
 
 The size of the improvement varied across sessions, likely reflecting differences in arousal, opsin expression and the overlap between the stimulated and recorded regions, but its direction did not: closed loop lowered RMSE in all 15 sessions and variance in 14 of 15 over the full window, and in at least 14 of 15 sessions in each sub-window.
 
@@ -173,46 +175,41 @@ The size of the improvement varied across sessions, likely reflecting difference
 % ------------------------------------------------------------
 \subsection*{Controller performance is brain-state dependent}
 % ------------------------------------------------------------
-Closed-loop control lowered tracking error in every session. In the sense of trial-averaged behavior we made a good regulator of regional cortical. But the performance of controller on trial-to-trial basis was state dependent.   
+Feedback improved tracking on average, but how well it held activity on a given trial depended on brain state.
+We characterized that state with four quantities: the initial deviation of activity from the reference, read at stimulus onset, and motion energy, relative 2--4\,Hz power and absolute 1--4\,Hz power, each measured from 2\,s before onset to the end of stimulation at $+3$\,s, because performance over a trial depends on activity both before and during stimulation (Materials and Methods).
+Figure~\ref{fig:figure4}A shows closed-loop trials that are extreme in one factor and typical in the others, and Figure~\ref{fig:f4_exemplars}A shows such exemplars for every session.
+Face video was available for 11 of the 15 sessions; the other 4 are excluded from all motion analyses.
 
-We characterized that state with four quantities: the initial deviation of output from the reference, motion energy, relative 2--4\,Hz power, and absolute 1--4\,Hz power.
-The initial deviation is read at stimulus onset.
-The other three are measured over one common window, from 2\,s before onset to the end of stimulation at $+3$\,s, because the controller's performance over a trial depends both on activity before the stimulus and on activity while it is delivered. Figure~\ref{fig:figure4}A shows representative closed-loop trials that are extreme in one factor and unremarkable in the others, and Figure~\ref{fig:f4_exemplars}A shows exemplars for every session.
-Motion tracking was available for 11 of the 15 sessions.
-All 11 enter the error decomposition below (613 closed-loop trials), and the 4 sessions without video are excluded from every motion analysis.
+We first asked how much of the per-trial tracking error (RMSE) each factor explains on its own, by fitting each session separately and computing the unique contribution of each factor in the first second and from 1 to 3\,s (Figure~\ref{fig:figure4}B,C; 11 sessions, 613 closed-loop trials; mean $\pm$ SEM across sessions).
+Because the two power measures are correlated, each entered a separate model together with the initial deviation and motion.
+The initial deviation explained most of the error in the first second but almost none later (unique $R^2 = 0.53 \pm 0.05$ and $0.03 \pm 0.03$), whereas absolute 1--4\,Hz power explained a similar share in both windows ($0.11 \pm 0.05$ and $0.11 \pm 0.06$).
+Relative 2--4\,Hz power explained less ($0.05 \pm 0.03$ and $0.03 \pm 0.02$), and motion explained none (unique $R^2 \le 0.001$).
+From 1 to 3\,s, absolute power was therefore the largest unique contributor, and it remained so when relative power was added to the same model ($0.07 \pm 0.04$; Figure~\ref{fig:f4_exemplars}B,C).
 
-We decomposed per-trial tracking error (RMSE) into the unique contribution of each of the four factors (Figure~\ref{fig:figure4}B), fitting each session separately, for the transient (0--1\,s) and steady-state (1--3\,s) windows (Figure~\ref{fig:figure4}C; mean $\pm$ SEM over 11 sessions). 
-The composition changed between the two windows.
-The initial deviation carried most of the transient error and little of the steady-state error (unique $R^2 = 0.53 \pm 0.05 \rightarrow 0.03 \pm 0.03$ in the model with relative power), whereas absolute 1--4\,Hz power took a similar share in both windows ($0.11 \pm 0.05$ and $0.11 \pm 0.06$). Relative 2--4\,Hz power contributed less ($0.05 \pm 0.03 \rightarrow 0.03 \pm 0.02$), and motion contributed nothing in either window (unique $R^2 \le 0.001$). At steady state, absolute low-frequency power was the largest unique term, and it remained so whether or not relative power was in the model ($0.07 \pm 0.04$ with it, $0.11 \pm 0.06$ without; Figure~\ref{fig:f4_exemplars}B,C).
+To see how each state affects open- and closed-loop error, we fit a mixed model to the 1--3\,s RMSE with condition, state and their interaction, and session and mouse as random effects (Figure~\ref{fig:figure4}D; 15 sessions from 4 mice and 1670 trials, or 11 sessions and 1190 trials for motion; Materials and Methods).
+Slopes are in $\%\,\Delta F/F$ of RMSE per within-session standard deviation (SD) of the state.
+We describe each state by two slopes.
+The open-loop slope measures \emph{predictability}: a positive slope means that the state adds error that a fixed feedforward input cannot anticipate.
+The closed-loop slope measures \emph{regularizability}: a flat slope means that feedback holds activity at the reference regardless of the state.
+All $p$ values are uncorrected; Table~\ref{tab:fig4_state_stats} (Materials and Methods) lists every estimate and marks those that survive Bonferroni correction.
 
-Binning trials into quartiles of each state and fitting a session-aware mixed model made the two regimes explicit (Figure~\ref{fig:figure4}D). The model regressed RMSE on condition, state and their interaction ($n = 15$ sessions from 4 mice and 1670 trials, or 11 sessions and 1190 trials for motion). We summarise each state by two properties. First, \emph{predictability} is read from the open-loop error: if it rises with the state, the disturbance grows and a simple LTI model can not forecast ongoing activity.
-Second, \emph{regularizability} is read from the closed-loop error, as simply ability to improve tracking. Slopes are in $\%\,\Delta F/F$ of RMSE per within-session standard deviation (SD) of the state. Table~\ref{tab:fig4_state_stats} lists every slope with its confidence interval and test. Predictability here is a property of the trial. It asks how well a fixed feedforward input anticipates what the trial will do. The trial-to-trial variability in Figure~\ref{fig:figure2}G asks how far single impulse responses scatter around the mean response at their amplitude. The two need not move together, and for motion they do not: on movement trials, impulse responses scatter less around their mean, but the target is harder to hit in open loop.
+Closed loop lowered error at every state, by $0.71$--$0.83\,\%\,\Delta F/F$ at the mean state ($t = -7.7$ to $-11.6$, all $p \le 3.4\times10^{-5}$), and two states stood out.
+Motion is a disturbance that the loop rejects.
+Open-loop error rose with motion ($+0.16\,\%\,\Delta F/F$ per SD, 95\% CI $[0.04, 0.29]$; $t(10) = 3.00$, $p = 0.013$; $n = 11$ sessions), but closed-loop error did not ($-0.07$, $[-0.20, 0.06]$; $p = 0.27$), and the open-loop slope exceeded the closed-loop slope in all 11 sessions.
+Absolute 1--4\,Hz power is a disturbance that the loop reduces but cannot hold: it raised open-loop error ($+0.30$, $[0.15, 0.45]$; $t(14) = 4.35$, $p = 6.6\times10^{-4}$; $n = 15$ sessions) and closed-loop error by as much ($+0.36$, $[0.21, 0.51]$; $t(14) = 5.09$, $p = 1.6\times10^{-4}$).
+The other two states had weaker effects.
+The initial deviation raised both errors, like absolute power but less ($+0.18$ and $+0.15$; $p = 0.014$ and $0.028$).
+Relative 2--4\,Hz power left open-loop error unchanged ($+0.02$, $p = 0.76$) and raised closed-loop error slightly ($+0.12$, $p = 0.044$), an effect that does not survive correction and that we do not build on.
 
-Closed-loop control lowered error at every state, by $0.71$--$0.83\,\%\,\Delta F/F$ at the mean state ($t = -7.7$ to $-11.6$, all $p \le 3.4\times10^{-5}$), and two states stood out in what the loop could hold. Motion is a disturbance the loop rejects. Open-loop error rose with motion ($+0.16\,\%\,\Delta F/F$ per SD, 95\% CI $[0.04, 0.29]$; $t(10) = 3.00$, $p = 0.013$; $n = 11$ sessions), so motion made the trial less predictable, while closed-loop error did not ($-0.07$, $[-0.20, 0.06]$; $p = 0.27$), and the open-loop slope exceeded the closed-loop slope in all 11 sessions (Materials and Methods). This is what feedback rejecting an unanticipated input should look like. Absolute 1--4\,Hz power is a disturbance the loop reduces but cannot hold: it raised open-loop error ($+0.30$, $[0.15, 0.45]$; $t(14) = 4.35$, $p = 6.6\times10^{-4}$; $n = 15$ sessions) and closed-loop error by as much ($+0.36$, $[0.21, 0.51]$; $t(14) = 5.09$, $p = 1.6\times10^{-4}$).
+Predictability as defined here differs from the trial-to-trial variability of Figure~\ref{fig:figure2}G, which measures how far single impulse responses scatter around their mean; for motion the two diverge, because impulse responses scatter less on movement trials, yet the reference is harder to hit in open loop.
 
-The other two states had weaker effects. The initial deviation raised both errors, like absolute power but less ($+0.18$ and $+0.15$; $p = 0.014$ and $0.028$). Relative 2--4\,Hz power left open-loop error unchanged ($+0.02$, $p = 0.76$) and raised closed-loop error slightly ($+0.12$, $p = 0.044$); this effect does not survive correction for the eight tests (Table~\ref{tab:fig4_state_stats}), and we do not build on it.
+A closed-loop error that rises with the state could still be a constant fraction of a growing open-loop error.
+We therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state (log scale).
+The same two states separated.
+With more motion, closed-loop error fell as a fraction of open-loop error, by 9\% per SD (95\% CI $[4, 14]$; $t(10) = -3.60$, $p = 0.0048$), whereas with more absolute 1--4\,Hz power it rose, by 8\% per SD ($[4, 12]$; $t(14) = 3.96$, $p = 0.0014$).
+Relative power raised the ratio slightly ($+5\%$, $p = 0.027$), and the initial deviation left it unchanged ($p = 0.89$), so the loop removes the same fraction of a large initial deviation as of a small one.
+Slow, large-amplitude cortical fluctuations therefore carry the largest share of the error from 1 to 3\,s (Figure~\ref{fig:figure4}C), and they are the one state that the loop can neither hold nor attenuate as it grows.
 
-Regularizability is an absolute measure. A closed-loop error that rises with the state could still be a constant fraction of a growing open-loop error. We therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state (log scale; Table~\ref{tab:fig4_state_stats}). The same two states separated here. Motion improved attenuation: closed-loop error fell as a fraction of open-loop error, by 9\% per SD of motion (95\% CI $[4, 14]$; $t(10) = -3.60$, $p = 0.0048$). Absolute 1--4\,Hz power degraded it, by 8\% per SD ($[4, 12]$; $t(14) = 3.96$, $p = 0.0014$). Relative power degraded it slightly ($+5\%$, $p = 0.027$), and the initial deviation left it unchanged ($p = 0.89$), so the loop removes the same fraction of a large initial deviation as of a small one. The low-frequency fluctuation carries the largest share of the steady-state error (Figure~\ref{fig:figure4}C), and it is the one state that the loop can neither regulate nor attenuate as it grows.
-
-\begin{table}[!t]
-    \centering
-    \footnotesize
-    \setlength{\tabcolsep}{3.5pt}
-    \begin{tabular}{lcccccccccc}
-        \hline
-         & & \multicolumn{3}{c}{Predictability (open-loop slope)} & \multicolumn{3}{c}{Regularizability (closed-loop slope)} & \multicolumn{3}{c}{Attenuation (\% per SD)} \\
-        \cline{3-5} \cline{6-8} \cline{9-11}
-        State & $n$ & Slope [95\% CI] & $t$ & $p$ & Slope [95\% CI] & $t$ & $p$ & Change [95\% CI] & $t$ & $p$ \\
-        \hline
-        Initial deviation & 15/1670 & $+0.18$ $[0.04, 0.31]$ & $2.80$ & $0.014$ & $+0.15$ $[0.02, 0.29]$ & $2.46$ & $0.028$ & $+0.3$ $[-4, 5]$ & $0.14$ & $0.89$ \\
-        Motion & 11/1190 & $+0.16$ $[0.04, 0.29]$ & $3.00$ & $0.013$ & $-0.07$ $[-0.20, 0.06]$ & $-1.16$ & $0.27$ & $-9$ $[-14, -4]$ & $-3.60$ & $\mathbf{0.0048}$ \\
-        Relative 2--4\,Hz & 15/1670 & $+0.02$ $[-0.11, 0.14]$ & $0.31$ & $0.76$ & $+0.12$ $[0.004, 0.24]$ & $2.21$ & $0.044$ & $+5$ $[1, 10]$ & $2.46$ & $0.027$ \\
-        Absolute 1--4\,Hz & 15/1670 & $+0.30$ $[0.15, 0.45]$ & $4.35$ & $\mathbf{6.6\times10^{-4}}$ & $+0.36$ $[0.21, 0.51]$ & $5.09$ & $\mathbf{1.6\times10^{-4}}$ & $+8$ $[4, 12]$ & $3.96$ & $\mathbf{0.0014}$ \\
-        \hline
-    \end{tabular}
-    \caption{\textbf{State dependence of open- and closed-loop tracking error.} Estimates from the session-aware mixed model of Figure~\ref{fig:figure4}D on per-trial steady-state RMSE (Materials and Methods). Rows are the four state factors of Figure~\ref{fig:figure4}A. Predictability and regularizability are the open- and closed-loop slopes of RMSE on state, in $\%\,\Delta F/F$ of RMSE per within-session SD of the state. Attenuation is the slope of the closed-to-open-loop RMSE ratio on state (log scale), given as percent change in the ratio per SD. A negative value means the loop removes a larger fraction of the open-loop error. $n$, sessions/trials. $t$ has $n_{\mathrm{sessions}} - 1$ degrees of freedom. $p$ is uncorrected; bold marks $p$ below the Bonferroni threshold, $0.0063$ for predictability and regularizability (eight tests) and $0.0125$ for attenuation (four tests).}
-    \label{tab:fig4_state_stats}
-\end{table}
 
 
 % ------------------------------------------------------------

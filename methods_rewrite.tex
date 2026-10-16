@@ -1160,9 +1160,9 @@ which the states are measured.
 For Fig.~\ref{fig:figure2}G we asked whether brain state changes how far a
 single impulse response departs from the model prediction. Any fixed
 amplitude-to-response model, the LTI model included, predicts the same response
-for every trial at a given amplitude, so we took as the per-trial prediction
-error the L2 (root-mean-square) distance between the trial's response time
-course and the trial-averaged response at its amplitude,
+for every trial at a given amplitude, so we took as each trial's variability (the trial-to-trial variability of
+Fig.~ef{fig:figure2}G) the root-mean-square distance between the trial's
+response time course and the trial-averaged response at its amplitude,
 \begin{equation}
 e_{j} = \sqrt{\frac{1}{N}\sum_{t} \bigl(x_{j}(t) - \bar{x}_{s,a}(t)\bigr)^{2}},
 \label{eq:l2_error}
@@ -1191,8 +1191,8 @@ effect individually. The panel shows the same quantity in
 interpretable units: the root mean square of $e_{j}$ within each quartile, pooled
 over the (session $\times$ amplitude) cells, and divided by the session's own
 root mean square over all of its trials, so that 1 is that session's typical
-error. The panel draws the stimulus-free control (below) in the same units. Each
-session's control is divided by the control's own root mean square, and the four
+variability. The panel draws the stimulus-free measure (below) in the same units. Each
+session's stimulus-free measure is divided by its own root mean square, and the four
 sessions are averaged with equal weight.
 
 Inference treats the session, not the trial, as the unit. Within each session
@@ -1206,13 +1206,13 @@ the sign of the mean slope. Two of the four sessions come from one mouse.
 Pooled Spearman correlations are reported as effect sizes only, without
 $p$-values, because trials within a session are not independent.
 
-\emph{Stimulus-free control.} The quartile ratio and the pooled Spearman
+\emph{Stimulus-free window.} The quartile ratio and the pooled Spearman
 correlation (effect sizes) were repeated on a matched quantity that contains no stimulus:
 Eq.~\eqref{eq:l2_error} evaluated over the 18 samples from $-1.51$ to
 $-1.03$\,s instead of 0 to 0.49\,s, with the trace referenced to the first sample
 of that window and compared with the mean trace of that window at the same
-amplitude, so that response and control are the same statistic and share no
-samples. The control is then scaled in the same way.
+amplitude, so that the response and stimulus-free measures are the same statistic
+and share no samples. The stimulus-free measure is then scaled in the same way.
 Its window and reference lie before the state window, and neither the response
 window nor its onset reference overlaps the state window. A state that predicts the spread of this control as strongly as
 the spread of the response acts on the amplitude of ongoing activity rather than
@@ -1378,7 +1378,7 @@ therefore test rejection at the session level, $\log \mathrm{RR} \sim 1 +
 (1 \mid \mathrm{session})$, corroborate it with a one-sided signed-rank test on
 the per-session median ratios, and report the mouse-nested model alongside as
 the mouse-level result. For the impulse-response state analysis
-(Fig.~\ref{fig:figure2}G) the scaled L2 error (Eq.~\eqref{eq:l2_error}) was regressed on
+(Fig.~\ref{fig:figure2}G) the scaled trial-to-trial variability (Eq.~\eqref{eq:l2_error}) was regressed on
 state separately in each session, and the four per-session slopes were tested
 against zero with a one-sample $t$-test (three degrees of freedom); we report the
 number of sessions agreeing in sign next to it.
@@ -1403,9 +1403,33 @@ this policy. The open- versus closed-loop comparisons of
 Fig.~\ref{fig:figure3} are pre-specified, one per metric and window, and are
 not corrected.
 
+\begin{table}[!t]
+    \centering
+    \footnotesize
+    \setlength{\tabcolsep}{3.5pt}
+    \begin{tabular}{lcccccccccc}
+        \hline
+         & & \multicolumn{3}{c}{Predictability (open-loop slope)} & \multicolumn{3}{c}{Regularizability (closed-loop slope)} & \multicolumn{3}{c}{Attenuation (\% per SD)} \\
+        \cline{3-5} \cline{6-8} \cline{9-11}
+        State & $n$ & Slope [95\% CI] & $t$ & $p$ & Slope [95\% CI] & $t$ & $p$ & Change [95\% CI] & $t$ & $p$ \\
+        \hline
+        Initial deviation & 15/1670 & $+0.18$ $[0.04, 0.31]$ & $2.80$ & $0.014$ & $+0.15$ $[0.02, 0.29]$ & $2.46$ & $0.028$ & $+0.3$ $[-4, 5]$ & $0.14$ & $0.89$ \\
+        Motion & 11/1190 & $+0.16$ $[0.04, 0.29]$ & $3.00$ & $0.013$ & $-0.07$ $[-0.20, 0.06]$ & $-1.16$ & $0.27$ & $-9$ $[-14, -4]$ & $-3.60$ & $\mathbf{0.0048}$ \\
+        Relative 2--4\,Hz & 15/1670 & $+0.02$ $[-0.11, 0.14]$ & $0.31$ & $0.76$ & $+0.12$ $[0.004, 0.24]$ & $2.21$ & $0.044$ & $+5$ $[1, 10]$ & $2.46$ & $0.027$ \\
+        Absolute 1--4\,Hz & 15/1670 & $+0.30$ $[0.15, 0.45]$ & $4.35$ & $\mathbf{6.6\times10^{-4}}$ & $+0.36$ $[0.21, 0.51]$ & $5.09$ & $\mathbf{1.6\times10^{-4}}$ & $+8$ $[4, 12]$ & $3.96$ & $\mathbf{0.0014}$ \\
+        \hline
+    \end{tabular}
+    \caption{\textbf{State dependence of open- and closed-loop tracking error.} Estimates from the mixed model of Figure~\ref{fig:figure4}D, fit to the per-trial RMSE from 1 to 3\,s after onset. Rows are the four state factors of Figure~\ref{fig:figure4}A. Predictability and regularizability are the open- and closed-loop slopes of RMSE on state, in $\%\,\Delta F/F$ of RMSE per within-session SD of the state. Attenuation is the slope of the closed-to-open-loop RMSE ratio on state (log scale), given as percent change in the ratio per SD. A negative value means the loop removes a larger fraction of the open-loop error. $n$, sessions/trials. $t$ has $n_{\mathrm{sessions}} - 1$ degrees of freedom. $p$ is uncorrected; bold marks $p$ below the Bonferroni threshold, $0.0063$ for predictability and regularizability (eight tests) and $0.0125$ for attenuation (four tests).}
+    \label{tab:fig4_state_stats}
+\end{table}
+
 \emph{Non-parametric tests.} Paired across-session comparisons, such as
 open-versus-closed-loop variance and RMSE ratios per window, used the two-sided
-Wilcoxon signed-rank test on the log ratio. The disturbance-rejection tests of
+Wilcoxon signed-rank test on the log ratio. The percentage variance reductions
+in the Results are mixed-model estimates from per-trial log variance, whereas
+Fig.~\ref{fig:figure3}I shows the ratio of window variances in each session;
+the two summaries weight trials differently and are not expected to coincide.
+The disturbance-rejection tests of
 Fig.~\ref{fig:figure4}G ($\mathrm{RR} < 1$, and closed- below open-loop
 $\mathrm{RR}$) were one-sided, because the hypothesis that feedback rejects the
 disturbance is directional and was fixed before the analysis.
@@ -1417,7 +1441,7 @@ descriptive and carries no test.
 
 \emph{Corroborating tests.} Each claim in the Results is reported with one
 primary test; the following checks agreed with it. For
-Fig.~\ref{fig:figure2}G, the stimulus-free control's Spearman correlation with
+Fig.~\ref{fig:figure2}G, the stimulus-free measure's Spearman correlation with
 state had the same sign and a similar size as the response's ($\rho = -0.23$,
 $+0.127$ and $+0.57$ for motion, relative and absolute power, against $-0.22$,
 $+0.148$ and $+0.55$). For Fig.~\ref{fig:figure3}, the per-session median RMSE
