@@ -269,17 +269,19 @@ To compare the two controllers on the same cortical activity, we drove the VARX 
 In this replay the MPC lowered the per-trial RMSE over the settled window (1--3\,s) from a median of $1.46$ under the recorded PI controller to $0.82\%\,\Delta F/F$, and was lower on all 108 trials (Figure~\ref{fig:mpc_direct}C--E). Across-trial variance over the same window fell by $39\%$ (Figure~\ref{fig:mpc_direct}F). The gain held across the range of command-smoothness penalties we tried (Figure~\ref{fig:mpc_direct}H). Given the future residuals, the same controller reached $0.27\%\,\Delta F/F$, so most of the error left under MPC is activity it could not predict from the past.
 
 The replayed cortex shares the controller's model class, responds to the laser in the same way in every brain state, and comes from one session, so these values bound rather than measure what a live MPC would achieve. They do show that part of the error the PI loop leaves is predictable, and that a controller using that prediction removes it.
-% ROOM RESERVED (user 2026-10-16): sinusoidal-reference MPC replay on an AL_0048 sine session
-% (Figure 6, panels after H) -- one paragraph here once the panels exist.
+
+We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (AL\_0048, right hemisphere; 46 CL and 57 CL$+$p trials), with the 1\,Hz reference entering the MPC's cost over its prediction horizon, so that the MPC sees the reference ahead of time, as the preview block does. The MPC lowered per-trial RMSE over the 4\,s window from a median of $2.26$ to $1.93\%\,\Delta F/F$ on the CL trials (lower on 46 of 46) and from $3.00$ to $2.70$ on the CL$+$p trials (lower on 56 of 57; Figure~\ref{fig:mpc_direct}I--K). It removed the phase lag that feedback alone leaves ($46^\circ$ under CL, $1^\circ$ under MPC), matching CL$+$p ($2^\circ$; Figure~\ref{fig:mpc_direct}L), and kept the across-trial variance at or below that of CL ($0.73$ times CL and $0.68$ times CL$+$p on the same trials; Figure~\ref{fig:mpc_direct}M). The MPC therefore combined the two corrections that, on the rig, required feedback and preview together. The gain was smaller than with the constant reference, and even perfect prediction reached only $0.72$ times the CL error. The residual error sat in the half-cycles where the reference rose back toward zero: the inhibitory laser can only suppress activity, so the controller switched it off there and could not drive the signal up. These values use the signal and reference timing the controller itself saw, so they differ slightly from those in Figure~\ref{fig:figure5}, and they carry the same caveats as the constant-reference replay: one session, a simulated cortex of the controller's own model class, and a laser response that does not depend on brain state.
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\linewidth]{images/Figure6.pdf}
-    %% Promoted from the supplement 2026-10-16. ROOM RESERVED: sinusoidal-reference MPC
-    %% replay panels (AL_0048 sine session) to be added after H; extend the caption then.
+    %% Promoted from the supplement 2026-10-16. I-M (sine replay) added 2026-10-16:
+    %% panels brain_paper/paper/figures_final/panels/supp_mpc/mpcs_*.pdf (ctrl_mpc_sine_panels.m).
     \caption{\textbf{In a replay of recorded trials, a model-predictive controller rejects
-    disturbances that the PI controller leaves.} One session
-    (AL\_0033 2025-02-26, 108 closed-loop trials). All values come from simulation
-    and are descriptive; no statistical tests were applied.
+    disturbances that the PI controller leaves.} \textbf{A--H:} one session
+    (AL\_0033 2025-02-26, 108 closed-loop trials), constant reference.
+    \textbf{I--M:} the sinusoidal session of Fig.~\ref{fig:figure5} (AL\_0048
+    2026-07-14, right hemisphere; 1\,Hz reference over a 4\,s window). All values come
+    from simulation and are descriptive; no statistical tests were applied.
     \textbf{A:} The controller. At every frame (35\,Hz) the MPC reads $\Delta F/F$
     at the controlled site and at 100 sites spread over dorsal cortex ($z_t$),
     predicts the controlled signal $\hat y$ over a horizon $H = 1$\,s for a
@@ -313,6 +315,21 @@ The replayed cortex shares the controller's model class, responds to the laser i
     \textbf{H:} Median ratio of MPC to PI RMSE against the command-smoothness
     penalty $\lambda$; circle, the value used ($\lambda = 0.1$); solid line, PI;
     dashed line, MPC with perfect prediction.
+    \textbf{I--M:} the same MPC with the sinusoidal reference in its cost over the
+    prediction horizon, replayed on every CL (46) and CL$+$p (57) trial. Colors as in
+    Fig.~\ref{fig:figure5} for the recorded modes; purple, MPC; light purple, perfect
+    prediction. \textbf{I:} The CL trial at the median of the per-trial MPC
+    improvement; lower traces, laser power; dashed line, reference.
+    \textbf{J:} Trial average $\pm$ SD: recorded OL, CL and CL$+$p trials, and MPC and
+    perfect-prediction MPC over the CL and CL$+$p trials.
+    \textbf{K:} Per-trial RMSE over the 4\,s window, each simulated trial paired with
+    the recorded trial it replays (left, CL; right, CL$+$p); black bars, medians.
+    \textbf{L:} Phase lag of the trial average relative to the reference, from a
+    1\,Hz fundamental fit (as in Fig.~\ref{fig:figure5}H).
+    \textbf{M:} Variance across trials over time (running mean over 5 frames).
+    The signal is the controlled site's $\Delta F/F$ as the rig computed it online,
+    paired with the reference at the controller's own timing, so recorded values
+    differ slightly from Fig.~\ref{fig:figure5}.
     The simulated cortex is the VARX fitted to all data and driven by each trial's
     recorded one-step residuals. Under the recorded laser it reproduces the recorded
     trial exactly, so the PI baseline is the recorded trial itself and needs no
