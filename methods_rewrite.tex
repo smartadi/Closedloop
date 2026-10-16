@@ -48,6 +48,7 @@ expression to forebrain inhibitory interneurons, so driving the opsin suppresses
 local activity focally, and the red-shifted excitation spectrum of ChrimsonR
 keeps actuation clear of the GCaMP excitation band. Per-animal details are in
 Table~\ref{tab:cohort}.
+Animals were 5--14 months old over the sessions reported here.
 %% Mouse lines, promoter, construct and injection age are the lab standard
 %% preparation, taken from Matveev et al. 2024 (bioRxiv 2024.11.01.621418), in
 %% which AL_0033 and AL_0034 appear as Subjects 1 and 3. Both are male/female
@@ -65,7 +66,7 @@ Table~\ref{tab:cohort}.
 %% 1.6e12 GC in Table 1 for these animals. One is a typo in that paper. Use the
 %% value from the lab's own injection records rather than either.
 
-Animals were 5--14 months old over the sessions reported here.
+
 %% AGE FILLED 2026-10-06 from Alyx birth dates against the session dates in
 %% Table~\ref{tab:cohort}: AL_0033 b.2024-02-16 -> 11.1 months at its first
 %% session and 14.1 at its last; AL_0039 b.2024-11-23 -> 4.9; AL_0048
@@ -660,8 +661,7 @@ the 4\,s stimulation window holds exactly four cycles. Preview acts on the
 reference before it reaches the controller,
 %
 \begin{equation}
-    \tilde{r}_{k} = r_{k} + K_{v}\,(r_{k+1} - r_{k})
-                + K_{a}\,(r_{k+1} - 2r_{k} + r_{k-1})
+    \tilde{r}_{k} = r_{k} 
                 + K_{\mathrm{pv}}\,(r_{k+d} - r_{k}),
     \label{eq:preview}
 \end{equation}
@@ -669,7 +669,7 @@ reference before it reaches the controller,
 and the previewed setpoint replaces $y_{\mathrm{ref}}$ in both the feedforward
 term and the error: $\bar{u}_{k} = K_{r}\,\tilde{r}_{k}$ in Eq.~\eqref{eq:ff} and
 $e_{k} = y_{k} + \tilde{r}_{k}$ in Eq.~\eqref{eq:error}. In every session
-reported here $K_{v} = K_{a} = 0$ and $K_{\mathrm{pv}} = 1$, so
+reported here $K_{\mathrm{pv}} = 1$, so
 $\tilde{r}_{k} = r_{k+d}$, a pure lookahead of $d = 5$ samples (143\,ms, or
 $51.4^{\circ}$ at 1\,Hz), chosen to match the lag of the open-loop response.
 
