@@ -270,7 +270,7 @@ In this replay the MPC lowered the per-trial RMSE over the settled window (1--3\
 
 The replayed cortex shares the controller's model class, responds to the laser in the same way in every brain state, and comes from one session, so these values bound rather than measure what a live MPC would achieve. They do show that part of the error the PI loop leaves is predictable, and that a controller using that prediction removes it.
 
-We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (AL\_0048, right hemisphere; 46 CL and 57 CL$+$p trials), with the 1\,Hz reference entering the MPC's cost over its prediction horizon, so that the MPC sees the reference ahead of time, as the preview block does. The MPC lowered per-trial RMSE over the 4\,s window from a median of $2.26$ to $1.93\%\,\Delta F/F$ on the CL trials (lower on 46 of 46) and from $3.00$ to $2.70$ on the CL$+$p trials (lower on 56 of 57; Figure~\ref{fig:mpc_direct}I--K). It removed the phase lag that feedback alone leaves ($46^\circ$ under CL, $1^\circ$ under MPC), matching CL$+$p ($2^\circ$; Figure~\ref{fig:mpc_direct}L), and kept the across-trial variance at or below that of CL ($0.73$ times CL and $0.68$ times CL$+$p on the same trials; Figure~\ref{fig:mpc_direct}M). The MPC therefore combined the two corrections that, on the rig, required feedback and preview together. The gain was smaller than with the constant reference, and even perfect prediction reached only $0.72$ times the CL error. The residual error sat in the half-cycles where the reference rose back toward zero: the inhibitory laser can only suppress activity, so the controller switched it off there and could not drive the signal up. These values use the signal and reference timing the controller itself saw, so they differ slightly from those in Figure~\ref{fig:figure5}, and they carry the same caveats as the constant-reference replay: one session, a simulated cortex of the controller's own model class, and a laser response that does not depend on brain state.
+We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (AL\_0048, right hemisphere), on the 57 trials run with feedback and preview (CL$+$p), the best of the rig's sinusoidal modes. The 1\,Hz reference entered the MPC's cost over its prediction horizon, so the MPC saw the reference ahead of time, as the preview block does. The MPC lowered per-trial RMSE over the 4\,s window from a median of $3.00$ under the recorded CL$+$p controller to $2.70\%\,\Delta F/F$, and was lower on 56 of 57 trials (Figure~\ref{fig:mpc_direct}I--K). It kept the phase lag at zero, as preview had ($2^\circ$ under CL$+$p, $-1^\circ$ under MPC, against $71^\circ$ open loop; Figure~\ref{fig:mpc_direct}L), and lowered across-trial variance to $0.68$ times that of CL$+$p (Figure~\ref{fig:mpc_direct}M). The gain was smaller than with the constant reference: even perfect prediction reached only $0.76$ times the CL$+$p error. Most of the remaining error (about two thirds of the squared error) fell in the half-cycles where the reference rose back toward zero. There the inhibitory laser was off for most of the time, because it can suppress activity but cannot drive the signal up. These values use the signal and reference timing the controller itself saw, so they differ slightly from those in Figure~\ref{fig:figure5}. They carry the same caveats as the constant-reference replay: one session, a simulated cortex of the controller's own model class, and a laser response that does not depend on brain state.
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\linewidth]{images/Figure6.pdf}
@@ -316,14 +316,16 @@ We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (AL
     penalty $\lambda$; circle, the value used ($\lambda = 0.1$); solid line, PI;
     dashed line, MPC with perfect prediction.
     \textbf{I--M:} the same MPC with the sinusoidal reference in its cost over the
-    prediction horizon, replayed on every CL (46) and CL$+$p (57) trial. Colors as in
-    Fig.~\ref{fig:figure5} for the recorded modes; purple, MPC; light purple, perfect
-    prediction. \textbf{I:} The CL trial at the median of the per-trial MPC
-    improvement; lower traces, laser power; dashed line, reference.
-    \textbf{J:} Trial average $\pm$ SD: recorded OL, CL and CL$+$p trials, and MPC and
-    perfect-prediction MPC over the CL and CL$+$p trials.
+    prediction horizon, replayed on the 57 closed-loop-with-preview (CL$+$p) trials and
+    compared with those recorded trials; recorded open-loop trials (OL, 51) for reference.
+    Red, OL; green, CL$+$p; purple, MPC; light purple, perfect prediction.
+    \textbf{I:} The CL$+$p trial at the median of the per-trial MPC improvement; lower
+    traces, laser power; dashed line, reference.
+    \textbf{J:} RMSE across trials against time in the stimulation window (square root
+    of the trial-averaged squared error; shading, $\pm$ SEM), as in
+    Fig.~\ref{fig:figure5}F.
     \textbf{K:} Per-trial RMSE over the 4\,s window, each simulated trial paired with
-    the recorded trial it replays (left, CL; right, CL$+$p); black bars, medians.
+    the recorded CL$+$p trial it replays; black bars, medians.
     \textbf{L:} Phase lag of the trial average relative to the reference, from a
     1\,Hz fundamental fit (as in Fig.~\ref{fig:figure5}H).
     \textbf{M:} Variance across trials over time (running mean over 5 frames).
