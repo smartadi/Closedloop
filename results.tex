@@ -164,7 +164,7 @@ The size of the improvement varied across sessions, likely reflecting difference
     \textbf{B:} Error-decomposition model: per-trial tracking error (RMSE) regressed on the state factors within each session; colours as in A.\\
     \textbf{C:} Unique $R^2$ of each state factor for closed-loop RMSE in the transient (0--1\,s, light) and steady-state (dark) windows. Relative and absolute power each enter a separate model with initial deviation and motion. Bars, mean over sessions of the adjusted unique $R^2$ fitted within each session; error bars, SEM ($n = 11$ sessions, 613 trials).\\
     \textbf{D:} Open- and closed-loop steady-state RMSE ($z$-scored within session) by within-session quartile of each state (low~$\rightarrow$~high). Points, mean $\pm$ SEM across sessions ($n = 15$ sessions, 1670 trials; 11 sessions, 1190 trials for motion). P, predictability (open-loop slope); R, regularizability (closed-loop slope), from a session-aware mixed model on raw RMSE; arrows, direction of improvement or degradation. Stars, uncorrected *$p < 0.05$, **$p < 0.01$, ***$p < 0.001$; n.s., $p \ge 0.05$ (Table~\ref{tab:fig4_state_stats}).\\
-    \textbf{E:} Ridge weights of the contralateral$\rightarrow$ipsilateral predictor of the control readout (representative session, AL\_0033); black dot, stimulation site.\\
+    \textbf{E:} Ridge weights of the contralateral$\rightarrow$ipsilateral predictor of the control readout (representative session, Mouse~1); black dot, stimulation site.\\
     \textbf{F:} The open-loop trial average $A$ (black; same session) split into the Global component $G$ (blue; predicted from the contralateral hemisphere) and the Local component $L = A - G$ (red shading). Beige shading, stimulation window; $R^2_{\mathrm{te}}$, held-out $R^2$ of the predictor on spontaneous frames.\\
     \textbf{G:} Closed-loop disturbance rejection, $\mathrm{RR} = \|A-r\|^2/\|D\|^2$ over the steady-state window, where $D$ is the contralaterally predicted disturbance; $\mathrm{RR} < 1$ indicates rejection. Dots, per-session geometric mean $\pm$1 SD (log scale); blue line and band, geometric mean and 95\% CI from a session-level mixed model; dashed line, $\mathrm{RR} = 1$. Stars, one-sided test of $\mathrm{RR} < 1$ (***$p < 0.001$; $n = 11$ sessions from 3 mice, 595 trials; inclusion in Results). Labels, mouse (Table~\ref{tab:cohort}) and session letter.}}}
     \label{fig:figure4}
@@ -236,7 +236,7 @@ Feedback and preview correct different failures of sinusoidal tracking: feedback
     \includegraphics[width=0.82\linewidth]{images/Figure5.pdf}
     \caption{\textbf{Feedback and preview correct different failures of sinusoidal reference tracking.}\\
 \small{
-All panels: AL\_0048, right hemisphere (inhibitory opsin), tracking a 1\,Hz sinusoidal reference over a 4\,s stimulation window. B--H show one session; I--K show all three. Four modes throughout: open-loop (OL, red), open-loop with preview (OL$+$p, orange), closed-loop (CL, blue), closed-loop with preview (CL$+$p, green). Grey traces, delivered laser power (scaled by 2 in B); black dashed traces, reference.\\
+All panels: Mouse~3, right hemisphere (inhibitory opsin), tracking a 1\,Hz sinusoidal reference over a 4\,s stimulation window. B--H show one session; I--K show all three. Four modes throughout: open-loop (OL, red), open-loop with preview (OL$+$p, orange), closed-loop (CL, blue), closed-loop with preview (CL$+$p, green). Grey traces, delivered laser power (scaled by 2 in B); black dashed traces, reference.\\
 \textbf{A:} Controller architecture. A preview block shifts the reference forward by a fixed lookahead before it reaches the PI controller.
 \textbf{B:} One representative trial per mode; vertical lines and shading mark the stimulation window.
 \textbf{C:} Trial average $\pm$ SD ($n = 51, 46, 46, 57$ trials for OL, OL$+$p, CL, CL$+$p).
@@ -261,7 +261,7 @@ Decomposing the error shows why the two mechanisms do not overlap. Because the s
 % ------------------------------------------------------------
 \subsection*{Model-predictive control rejects disturbances in a replay of recorded trials}
 % ------------------------------------------------------------
-The PI controller corrects an error only after it has appeared. Part of the error it leaves is predictable, from ongoing activity across cortex and from the known effect of the laser, and a controller that plans ahead could act on it. We did not run such a controller on the rig, so we asked how one would have performed on the closed-loop trials we recorded, using a model fitted to the same session (AL\_0033, 108 closed-loop trials; Figure~\ref{fig:mpc_direct}). Everything in this section comes from simulation on recorded data and is descriptive.
+The PI controller corrects an error only after it has appeared. Part of the error it leaves is predictable, from ongoing activity across cortex and from the known effect of the laser, and a controller that plans ahead could act on it. We did not run such a controller on the rig, so we asked how one would have performed on the closed-loop trials we recorded, using a model fitted to the same session (one session of Mouse~1, 108 closed-loop trials; Figure~\ref{fig:mpc_direct}). Everything in this section comes from simulation on recorded data and is descriptive.
 
 We modelled the controlled site, 100 sites spread over dorsal cortex and the laser command as one linear vector autoregressive process with exogenous input (VARX). On held-out open-loop trials it predicted the controlled signal better than the last observed value and better than a univariate autoregressive model of the kind benchmarked on spontaneous widefield activity~\citep{lu2025benchmarking} (Figure~\ref{fig:mpc_direct}G). At every frame the model-predictive controller (MPC) used this model to predict the controlled signal over the next second for a candidate plan of laser commands, chose the plan that kept the prediction closest to the reference without abrupt changes in the command, applied its first command and planned again at the next frame (Figure~\ref{fig:mpc_direct}A,B).
 
@@ -271,70 +271,36 @@ In this replay the MPC lowered the per-trial RMSE over the settled window (1--3\
 
 The replayed cortex shares the controller's model class, responds to the laser in the same way in every brain state, and comes from one session, so these values bound rather than measure what a live MPC would achieve. They do show that part of the error the PI loop leaves is predictable, and that a controller using that prediction removes it.
 
-We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (AL\_0048, right hemisphere), on the 57 trials run with feedback and preview (CL$+$p), the rig mode that combined both corrections. The 1\,Hz reference entered the MPC's cost over its prediction horizon, so the MPC saw the reference ahead of time, as the preview block does. The MPC lowered per-trial RMSE over the 4\,s window from a median of $3.00$ under the recorded CL$+$p controller to $2.70\%\,\Delta F/F$, and was lower on 56 of 57 trials (Figure~\ref{fig:mpc_direct}I,L). It kept the phase lag at zero, as preview had ($2^\circ$ under CL$+$p, $-1^\circ$ under MPC, against $71^\circ$ open loop; Figure~\ref{fig:mpc_direct}K), and lowered across-trial variance to $0.68$ times that of CL$+$p (Figure~\ref{fig:mpc_direct}J). The gain was smaller than with the constant reference: even perfect prediction reached only $0.76$ times the CL$+$p error. Most of the remaining error (about two thirds of the squared error) fell in the half-cycles where the reference rose back toward zero. There the inhibitory laser was off for most of the time, because it can suppress activity but cannot drive the signal up. These values use the signal and reference timing the controller itself saw, so they differ slightly from those in Figure~\ref{fig:figure5}. They carry the same caveats as the constant-reference replay: one session, a simulated cortex of the controller's own model class, and a laser response that does not depend on brain state.
+We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (Mouse~3), on the 57 trials run with feedback and preview (CL$+$p), the rig mode that combined both corrections. The 1\,Hz reference entered the MPC's cost over its prediction horizon, so the MPC saw the reference ahead of time, as the preview block does. The MPC lowered per-trial RMSE over the 4\,s window from a median of $3.00$ under the recorded CL$+$p controller to $2.70\%\,\Delta F/F$, and was lower on 56 of 57 trials (Figure~\ref{fig:mpc_direct}I,L). It kept the phase lag at zero, as preview had ($2^\circ$ under CL$+$p, $-1^\circ$ under MPC, against $71^\circ$ open loop; Figure~\ref{fig:mpc_direct}K), and lowered across-trial variance to $0.68$ times that of CL$+$p (Figure~\ref{fig:mpc_direct}J). The gain was smaller than with the constant reference: even perfect prediction reached only $0.76$ times the CL$+$p error. Most of the remaining error (about two thirds of the squared error) fell in the half-cycles where the reference rose back toward zero. There the inhibitory laser was off for most of the time, because it can suppress activity but cannot drive the signal up. These values use the signal and reference timing the controller itself saw, so they differ slightly from those in Figure~\ref{fig:figure5}. They carry the same caveats as the constant-reference replay: one session, a simulated cortex of the controller's own model class, and a laser response that does not depend on brain state.
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\linewidth]{images/Figure6.pdf}
     %% Promoted from the supplement 2026-10-16. I-L (sine replay) added 2026-10-16; assembled as figures_final/FigureMPC.pdf:
     %% panels brain_paper/paper/figures_final/panels/supp_mpc/mpcs_*.pdf (ctrl_mpc_sine_panels.m).
     \caption{\textbf{In a replay of recorded trials, a model-predictive controller rejects
-    disturbances that the PI controller leaves.} \textbf{A--H:} one session
-    (AL\_0033 2025-02-26, 108 closed-loop trials), constant reference.
-    \textbf{I--L:} the sinusoidal session of Fig.~\ref{fig:figure5} (AL\_0048
-    2026-07-14, right hemisphere; 1\,Hz reference over a 4\,s window). All values come
-    from simulation and are descriptive; no statistical tests were applied.
-    \textbf{A:} The controller. At every frame (35\,Hz) the MPC reads $\Delta F/F$
-    at the controlled site and at 100 sites spread over dorsal cortex ($z_t$),
-    predicts the controlled signal $\hat y$ over a horizon $H = 1$\,s for a
-    candidate plan of laser commands, and chooses the plan that minimizes the
-    squared deviation from the target $r$ plus a penalty $\lambda$ on command
-    changes $\Delta u$ (with a small penalty on departures from the steady-state
-    command, and within the range of commands the rig delivered; $\lambda = 0.1$). It applies the
-    first command and solves again at the next frame. The predictor is a vector
-    autoregressive model with exogenous laser input (VARX; ten lags, 286\,ms),
-    fitted by ridge regression.
-    \textbf{B:} One MPC step on a closed-loop trial, 2.17\,s after stimulus onset,
-    during an upward excursion of the controlled signal. Purple, the controlled
-    signal and laser command up to that moment; magenta, the predicted signal and
-    the planned laser commands over the prediction horizon (shaded, 1\,s), which
-    bring the signal back to the reference. Grey, what happened next.
-    \textbf{C:} The trial at the median of the per-trial MPC improvement. Blue, the
-    recorded PI trial; purple, MPC; light purple, the same MPC given the future
-    residuals of the simulated cortex (perfect prediction). Lower traces, laser
-    command. Grey band, stimulation; dashed line, reference ($-5\%\,\Delta F/F$).
-    \textbf{D:} Trial average $\pm$ SD over the 108 trials.
-    \textbf{E:} Per-trial RMSE over the settled window (1--3\,s). Lines join the
-    same trial; black bars, medians.
-    \textbf{F:} Variance across trials over time. The three traces share the
-    recorded trials before onset, and the simulated laser is off after the
-    stimulation ends.
-    \textbf{G:} Prediction $R^2$ of the controlled signal against lead time on 92
-    held-out open-loop trials (five folds), for the VARX, a univariate
-    autoregressive model (AR; order 35, chosen on validation data) of the kind
-    benchmarked on spontaneous widefield activity by \citet{lu2025benchmarking},
-    and the last observed value (naive). Dotted lines, 200\,ms and 1\,s.
-    \textbf{H:} Median ratio of MPC to PI RMSE against the command-smoothness
-    penalty $\lambda$; circle, the value used ($\lambda = 0.1$); solid line, PI;
-    dashed line, MPC with perfect prediction.
-    \textbf{I--L:} the same MPC with the sinusoidal reference in its cost over the
-    prediction horizon, replayed on the 57 closed-loop-with-preview (CL$+$p) trials and
-    compared with those recorded trials; recorded open-loop trials (OL, 51) for reference.
-    Red, OL; green, CL$+$p; purple, MPC; light purple, perfect prediction.
-    \textbf{I:} A CL$+$p trial on which the MPC improved tracking markedly (RMSE about
-    halved); lower traces, laser power; dashed line, reference.
-    \textbf{J:} Variance across trials over time (running mean over 5 frames).
-    \textbf{K:} Phase lag of the trial average relative to the reference, from a
-    1\,Hz fundamental fit (as in Fig.~\ref{fig:figure5}H); the OL bar ($71^\circ$) is
-    truncated.
-    \textbf{L:} Per-trial RMSE over the 4\,s window, each simulated trial paired with
-    the recorded CL$+$p trial it replays; black bars, medians.
-    The signal is the controlled site's $\Delta F/F$ as the rig computed it online,
-    paired with the reference at the controller's own timing, so recorded values
-    differ slightly from Fig.~\ref{fig:figure5}.
-    The simulated cortex is the VARX fitted to all data and driven by each trial's
-    recorded one-step residuals. Under the recorded laser it reproduces the recorded
-    trial exactly, so the PI baseline is the recorded trial itself and needs no
-    model of the PI loop. The MPC's own VARX was fitted with that trial's fold held
-    out (five folds).}
+    disturbances that the PI controller leaves.} Simulation on recorded data; descriptive,
+    no statistical tests (Materials and Methods). Grey band, stimulation; dashed line,
+    reference.
+    \textbf{A--H:} Constant reference, one session of Mouse~1 (108 closed-loop trials).
+    \textbf{A:} The MPC predicts the controlled signal over 1\,s from the controlled site,
+    100 cortical sites and the laser command (VARX model), and plans the laser to hold the
+    prediction at the reference; it applies the first command and replans every frame.
+    \textbf{B:} One planning step: signal and laser so far (purple), predicted signal and
+    planned laser over the horizon (magenta), and what followed (grey).
+    \textbf{C:} The trial at the median MPC improvement: recorded PI (blue), MPC (purple)
+    and MPC with perfect prediction (light purple); lower traces, laser.
+    \textbf{D:} Trial average $\pm$ SD.
+    \textbf{E:} Per-trial RMSE over 1--3\,s; lines join trials, bars mark medians.
+    \textbf{F:} Variance across trials over time.
+    \textbf{G:} Prediction $R^2$ against lead time on held-out open-loop trials for the
+    VARX, a univariate autoregressive model (AR) and the last observed value (naive).
+    \textbf{H:} MPC/PI RMSE against the command-smoothness penalty $\lambda$; circle,
+    value used.
+    \textbf{I--L:} Sinusoidal reference, the Mouse~3 session of Fig.~\ref{fig:figure5};
+    MPC replayed on the 57 CL$+$p trials. Red, OL; green, CL$+$p.
+    \textbf{I:} A trial with a large MPC improvement.
+    \textbf{J:} Variance across trials over time.
+    \textbf{K:} Phase lag of the trial average (OL bar, $71^\circ$, truncated).
+    \textbf{L:} Per-trial RMSE over the 4\,s window, paired with the recorded trial.}
     \label{fig:mpc_direct}
 \end{figure}

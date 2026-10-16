@@ -175,8 +175,8 @@ began with a tuning phase (\nameref{sec:gain_opt}), followed by a validation
 block of 30--200 trials (Table~\ref{tab:gains}). On each validation trial the
 condition was drawn independently with probability one half, so open- and
 closed-loop trials were interleaved in random order, balanced only
-approximately, and sampled the same distribution of brain states. In AL\_0048
-and AL\_0051 the tuning phase swept $K_p$, and only the final 100 trials, with
+approximately, and sampled the same distribution of brain states. In Mice 3
+and 4 the tuning phase swept $K_p$, and only the final 100 trials, with
 $K_p$ held fixed, entered the comparison. Sessions lasted about one hour.
 
 % -----------------------------------------------------------------------------
@@ -380,7 +380,7 @@ sessions.
 % -----------------------------------------------------------------------------
 
 We simulated a model-predictive controller (MPC) on one closed-loop session
-(AL\_0033, 2025-02-26; 108 closed-loop trials). Activity at the controlled site
+(Mouse~1, session m4; 108 closed-loop trials). Activity at the controlled site
 and at 100 sites over dorsal cortex, with the laser command as input, was
 modeled as a linear vector autoregressive process with exogenous input (VARX;
 ten lags, 286\,ms). The 100 sites were an evenly spaced grid of $5 \times 5$
@@ -399,7 +399,7 @@ the recorded trial exactly, so the PI baseline is the trial as it ran and needs
 no model of the PI loop. The MPC's own model was fitted with the trial's fold
 held out (five folds). RMSE was scored over the steady-state window (1--3\,s).
 We repeated the replay on the CL$+$p trials of the sinusoidal session
-AL\_0048 2026-07-14, with the 1\,Hz reference in the MPC cost over its horizon,
+of Fig.~\ref{fig:figure5} (Mouse~3), with the 1\,Hz reference in the MPC cost over its horizon,
 and scored RMSE over the 4\,s window. All MPC results are descriptive.
 
 % -----------------------------------------------------------------------------
@@ -522,14 +522,14 @@ Fig.~\ref{fig:figure4} (panels D and G; panel C reports both windows), because
 it excludes the laser-evoked transient.
 
 \emph{Gain grid.} Gradients of the cost require a model, so we mapped the cost
-surface directly. In one session (AL\_0033, 2025-03-05) the controller cycled
+surface directly. In one session of Mouse~1 the controller cycled
 through 10 fixed PI gain pairs, and we estimated $\hat{J}(K)$ at each node over
 the full window (Fig.~\ref{fig:cost_landscape}A,D). The minimum fell at
 $(K_p, K_i) = (0.05,\,0.10)$, with $\hat{J} = 16.1$. We read the grid as showing
 a smooth cost surface with a low-cost basin, not as locating a global optimum.
 
-\emph{Online gain search.} In a second session of the same mouse (AL\_0033,
-2025-03-17; 136 trials), the controller tuned its own gains during the
+\emph{Online gain search.} In a second session of the same mouse
+(136 trials), the controller tuned its own gains during the
 experiment with the zeroth-order search of Algorithm~\ref{alg:zo}, starting from
 open loop ($K_p = K_i = 0$). A candidate replaced the current gains only if it
 lowered the running best cost. The online cost was evaluated over the
@@ -592,8 +592,8 @@ All exclusions are collected here.
           steady-state window the residual energy splits exactly into
           $\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and we
           excluded a session when the first term, the standing offset, supplied
-          more than one third of the total. This removed AL\_0033 2025-02-12 and
-          AL\_0051 2026-07-29. We chose the threshold after inspecting the
+          more than one third of the total. This removed sessions m2 (Mouse~1) and
+          m15 (Mouse~4; Table~\ref{tab:gains}). We chose the threshold after inspecting the
           sessions; any threshold between 20\% and 37\% selects the same eleven.
 \end{itemize}
 
