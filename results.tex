@@ -8,66 +8,78 @@
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Results}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We built a real-time, closed-loop optogenetic system that regulates population activity in a targeted cortical region monitored with wide-field calcium imaging. Trial-averaged cortical responses to optogenetic stimulation were well described within each session by a linear, time-invariant input--output map, which gave us an empirical basis for controller design. We then show an effective controller design and how its performance depends on brain state.
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We built a closed-loop optogenetic system that precisely regulates the activity of a cortical region, monitored with wide-field calcium imaging in mice.
+Evoked responses to stimulation scaled monotonically with stimulus amplitude, and a linear time-invariant model captured their dynamics well, which gave us an empirical basis for designing a controller.
+We then show that this controller holds cortical activity at a target level and that how well it performs depends on brain state.
 % ------------------------------------------------------------
 \subsection*{Experimental setup and closed-loop control architecture}
 % ------------------------------------------------------------
-We performed closed-loop experiments in head-fixed transgenic mice co-expressing GCaMP and an inhibitory opsin, positioned in a behavioral chamber~\citep{Matveev2024}. The forelimbs of each mouse rested on a freely moving wheel and a blank screen faced the animal; no visual stimuli were presented. We recorded neural activity at 35\,Hz with wide-field calcium imaging (Figure~\ref{fig:figure1}A) and delivered spatially targeted optogenetic stimulation to a cortical spot adjacent to the $\Delta F/F$ output kernel (Figure~\ref{fig:figure1}B,C). Stimulation suppressed activity around the spot (Figure~\ref{fig:spatial_spread}A,B). In one mapping session, the core of this region, where suppression exceeded half its maximum, was negligible below $0.6$\,mW and stopped growing above about $1.2$\,mW. The output kernel lay next to the spot, within the region where stimulation lowered activity (Figure~\ref{fig:figure3}B)~\citep{Matveev2024}. In a subset of experiments we also recorded face video and computed motion energy, the squared pixel change per unit time (see Materials and Methods).
+We performed closed-loop experiments in head-fixed transgenic mice co-expressing GCaMP and an inhibitory opsin.
+Each mouse sat in a behavioral chamber~\citep{Matveev2024} facing a blank screen, with its forelimbs resting on a freely moving wheel, and was not engaged in any task, so all recordings captured spontaneous activity.
+We recorded cortical activity at 35\,Hz with wide-field calcium imaging (Figure~\ref{fig:figure1}A) and delivered spatially targeted optogenetic stimulation to a fixed cortical spot, which suppressed activity in the surrounding cortex (Figure~\ref{fig:spatial_spread}A,B).
+We refer to the controlled signal as the output, or simply activity: the fractional change in fluorescence relative to its mean ($\Delta F/F$), averaged over a kernel of pixels adjacent to the stimulation spot (Figure~\ref{fig:figure1}B,C; see Materials and Methods).
+In a subset of experiments, we also recorded video of the face and computed motion energy, the squared pixel change per unit time (see Materials and Methods).
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\linewidth]{images/Figure1.pdf}
+
+\begin{figure}[!t]
+    \centering    \includegraphics[width=\linewidth]{images/Figure1.pdf}
     \caption{\textbf{Experimental setup and closed-loop control architecture.}\\
     \small{
     \textbf{A:} Optical path of the wide-field microscope. Blue (470\,nm) and violet (405\,nm) LEDs illuminate the dorsal cortex, and the camera collects emitted green light through two dichroics. A red (638\,nm) galvanometer-steered laser passes through both dichroics for spatially targeted optogenetic stimulation.\\
     \textbf{B:} Optogenetic stimulation target (red) and the adjacent $\Delta F/F$ output region (blue box).\\
     \textbf{C:} Representative wide-field frame with the stimulation spot (red) and the adjacent spatial kernel used as the closed-loop feedback output (blue box). Markers are not to scale.\\
     \textbf{D:} Hardware and software layers of the closed-loop pipeline. The blue-light exposure trigger starts each frame. The imaging API passes the frame to signal processing ($\Delta F/F$) and to the controller, and the command drives the optogenetic stimulator through a microcontroller. The bracket on the trigger trace marks the loop latency.\\
-    \textbf{E:} Block diagram of the controller. The kernel-averaged $\Delta F/F$ is the output $y_t$. The PI controller ($K_p$, $K_i$) acts on the tracking error, and its output is summed with the open-loop (feedforward) term $K_r$ to form the laser input.\\
+    \textbf{E:} Block diagram of the controller. The kernel-averaged $\Delta F/F$ is the output. The PI controller ($K_p$, $K_i$) acts on the tracking error, and its output is summed with the open-loop (feedforward) term $K_r$ to form the laser input.\\
     \textbf{F:} Distribution of end-to-end control-loop latency over 200 loop cycles, measured from camera trigger to laser-activation command (image transfer, $\Delta F/F$ computation and digital-to-analog conversion).
     }}
     \label{fig:figure1}
 \end{figure}
 
-We built an end-to-end system for real-time closed-loop control of mesoscale activity (Figure~\ref{fig:figure1}D). The software layer computes the control signal from the real-time measurement. We implemented a proportional--integral (PI) feedback controller with open-loop (feedforward) compensation that drives cortical activity toward a reference $\Delta F/F$ value (Figure~\ref{fig:figure1}E). Throughout the paper, the output (or activity) is the $\Delta F/F$ averaged over a kernel on the region of interest.
-The feedforward term supplies the nominal open-loop stimulus needed to reach the reference, set by a feedforward gain calibrated from stimulation experiments. The PI term corrects errors in real time: it compensates for an inaccurate feedforward gain, residual nonlinearities, and spontaneous trial-to-trial fluctuations.
+We built an end-to-end system for real-time closed-loop control of mesoscale activity (Figure~\ref{fig:figure1}D).
+In real time, software computes the error between the measured output and a reference $\Delta F/F$ value and computes the required optogenetic stimulus, which drives the cortical dynamics with a maximum loop delay of 47\,ms (Figure~\ref{fig:figure1}E,F).
+This delay limits the bandwidth over which feedback can act (see Discussion).
 
-In this setup (Figure~\ref{fig:figure1}E) the kernel-averaged wide-field signal is the system output. The controller computes the optogenetic stimulus from the error between this output and the reference, and the stimulus drives the cortical dynamics with a maximum loop delay of $47$~ms (Figure~\ref{fig:figure1}F). This delay limits the bandwidth over which feedback can act (see Discussion).
+The controller combines a proportional--integral (PI) feedback term with open-loop (feedforward) compensation (Figure~\ref{fig:figure1}E).
+The feedforward term supplies the nominal stimulus needed to reach the reference, scaled by a gain calibrated from open-loop stimulation experiments.
+The PI term corrects the remaining error in real time,accounting for the current brain-state, compensating for an inaccurate feedforward gain, residual nonlinearities, and spontaneous trial-to-trial fluctuations.
 % ------------------------------------------------------------
 \subsection*{Trial-averaged cortical dynamics are well approximated by a linear system}
 % ------------------------------------------------------------
-Trial-averaged cortical responses to optogenetic stimulation were well described by a low-order linear time-invariant (LTI) system.
-To characterize this relationship, we delivered brief optogenetic impulses at discrete amplitudes from 0 to 1.6\,mW, randomly interleaved across trials within each session. Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these amplitudes.
-We repeated this experiment in 4 sessions from 3 mice.
+To characterize input-output relationship, we delivered brief optogenetic impulses at discrete amplitudes, randomly interleaved across trials within each session. 
+The Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these amplitudes in a particular session.
+We repeated this experiment in 4 sessions across 3 mice.
 
-\begin{figure}
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=\linewidth]{images/Figure2.pdf}
     \caption{\textbf{A low-order linear model captures the trial-averaged cortical impulse response.}\\
     \small{
-    \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses for one representative session (Mouse 5b) at three of the delivered stimulation amplitudes (0.23--0.90\,mW); shading, $\pm$1\,SD across trials for the lowest and highest amplitude. Gray band, $-0.2$ to $0.5$\,s around onset, containing the $0$--$0.5$\,s model-fit window; red dot, stimulation onset.\\
-    \textbf{B:} Evoked suppression (mean $\Delta F/F$ over the 200\,ms after onset) versus stimulation amplitude for four sessions from three mice (Mice 5a and 5b are two sessions of one animal). Points, mean $\pm$ SEM across trials (44--100 trials per amplitude); lines, linear fits.\\
-    \textbf{C:} Measured trial-averaged response (solid) and the prediction of a low-order LTI model fit on the other half of the trials (dashed) at three amplitudes (Mouse 1), with each held-out $R^2$.\\
-    \textbf{D:} Left, peak-normalized measured responses (solid; trough scaled to $-1$) and each session's held-out LTI prediction (dashed), one colour per session. Right, per-session held-out $R^2$ (median and interquartile range).\\
-    \textbf{E:} Cross-session model swap: $R^2$ of each session's LTI model (rows) on every session's measured response (columns), with a gain fitted for each pair; the diagonal is in sample (Materials and Methods).\\
-    \textbf{F:} Dip (open square) and rebound (filled circle) time constants from the fitted poles, per session; dotted line, median dip time constant; filled triangles, rebound time constants beyond the $0.5$\,s fit window, drawn at its edge (Mice 5a, 5b and 3). No intervals are drawn, because bootstrap refits often placed the rebound beyond the fit window (Materials and Methods).\\
-        \textbf{G:} Single-trial variability by pre-stimulus state. $y$, each trial's L2 error (its distance from the mean response at its amplitude over 0--0.49\,s), normalized within session so that 1 marks a typical trial (dotted line), by quartile of motion energy, relative 2--4\,Hz ($\delta$) power and absolute 2--4\,Hz power over the 1\,s before onset (1516 trials, 4 sessions; Materials and Methods). Thin grey lines, sessions; bold black line, mean of sessions; dashed line with open circles, stimulus-free control over an equally long pre-stimulus window. Stars, one-sample $t$-test on the per-session slopes of L2 error on state ($n = 4$ sessions, uncorrected; *$p < 0.05$, ***$p < 0.001$; n.s., $p \ge 0.05$); fractions, sessions whose slope has the sign of the mean.
+    \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses for one representative session (Mouse 5b) at three of the delivered stimulation amplitudes (0.23--0.87\,mW); shading, $\pm$1\,SD across trials for the lowest and highest amplitudes. Gray band, $-0.2$ to $0.5$\,s, spanning the $0$--$0.5$\,s model-fit window; red dot, stimulation onset.\\
+    \textbf{B:} Evoked suppression (mean $\Delta F/F$ over the 200\,ms after onset) versus stimulation amplitude for four sessions from three mice (Mice 5a and 5b are two sessions of one animal). Points, mean $\pm$ SEM across trials (19--84 trials per amplitude); lines, linear fits.\\
+    \textbf{C:} Measured trial-averaged response (solid) and the prediction of a low-order LTI model fit on the other half of the trials (dashed) at three amplitudes (Mouse 1), with the held-out $R^2$ for each.\\
+    \textbf{D:} Left, peak-normalized measured responses (solid; trough scaled to $-1$) and each session's held-out LTI prediction (dashed), one color per session. Right, held-out $R^2$ per session (median and interquartile range).\\
+    \textbf{E:} Cross-session model swap: $R^2$ of each session's LTI model (rows) on every session's measured response (columns), with a gain fitted for each pair; diagonal entries are in-sample fits (Materials and Methods).\\
+    \textbf{F:} Dip (open squares) and rebound (filled circles) time constants from the fitted poles, per session; dotted line, median dip time constant; filled triangles, rebound time constants beyond the $0.5$\,s fit window, drawn at its edge (Mice 5a, 5b and 3).\\
+    \textbf{G:} Single-trial variability against pre-stimulus state. Variability is each trial's error: the root-mean-square deviation of its response from the trial-averaged response at the same amplitude over $0$--$0.5$\,s, normalized within each session and amplitude so that 1 marks a typical trial (dotted line). From left to right, panels group trials by quartile of motion energy, relative 2--4\,Hz ($\delta$) power and absolute 2--4\,Hz power over the 1\,s before onset (1516 trials, 4 sessions; Materials and Methods). Thin gray lines, sessions; bold black line, mean of sessions; dashed line with open circles, stimulus-free control computed over a window of equal length before the state window. Stars, one-sample $t$-test of whether the mean per-session slope of error against state differs from zero ($n = 4$ sessions; not corrected for the three states tested; *$p < 0.05$, ***$p < 0.001$; n.s., $p \ge 0.05$); fractions, sessions whose slope has the same sign as the mean.
     }}
-    \label{fig:figure2}
+\label{fig:figure2}
 \end{figure}
 
-The mean evoked suppression per trial (see Materials and Methods) grew monotonically with stimulation power: the stronger the stimulation, the deeper the trial-averaged suppression, even though single-trial responses varied.
-The relationship between input (stimulation amplitude) and output (mean evoked response) was approximately linear (Figure~\ref{fig:figure2}B; slopes $-0.88, -1.32, -1.53, -3.11\,\%\,\Delta F/F$ per mW and $R^2 = 0.97, 0.73, 0.88, 0.88$). This monotonic relationship supports a feedforward controller calibrated from impulse-response data~\citep{astrom1995pid}.
-An approximately linear plant also makes it straightforward to design a stable linear feedback controller around it.
-We next asked whether the trial-averaged response over time could be described by an LTI system, and fit LTI models to the impulse-response data (Materials and Methods).
-The selected models had three to five poles, one to four zeros and no input delay (Mouse 5a, three poles and one zero; Mice 5b and 1, four poles and three zeros; Mouse 3, five poles and four zeros). The order was selected once per session on all trials and then held fixed when the model was scored on held-out trials. A two-pole model predicted held-out trials nearly as well (pooled held-out $R^2 = 0.81$ against $0.85$; in Mouse 3 slightly better, $0.87$ against $0.85$).
-Models fit to a subset of trials predicted the held-out trials (Figure~\ref{fig:figure2}C shows three amplitudes), least well in Mouse 5a. The trial-cross-validated held-out $R^2$ had a pooled median of $0.85$ across the four sessions, with per-session medians from $0.56$ (Mouse 5a; interquartile range $0.09$--$0.79$) to $0.95$ (Mouse 1; Figure~\ref{fig:figure2}D).
-Responses still varied within a session, as the spread of held-out $R^2$ shows. The fitted dynamics were also session-specific: each session's model explained the other sessions' responses less well on average (cross-session $R^2 = 0.69$, range $0.12$--$0.97$, against $0.99$ in sample; Figure~\ref{fig:figure2}E).
-A model fit in one session therefore cannot be assumed to hold in another, which is why we tuned the controller gains in every session.
-Each response was summarized by two timescales from the fitted poles, a dip and a rebound (Figure~\ref{fig:figure2}F). The dip timescale is the decay of the fastest mode, a damped 2.4--4.2\,Hz oscillation that shapes the initial suppression. It was similar across sessions (median $0.113$\,s; $0.106$--$0.114$\,s in Mice 5a, 5b and 1, and $0.14$\,s in Mouse 3), and a model of another order that fit almost as well lengthened it by at most $0.04$\,s (Materials and Methods). The rebound timescale is the slowest mode that shapes the response and sets how activity returns after the dip. It varied across sessions ($0.27$\,s in Mouse 1, $0.50$\,s in Mouse 3, beyond the $0.5$\,s fit window in Mouse 5b, and no decay within that window in Mouse 5a), and because it lies near or beyond that window it is less well constrained (Materials and Methods). The peak-normalized responses share the dip time course and diverge during the rebound (Figure~\ref{fig:figure2}D).
+The mean evoked suppression grew monotonically with stimulation amplitude: the stronger the stimulation, the deeper the trial-averaged suppression, even though single-trial responses varied (Figure~\ref{fig:figure2}B; Materials and Methods).
+This input--output relationship was approximately linear (slopes $-0.88$, $-1.32$, $-1.53$ and $-3.11\,\%\,\Delta F/F$ per mW; $R^2 = 0.97$, $0.73$, $0.88$ and $0.88$), which supports a linear feedforward controller calibrated from impulse-response data~\citep{astrom1995pid}.
+To capture the dynamics we fit LTI model to the impulse-response data per session (Materials and Methods).
+Models fit to half of the trials predicted the held-out trials (Figure~\ref{fig:figure2}C), with a pooled median held-out $R^2$ of $0.85$ across the four sessions; per-session medians ranged from $0.56$ in Mouse 5a (interquartile range $0.09$--$0.79$) to $0.95$ in Mouse 1 (Figure~\ref{fig:figure2}D).
+The spread of held-out $R^2$ within each session reflects trial-to-trial variability in the response, which we examine below.
+We allowed up to five poles and four zeros, selected the order once per session on all trials, and held it fixed when scoring held-out trials (Mouse 5a, three poles and one zero; Mice 5b and 1, four poles and three zeros; Mouse 3, five poles and four zeros).
+A two-pole model predicted held-out trials almost as well (pooled held-out $R^2 = 0.81$ against $0.85$; $0.87$ against $0.85$ in Mouse 3), so the fit did not hinge on the exact model order.
+
+The fitted dynamics were session-specific: each session's model explained the other sessions' responses less well (cross-session $R^2 = 0.69$ on average, range $0.12$--$0.97$, against $0.99$ in sample; Figure~\ref{fig:figure2}E).
+Two timescales derived from the fitted poles show where the sessions differ (Figure~\ref{fig:figure2}F).
+The dip timescale, the decay of the fastest mode (a damped 2.4--4.2\,Hz oscillation that shapes the initial suppression), was similar across sessions (median $0.113$\,s; $0.106$--$0.114$\,s in Mice 5a, 5b and 1, and $0.14$\,s in Mouse 3), and a model of another order that fit almost as well lengthened it by at most $0.04$\,s (Materials and Methods).
+The rebound timescale, the slowest mode, sets how activity returns after the dip and varied across sessions ($0.27$\,s in Mouse 1, $0.50$\,s in Mouse 3, and beyond the $0.5$\,s fit window in Mice 5a and 5b); because it lies near or beyond that window, it is less well constrained (Materials and Methods).
+Accordingly, the peak-normalized responses share the dip time course and diverge during the rebound (Figure~\ref{fig:figure2}D).
+Because a model fit in one session cannot be assumed to hold in another, we tuned the controller gains separately in every session.
 
 \subsection*{Stimulation response is state dependent}
 The LTI model captured the trial-averaged response, but individual trials deviated from it in a way that depended on brain state.
