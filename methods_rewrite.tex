@@ -1159,7 +1159,7 @@ For Fig.~\ref{fig:figure2}G we asked whether brain state changes how far a
 single impulse response departs from the model prediction. Any fixed
 amplitude-to-response model, the LTI model included, predicts the same response
 for every trial at a given amplitude, so we took as each trial's variability (the trial-to-trial variability of
-Fig.~ef{fig:figure2}G) the root-mean-square distance between the trial's
+Fig.~\ref{fig:figure2}G) the root-mean-square distance between the trial's
 response time course and the trial-averaged response at its amplitude,
 \begin{equation}
 e_{j} = \sqrt{\frac{1}{N}\sum_{t} \bigl(x_{j}(t) - \bar{x}_{s,a}(t)\bigr)^{2}},
@@ -1177,13 +1177,11 @@ $z_{j} = e_{j} / \mathrm{RMS}_{s,a}(e)$.
 
 Each state measure (\nameref{sec:disturbance}, $[-1, 0)$\,s window) was
 converted to a within-session percentile, so that every session spans the same
-axis, and trials were binned into quartiles of that percentile. The effect size
-is the ratio of the variability drawn in the panel (defined below) in the top
-quartile to that in the bottom quartile, computed in each session and summarized as the geometric mean of the four
-per-session ratios together with their range. We report the range rather than a
-confidence interval because four sessions are too few to estimate one reliably: a
-bootstrap over sessions has only 35 distinct draws, and resampling trials alone
-would treat the 1516 trials as independent. The panel shows the same quantity in
+axis, and trials were binned into quartiles of that percentile. We summarize the
+pattern as the ratio of the variability drawn in the panel (defined below) in the
+top quartile to that in the bottom quartile, computed in each session and reported
+as the geometric mean of the four per-session ratios with their range; with four
+sessions we do not attach confidence intervals. The panel shows the same quantity in
 interpretable units: the root mean square of $e_{j}$ within each quartile, pooled
 over the (session $\times$ amplitude) cells, and divided by the session's own
 root mean square over all of its trials, so that 1 is that session's typical
@@ -1191,16 +1189,15 @@ variability. The panel draws the stimulus-free measure (below) in the same units
 session's stimulus-free measure is divided by its own root mean square, and the four
 sessions are averaged with equal weight.
 
-Inference treats the session, not the trial, as the unit. Within each session
-we fitted the ordinary least-squares slope of $z$ on state, with state
-standardized within that session, and tested the four slopes against zero with a
-one-sample $t$-test (three degrees of freedom). This is the summary-statistic
-form of a random-slope model; a model with a session random intercept only
-estimates the slope from trials and, by the simulation below, is
-anti-conservative. Session agreement is the number of sessions whose slope has
-the sign of the mean slope. Two of the four sessions come from one mouse.
-Pooled Spearman correlations are reported as effect sizes only, without
-$p$-values, because trials within a session are not independent.
+This analysis is descriptive. It establishes the pattern that the closed-loop
+experiments then test (Fig.~\ref{fig:figure4}), and the Results draw no
+inference from it. For completeness, Table~\ref{tab:stat_fig2g} lists a
+supporting session-level test: within each session the ordinary least-squares
+slope of $z$ on state, with state standardized within that session, and a
+one-sample $t$-test of the four slopes against zero (three degrees of freedom),
+with the number of sessions whose slope has the sign of the mean. Two of the four
+sessions come from one mouse. Pooled Spearman correlations are effect sizes
+only, without $p$-values, because trials within a session are not independent.
 
 \emph{Stimulus-free window.} The quartile ratio and the pooled Spearman
 correlation (effect sizes) were repeated on a matched quantity that contains no stimulus:
@@ -1210,20 +1207,19 @@ of that window and compared with the mean trace of that window at the same
 amplitude, so that the response and stimulus-free measures are the same statistic
 and share no samples. The stimulus-free measure is then scaled in the same way.
 Its window and reference lie before the state window, and neither the response
-window nor its onset reference overlaps the state window. A state that predicts the spread of this control as strongly as
-the spread of the response acts on the amplitude of ongoing activity rather than
-on the response to the stimulus, and we attribute an effect to the stimulus only
-when it exceeds its control on both the quartile ratio and the correlation.
+window nor its onset reference overlaps the state window. A state that changes the
+spread of this control as much as the spread of the response acts on the amplitude
+of ongoing activity rather than on the response to the stimulus.
 
-\emph{Per-quartile tests (Figure~\ref{fig:state_quartile}).} Because the
-motion effect was confined to the top quartile, we also compared the top quartile
-with the mean of the other three in each session, and tested the four per-session log
-ratios against zero with a one-sample $t$-test (three degrees of freedom). To compare
-the response with its control directly, we divided each session's response
-variability by its stimulus-free variability in every quartile and applied the same
-top-versus-rest test to that ratio; a state that acted only on ongoing activity leaves
-this ratio flat. Within each session, a Brown--Forsythe test asked whether the spread
-of single-trial errors differed across quartiles.
+\emph{Per-session view (Figure~\ref{fig:state_quartile}).} To compare the response
+with its control directly, we divided each session's response variability by its
+stimulus-free variability in every quartile; a state that acts only on ongoing
+activity leaves this ratio flat. The figure also shows the single-trial errors and
+their variance in each quartile and session, the variance with a 95\% bootstrap
+interval over trials within the session. The supporting test in
+Table~\ref{tab:stat_fig2g} compares the top quartile of the response-to-control
+ratio with the mean of the other three (one-sample $t$-test on the four per-session
+log ratios, three degrees of freedom).
 
 \subsubsection*{Contralateral prediction and disturbance decomposition}
 \label{sec:disturbance_decomp}
@@ -1401,13 +1397,10 @@ $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{mouse}) +
 (1 \mid \mathrm{mouse}\!:\!\mathrm{session})$, alongside as the mouse-level
 result; because its intercept is a between-mouse quantity and only three mice
 contribute, one of them with a single session, its degrees of freedom are
-${\approx}1.2$ and the mouse and session variances cannot be separated. For the impulse-response state analysis
-(Fig.~\ref{fig:figure2}G) the scaled trial-to-trial variability (Eq.~\eqref{eq:l2_error}) was regressed on
-state separately in each session, and the four per-session slopes were tested
-against zero with a one-sample $t$-test (three degrees of freedom); we report the
-number of sessions agreeing in sign next to it.
-The Fig.~\ref{fig:figure2}G quartile ratios are reported as the geometric mean and
-range of the four per-session ratios, without a confidence interval.
+${\approx}1.2$ and the mouse and session variances cannot be separated. The impulse-response state analysis (Fig.~\ref{fig:figure2}G) is reported
+descriptively, as the geometric mean and range of the four per-session quartile
+ratios; its per-session slope test (\nameref{sec:imp_state}) is listed in
+Table~\ref{tab:stat_fig2g} as supporting information and is not used for inference.
 
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D
 reads two properties (predictability and regularizability) for each of four
