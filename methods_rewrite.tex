@@ -1178,14 +1178,12 @@ $z_{j} = e_{j} / \mathrm{RMS}_{s,a}(e)$.
 Each state measure (\nameref{sec:disturbance}, $[-1, 0)$\,s window) was
 converted to a within-session percentile, so that every session spans the same
 axis, and trials were binned into quartiles of that percentile. The effect size
-is the ratio of the root mean square of $z$ in the top quartile to that in the
-bottom quartile. Its 95\% confidence interval comes from a hierarchical bootstrap
-that matches the session-level test: each of 10{,}000 resamples draws four sessions
-with replacement, then resamples trials with replacement within each drawn session,
-and re-bins the pooled resample. Resampling trials alone would treat the 1516 trials
-as independent and give an interval too narrow for a four-session design. With four
-sessions the interval is approximate, so we also report how many sessions show the
-effect individually. The panel shows the same quantity in
+is the ratio of the variability drawn in the panel (defined below) in the top
+quartile to that in the bottom quartile, computed in each session and summarized as the geometric mean of the four
+per-session ratios together with their range. We report the range rather than a
+confidence interval because four sessions are too few to estimate one reliably: a
+bootstrap over sessions has only 35 distinct draws, and resampling trials alone
+would treat the 1516 trials as independent. The panel shows the same quantity in
 interpretable units: the root mean square of $e_{j}$ within each quartile, pooled
 over the (session $\times$ amplitude) cells, and divided by the session's own
 root mean square over all of its trials, so that 1 is that session's typical
@@ -1216,6 +1214,16 @@ window nor its onset reference overlaps the state window. A state that predicts 
 the spread of the response acts on the amplitude of ongoing activity rather than
 on the response to the stimulus, and we attribute an effect to the stimulus only
 when it exceeds its control on both the quartile ratio and the correlation.
+
+\emph{Per-quartile tests (Figure~\ref{fig:state_quartile}).} Because the
+motion effect was confined to the top quartile, we also compared the top quartile
+with the mean of the other three in each session, and tested the four per-session log
+ratios against zero with a one-sample $t$-test (three degrees of freedom). To compare
+the response with its control directly, we divided each session's response
+variability by its stimulus-free variability in every quartile and applied the same
+top-versus-rest test to that ratio; a state that acted only on ongoing activity leaves
+this ratio flat. Within each session, a Brown--Forsythe test asked whether the spread
+of single-trial errors differed across quartiles.
 
 \subsubsection*{Contralateral prediction and disturbance decomposition}
 \label{sec:disturbance_decomp}
@@ -1398,10 +1406,8 @@ ${\approx}1.2$ and the mouse and session variances cannot be separated. For the 
 state separately in each session, and the four per-session slopes were tested
 against zero with a one-sample $t$-test (three degrees of freedom); we report the
 number of sessions agreeing in sign next to it.
-The confidence intervals on the Fig.~\ref{fig:figure2}G quartile ratios come from
-the two-level bootstrap described there (sessions, then trials within session);
-four sessions allow only 35 distinct session draws, so these intervals are
-approximate and are read together with the per-session slopes.
+The Fig.~\ref{fig:figure2}G quartile ratios are reported as the geometric mean and
+range of the four per-session ratios, without a confidence interval.
 
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D
 reads two properties (predictability and regularizability) for each of four

@@ -62,6 +62,35 @@
 
 \begin{figure}[!ht]
     \centering
+    %% ASSEMBLY PENDING. Place the 12 panels + legend from
+    %% paper/images/supplementary/state_quartile/ (sq_<mot|dpr|dpa>_<rms|ratio|dist|var>.pdf,
+    %% each 3.6 x 2.8 cm; rows = motion, rel delta, abs delta; columns = rms, ratio, dist, var
+    %% = A-D) and export as images/supplementary/S_state_quartile.pdf, then uncomment the
+    %% line below. Producer: brain_paper/impulse-analysis/imp_state_quartile_supp.m.
+    % \includegraphics[width=\linewidth]{images/supplementary/S_state_quartile.pdf}
+    \caption{\textbf{Single-trial variability by state quartile, session by session.}
+    Rows, the three pre-stimulus states of Fig.~\ref{fig:figure2}G (motion energy,
+    relative and absolute 2--4\,Hz power over the 1\,s before onset); 1516 trials in
+    four sessions from three mice (Mouse 1a and 1b, two sessions of one mouse).
+    Colors, sessions. \textbf{A:} Root-mean-square trial-to-trial variability in each
+    quartile, normalized to the session's typical trial (dotted line, 1). Thin lines,
+    sessions; red, mean of sessions; gray dashed, the stimulus-free control.
+    \textbf{B:} Response variability divided by stimulus-free variability, per quartile;
+    a state that acts only on ongoing activity leaves this ratio flat at the session's
+    level. Black, mean of sessions. \textbf{C:} Single-trial errors per quartile and
+    session (box, 25th--75th percentile; whiskers, 10th--90th; line, median).
+    \textbf{D:} Variance of the single-trial errors per quartile and session; error bars,
+    95\% bootstrap interval over trials within that session. Annotations: in \textbf{A}
+    and \textbf{B}, the top quartile against the mean of the other three, geometric mean
+    of the per-session ratios and one-sample $t$-test on their logarithms ($n = 4$
+    sessions); in \textbf{D}, the number of sessions with a within-session
+    Brown--Forsythe $p < 0.05$, and the same top-versus-rest test on variance
+    (Materials and Methods).}
+    \label{fig:state_quartile}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
     \includegraphics[width=\linewidth]{images/supplementary/S2.pdf}
     \caption{\textbf{Controller gain tuning.} All panels are from one mouse
     (AL\_0033): the grid sweep on 2025-03-05 and the auto-tuning session on
