@@ -55,7 +55,7 @@ Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these a
     \caption{\textbf{A low-order linear model captures the trial-averaged cortical impulse response.}\\
     \small{
     \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses for one representative session (Mouse 5b) at three of the delivered stimulation amplitudes (0.23--0.87\,mW); shading, $\pm$1\,SD across trials for the lowest and highest amplitudes. Gray band, $-0.2$ to $0.5$\,s, spanning the $0$--$0.5$\,s model-fit window; red dot, stimulation onset.\\
-    \textbf{B:} Evoked suppression (mean $\Delta F/F$ over the 200\,ms after onset) versus stimulation amplitude for four sessions from three mice (Mice 5a and 5b are two sessions of one animal). Points, mean $\pm$ SEM across trials (trials per amplitude, lowest to highest: Mouse 5a, 44, 49, 59 and 56; Mouse 5b, 53, 58, 45, 50 and 54; Mouse 1, 84, 84, 82, 85, 81, 84, 82, 82 and 84; Mouse 3, 100 at each of three amplitudes); lines, linear fits.\\
+    \textbf{B:} Evoked suppression (mean $\Delta F/F$ over the 200\,ms after onset) versus stimulation amplitude for four sessions from three mice (Mice 5a and 5b are two sessions of one animal). Points, mean $\pm$ SEM across trials (about 52, 52, 83 and 100 trials per amplitude for Mice 5a, 5b, 1 and 3; Table~\ref{tab:stat_counts}); lines, linear fits.\\
     \textbf{C:} Measured trial-averaged response of held-out trials (solid) and the prediction of a low-order LTI model fit to the trial average of the other half (dashed) at three amplitudes (Mouse 1), with the held-out $R^2$ for each.\\
     \textbf{D:} Left, peak-normalized measured responses (solid; trough scaled to $-1$) and each session's held-out LTI prediction (dashed), one color per session. Right, held-out $R^2$ per session (median and interquartile range over 100 random split-halves, stratified by amplitude and scored in both directions).\\
     \textbf{E:} Cross-session model swap: $R^2$ of each session's LTI model (rows) on every session's measured response (columns), with a gain fitted for each pair; diagonal entries are in-sample fits (Materials and Methods).\\
@@ -90,8 +90,8 @@ We quantified each trial's variability as the root-mean-square deviation of its 
 We normalized this variability within each session and binned trials by quartile of each state measure (1516 trials, four sessions; Figure~\ref{fig:figure2}G).
 We computed the same measure over a stimulus-free window sampled between stimulus trials, to ask whether ongoing activity without stimulation shows the same state dependence (Materials and Methods).
 
-Single-trial responses were less variable on high-motion trials (top versus bottom quartile variability ratio $0.64$, 95\% CI $[0.47, 0.82]$; per-session slopes, $t(3) = -3.90$, $p = 0.030$, $n = 4$ sessions).
-Relative $\delta$ power had no clear effect ($1.03$, $[0.85, 1.23]$; $t(3) = 1.81$, $p = 0.17$), whereas responses were more variable on trials with high absolute $\delta$ power ($2.31$, $[1.85, 2.75]$; $t(3) = 14.3$, $p = 7.4\times10^{-4}$).
+Single-trial responses were less variable on high-motion trials (top versus bottom quartile variability ratio $0.64$; per-session slopes, $p = 0.030$, $n = 4$ sessions; Table~\ref{tab:stat_fig2g}).
+Relative $\delta$ power had no clear effect ($1.03$; $p = 0.17$), whereas responses were more variable on trials with high absolute $\delta$ power ($2.31$; $p = 7.4\times10^{-4}$).
 
 Ongoing activity in the stimulus-free window showed the same state dependence in every state (Figure~\ref{fig:figure2}G, dashed line; quartile ratios $0.66$, $1.08$ and $2.71$ for motion, relative and absolute $\delta$ power, against $0.64$, $1.03$ and $2.31$ for the response), and it deviated from its own trial average about as much as the evoked response did (ratio of within-session variabilities, $0.92$--$1.06$ across sessions).
 The state dependence of single-trial responses is therefore consistent with a fixed stimulus effect superimposed on ongoing activity whose amplitude depends on state, rather than with a change in how cortex responds to the stimulus; because we did not compare the response and stimulus-free errors statistically, this remains an interpretation.
@@ -131,10 +131,10 @@ As a result, trial-averaged closed-loop activity stayed close to the reference t
 We quantified tracking accuracy on each trial as the root-mean-square error (RMSE) between activity and the reference.
 In the representative session, closed loop lowered both the typical RMSE and its spread across trials (Figure~\ref{fig:figure3}F).
 To compare sessions on one scale, we took for each session the ratio of closed- to open-loop mean RMSE in each window, so that values below one mean closed loop tracked better, and tested the log ratio across sessions with a mixed model that allows for mouse (Materials and Methods).
-Across all 15 sessions from 4 mice, closed loop lowered RMSE over the full 3\,s window in every session, by 23\% on average (geometric-mean ratio $0.77$, 95\% CI $[0.73, 0.81]$).
+Across all 15 sessions from 4 mice, closed loop lowered RMSE over the full 3\,s window in every session, by 23\% on average (geometric-mean ratio $0.77$; Table~\ref{tab:stat_fig3}).
 The gap, averaged over sessions, opened at stimulation onset and persisted for the rest of the trial (Figure~\ref{fig:figure3}G).
 Because the initial deviation settles within the first second, we split the window at 1\,s, so that the 1--3\,s window mainly reflects the response to ongoing disturbances.
-Closed loop lowered RMSE by 15\% in the first second (ratio $0.85$, $[0.80, 0.90]$; $t(14) = -6.29$, $p = 2.0\times10^{-5}$) and by 32\% from 1 to 3\,s ($0.68$, $[0.62, 0.76]$; $t(14) = -8.14$, $p = 1.1\times10^{-6}$), with the ratio below one in all 15 sessions in both windows (Figure~\ref{fig:figure3}H).
+Closed loop lowered RMSE by 15\% in the first second (ratio $0.85$; $p = 2.0\times10^{-5}$) and by 32\% from 1 to 3\,s ($0.68$; $p = 1.1\times10^{-6}$), with the ratio below one in all 15 sessions in both windows (Figure~\ref{fig:figure3}H).
 Before and after stimulation the ratio stayed at one (geometric mean $1.01$ and $1.00$; $p = 0.84$ and $1.0$).
 
 % ------------------------------------------------------------
@@ -144,7 +144,7 @@ Feedback also made responses more repeatable.
 In the representative session, the variance across trials was the same in both conditions before stimulation (Figure~\ref{fig:figure3}D).
 During stimulation, open-loop variance fell only slightly, because a fixed input cannot respond to the deviations of individual trials, whereas closed-loop variance fell much further, because feedback acts on each trial's deviation as it develops.
 Across all 15 sessions, the gap between conditions likewise opened at stimulation onset and closed after it (Figure~\ref{fig:figure3}E).
-In the per-session ratio of closed- to open-loop across-trial variance (Figure~\ref{fig:figure3}I; same test as above), closed loop lowered variance by 35\% in the first second (ratio $0.65$, 95\% CI $[0.53, 0.80]$; $t(6.0) = -4.55$, $p = 0.0039$) and by 46\% from 1 to 3\,s ($0.54$, $[0.46, 0.64]$; $t(8.0) = -7.80$, $p = 5.4\times10^{-5}$), and left it unchanged before and after stimulation (geometric mean $1.04$ and $1.05$; $p = 0.98$ and $0.48$), so the reduction is confined to the period in which feedback is active.
+In the per-session ratio of closed- to open-loop across-trial variance (Figure~\ref{fig:figure3}I; same test as above), closed loop lowered variance by 35\% in the first second (ratio $0.65$; $p = 0.0039$) and by 46\% from 1 to 3\,s ($0.54$; $p = 5.4\times10^{-5}$), and left it unchanged before and after stimulation (geometric mean $1.04$ and $1.05$; $p = 0.98$ and $0.48$), so the reduction is confined to the period in which feedback is active.
 
 The size of the improvement varied across sessions, likely reflecting differences in arousal, opsin expression and the overlap between the stimulated and recorded regions, but its direction did not: closed loop lowered RMSE in all 15 sessions and variance in 14 of 15 over the full window, and in at least 14 of 15 sessions in each sub-window.
 
@@ -190,12 +190,12 @@ Slopes are in $\%\,\Delta F/F$ of RMSE per within-session standard deviation (SD
 We describe each state by two slopes.
 The open-loop slope measures \emph{predictability}: a positive slope means that the state adds error that a fixed feedforward input cannot anticipate.
 The closed-loop slope measures \emph{regularizability}: a flat slope means that feedback holds activity at the reference regardless of the state.
-All $p$ values are uncorrected; Table~\ref{tab:fig4_state_stats} (Materials and Methods) lists every estimate and marks those that survive Bonferroni correction.
+All $p$ values are uncorrected; Table~\ref{tab:fig4_state_stats} lists every estimate and marks those that survive Bonferroni correction.
 
-Closed loop lowered error at every state, by $0.71$--$0.83\,\%\,\Delta F/F$ at the mean state ($t = -7.7$ to $-11.6$, all $p \le 3.4\times10^{-5}$), and two states stood out.
+Closed loop lowered error at every state, by $0.71$--$0.83\,\%\,\Delta F/F$ at the mean state (all $p \le 3.4\times10^{-5}$), and two states stood out.
 Motion is a disturbance that the loop rejects.
-Open-loop error rose with motion ($+0.16\,\%\,\Delta F/F$ per SD, 95\% CI $[0.04, 0.29]$; $t(10) = 3.00$, $p = 0.013$; $n = 11$ sessions), but closed-loop error did not ($-0.07$, $[-0.20, 0.06]$; $p = 0.27$), and the open-loop slope exceeded the closed-loop slope in all 11 sessions.
-Absolute 1--4\,Hz power is a disturbance that the loop reduces but cannot hold: it raised open-loop error ($+0.30$, $[0.15, 0.45]$; $t(14) = 4.35$, $p = 6.6\times10^{-4}$; $n = 15$ sessions) and closed-loop error by as much ($+0.36$, $[0.21, 0.51]$; $t(14) = 5.09$, $p = 1.6\times10^{-4}$).
+Open-loop error rose with motion ($+0.16\,\%\,\Delta F/F$ per SD, $p = 0.013$; $n = 11$ sessions), but closed-loop error did not ($-0.07$, $p = 0.27$), and the open-loop slope exceeded the closed-loop slope in all 11 sessions.
+Absolute 1--4\,Hz power is a disturbance that the loop reduces but cannot hold: it raised open-loop error ($+0.30$, $p = 6.6\times10^{-4}$; $n = 15$ sessions) and closed-loop error by as much ($+0.36$, $p = 1.6\times10^{-4}$).
 The other two states had weaker effects.
 The initial deviation raised both errors, like absolute power but less ($+0.18$ and $+0.15$; $p = 0.014$ and $0.028$).
 Relative 2--4\,Hz power left open-loop error unchanged ($+0.02$, $p = 0.76$) and raised closed-loop error slightly ($+0.12$, $p = 0.044$), an effect that does not survive correction and that we do not build on.
@@ -205,7 +205,7 @@ Predictability as defined here differs from the trial-to-trial variability of Fi
 A closed-loop error that rises with the state could still be a constant fraction of a growing open-loop error.
 We therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state (log scale).
 The same two states separated.
-With more motion, closed-loop error fell as a fraction of open-loop error, by 9\% per SD (95\% CI $[4, 14]$; $t(10) = -3.60$, $p = 0.0048$), whereas with more absolute 1--4\,Hz power it rose, by 8\% per SD ($[4, 12]$; $t(14) = 3.96$, $p = 0.0014$).
+With more motion, closed-loop error fell as a fraction of open-loop error, by 9\% per SD ($p = 0.0048$), whereas with more absolute 1--4\,Hz power it rose, by 8\% per SD ($p = 0.0014$).
 Relative power raised the ratio slightly ($+5\%$, $p = 0.027$), and the initial deviation left it unchanged ($p = 0.89$), so the loop removes the same fraction of a large initial deviation as of a small one.
 Slow, large-amplitude cortical fluctuations therefore carry the largest share of the error from 1 to 3\,s (Figure~\ref{fig:figure4}C), and they are the one state that the loop can neither hold nor attenuate as it grows.
 
@@ -222,9 +222,9 @@ We quantified how well closed-loop control rejects this disturbance with a per-t
 
 A session enters this analysis only if a contralateral predictor can be fit for it, which is the case for thirteen of the fifteen (Materials and Methods). We kept eleven of these. In the other two the closed-loop trial average never reached the reference ($2.2$ and $1.4\%\,\Delta F/F$ above it at steady state), so a standing offset, not unrejected disturbance, made up most of their residual: it supplied $38\%$ and $59\%$ of the residual energy, against $17\%$ or less in every other session, and we excluded sessions in which it supplied more than one third (Materials and Methods).
 
-Across these eleven sessions, closed-loop control rejected the disturbance: the geometric-mean ratio was $\mathrm{RR} = 0.58$ (95\% CI $[0.46, 0.72]$; mixed model with a session random intercept, $t(9.3) = -5.69$, one-sided $p = 1.3\times10^{-4}$; $n = 11$ sessions, 595 trials, 3 mice; Figure~\ref{fig:figure4}G), and the median ratio was below one in every session. The evidence is at the level of sessions: the eleven come from three mice, one of which contributes a single session, too few for a mouse-level test (Materials and Methods).
+Across these eleven sessions, closed-loop control rejected the disturbance: the geometric-mean ratio was $\mathrm{RR} = 0.58$ (mixed model with a session random intercept, one-sided $p = 1.3\times10^{-4}$; $n = 11$ sessions, 595 trials, 3 mice; Figure~\ref{fig:figure4}G; Table~\ref{tab:stat_fig4g}), and the median ratio was below one in every session. The evidence is at the level of sessions: the eleven come from three mice, one of which contributes a single session, too few for a mouse-level test (Materials and Methods).
 
-Applying the same ratio to the open-loop trials of these sessions shows what feedback adds. The open loop left more energy about the reference than the disturbance it faced (median $\mathrm{RR} = 1.25$ against $0.72$ under closed loop, lower under feedback in all eleven sessions; one-sided Wilcoxon signed-rank $V = 66$, $p = 4.9\times10^{-4}$). This paired comparison does not depend on how the disturbance is scaled, since any error in that scale divides out of both conditions. Most of the difference lies in where the response sits, not in how it fluctuates. The standing offset supplied $35\%$ of the open-loop residual against $7\%$ under closed loop (10 of 11 sessions, $p = 9.8\times10^{-4}$), because a fixed input sets the response level by its calibration and not by the reference, while the integral term removes that offset. Feedback also reduced the fluctuation itself, but by less (fluctuation energy fell from $0.66$ to $0.54$ of the disturbance, 10 of 11 sessions, $p = 0.0024$).
+Applying the same ratio to the open-loop trials of these sessions shows what feedback adds. The open loop left more energy about the reference than the disturbance it faced (median $\mathrm{RR} = 1.25$ against $0.72$ under closed loop, lower under feedback in all eleven sessions; one-sided $p = 4.9\times10^{-4}$). This paired comparison does not depend on how the disturbance is scaled, since any error in that scale divides out of both conditions. Most of the difference lies in where the response sits, not in how it fluctuates. The standing offset supplied $35\%$ of the open-loop residual against $7\%$ under closed loop (10 of 11 sessions, $p = 9.8\times10^{-4}$), because a fixed input sets the response level by its calibration and not by the reference, while the integral term removes that offset. Feedback also reduced the fluctuation itself, but by less (fluctuation energy fell from $0.66$ to $0.54$ of the disturbance, 10 of 11 sessions, $p = 0.0024$).
 % % ------------------------------------------------------------
 \subsection*{Feedforward control for variable reference tracking}
 % ------------------------------------------------------------
