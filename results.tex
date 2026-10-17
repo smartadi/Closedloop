@@ -54,13 +54,13 @@ Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these a
     \includegraphics[width=\linewidth]{images/Figure2.pdf}
     \caption{\textbf{A low-order linear model captures the trial-averaged cortical impulse response.}\\
     \small{
-    \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses for one representative session (Mouse 5b) at three of the delivered stimulation amplitudes (0.23--0.87\,mW); shading, $\pm$1\,SD across trials for the lowest and highest amplitudes. Gray band, $-0.2$ to $0.5$\,s, spanning the $0$--$0.5$\,s model-fit window; red dot, stimulation onset.\\
+    \textbf{A:} Trial-averaged $\Delta F/F$ impulse responses for one representative session (Mouse 5b) at three of the delivered stimulation amplitudes (0.23--0.90\,mW); shading, $\pm$1\,SD across trials for the lowest and highest amplitudes. Gray band, $-0.2$ to $0.5$\,s, spanning the $0$--$0.5$\,s model-fit window; red dot, stimulation onset.\\
     \textbf{B:} Evoked suppression (mean $\Delta F/F$ over the 200\,ms after onset) versus stimulation amplitude for four sessions from three mice (Mice 5a and 5b are two sessions of one animal). Points, mean $\pm$ SEM across trials (about 52, 52, 83 and 100 trials per amplitude for Mice 5a, 5b, 1 and 3; Table~\ref{tab:stat_counts}); lines, linear fits.\\
     \textbf{C:} Measured trial-averaged response of held-out trials (solid) and the prediction of a low-order LTI model fit to the trial average of the other half (dashed) at three amplitudes (Mouse 1), with the held-out $R^2$ for each.\\
     \textbf{D:} Left, peak-normalized measured responses (solid; trough scaled to $-1$) and each session's held-out LTI prediction (dashed), one color per session. Right, held-out $R^2$ per session (median and interquartile range over 100 random split-halves, stratified by amplitude and scored in both directions).\\
     \textbf{E:} Cross-session model swap: $R^2$ of each session's LTI model (rows) on every session's measured response (columns), with a gain fitted for each pair; diagonal entries are in-sample fits (Materials and Methods).\\
     \textbf{F:} Dip (open squares) and rebound (filled circles) time constants from the fitted poles, per session; dotted line, median dip time constant; filled triangles, rebound time constants beyond the $0.5$\,s fit window, drawn at its edge (Mice 5a, 5b and 3).\\
-    \textbf{G:} Single-trial variability against pre-stimulus state. Trial-to-trial variability is the root-mean-square deviation of each trial's response from the trial-averaged response at the same amplitude over $0$--$0.5$\,s, normalized within each session and amplitude so that 1 marks a typical trial (dotted line). From left to right, panels group trials by quartile of motion energy, relative 2--4\,Hz ($\delta$) power and absolute 2--4\,Hz power over the 1\,s before onset (1516 trials, 4 sessions; Materials and Methods). Thin gray lines, sessions; bold black line, mean of sessions; dashed line with open circles, the same measure computed over an equally long stimulus-free window before the state window. Descriptive panel; per-session values for every quartile, the trial-level distributions and the response relative to the stimulus-free control are in Figure~\ref{fig:state_quartile}, and supporting tests in Table~\ref{tab:stat_fig2g}.
+    \textbf{G:} Single-trial variability against pre-stimulus state. Trial-to-trial variability is the root-mean-square deviation of each trial's response from the trial-averaged response at the same amplitude over $0$--$0.5$\,s, normalized within each session and amplitude so that 1 marks a typical trial (dotted line). From left to right, panels group trials by quartile of motion energy, relative 2--4\,Hz ($\delta$) power and absolute 2--4\,Hz power over the 1\,s before onset (1516 trials, 4 sessions; Materials and Methods). Thin gray lines, sessions; bold black line, mean of sessions; dashed line with open diamonds, the same measure computed over an equally long stimulus-free window before the state window. Descriptive panel; per-session values for every quartile, the trial-level distributions and the response relative to the stimulus-free control are in Figure~\ref{fig:state_quartile}, and supporting tests in Table~\ref{tab:stat_fig2g}.
     }}
 \label{fig:figure2}
 \end{figure}
@@ -100,7 +100,7 @@ We report this co-variation and do not separate a state-dependent change in the 
 This is consistent with brain state acting as a disturbance added to an otherwise fixed plant, which is the situation feedback control is designed to handle, and it sets a floor on how well any fixed model can predict an individual trial; we test this directly in closed loop below (Figure~\ref{fig:figure4}).
 
 The two $\delta$ measures are correlated but not redundant (Spearman $\rho = 0.47$ over the impulse trials).
-We therefore carry both into the closed-loop analysis, relative power as a candidate state variable independent of overall power and absolute power as a measure of disturbance amplitude; there, absolute power is taken over 1--4\,Hz and all state measures are computed from $-2$ to $+3$\,s around onset (Materials and Methods).
+We therefore carry both into the closed-loop analysis, relative power as a candidate state variable normalized for overall power and absolute power as a measure of disturbance amplitude; there, absolute power is taken over 1--4\,Hz and all state measures are computed from $-2$ to $+3$\,s around onset (Materials and Methods).
 
 
 \begin{figure}[!t]
@@ -176,8 +176,7 @@ The size of the improvement varied across sessions, likely reflecting difference
 % ------------------------------------------------------------
 \subsection*{Controller performance is brain-state dependent}
 % ------------------------------------------------------------
-Feedback improved tracking on average, but tracking performance 
-but how well it held activity on a given trial depended on brain state.
+Feedback improved tracking on average, but how well it held activity on a given trial depended on brain state.
 We characterized that state with four quantities: the initial deviation of activity from the reference, read at stimulus onset, and motion energy, relative 2--4\,Hz power and absolute 1--4\,Hz power, each measured from 2\,s before onset to the end of stimulation at $+3$\,s, because performance over a trial depends on activity both before and during stimulation (Materials and Methods).
 Figure~\ref{fig:figure4}A shows closed-loop trials that are extreme in one factor and typical in the others, and Figure~\ref{fig:f4_exemplars}A shows such exemplars for every session.
 Face video was available for 11 of the 15 sessions; the other 4 are excluded from all motion analyses.
