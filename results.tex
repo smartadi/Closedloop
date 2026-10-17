@@ -265,7 +265,7 @@ Decomposing the error shows why the two mechanisms do not overlap. Because the s
 % ------------------------------------------------------------
 The PI controller corrects an error only after it has appeared. Part of the error it leaves is predictable, from ongoing activity across cortex and from the known effect of the laser, and a controller that plans ahead could act on it. We did not run such a controller on the rig, so we asked how one would have performed on the closed-loop trials we recorded, using a model fitted to the same session (one session of Mouse~1, 108 closed-loop trials; Figure~\ref{fig:mpc_direct}). Everything in this section comes from simulation on recorded data and is descriptive.
 
-We modelled the controlled site, 100 sites spread over dorsal cortex and the laser command as one linear vector autoregressive process with exogenous input (VARX), using the past second of every channel and of the laser. On held-out open-loop trials it predicted the controlled signal better than the last observed value and better than a univariate autoregressive model of the kind benchmarked on spontaneous widefield activity~\citep{lu2025benchmarking} (Figure~\ref{fig:mpc_direct}H). At every frame the model-predictive controller (MPC) used this model to predict the controlled signal over the next second for a candidate plan of laser commands, chose the plan that kept the prediction closest to the reference without abrupt changes in the command, applied its first command and planned again at the next frame (Figure~\ref{fig:mpc_direct}A,B).
+We modelled the controlled site, 100 sites spread over dorsal cortex and the laser command as one linear vector autoregressive process with exogenous input (VARX), using the past second of every channel and of the laser. On held-out open-loop trials it predicted the controlled signal better than the last observed value and better than the same model given only the controlled site and the laser, so activity across cortex added to the prediction (Figure~\ref{fig:mpc_direct}H; Fig.~\ref{fig:supp_varx}). At every frame the model-predictive controller (MPC) used this model to predict the controlled signal over the next second for a candidate plan of laser commands, chose the plan that kept the prediction closest to the reference without abrupt changes in the command, applied its first command and planned again at the next frame (Figure~\ref{fig:mpc_direct}A,B).
 
 To compare the two controllers on the same cortical activity, we drove the VARX fitted to the whole session with each trial's recorded one-step prediction residuals. Under the recorded laser this reproduces the recorded trial exactly, so the PI baseline is the trial as it ran on the rig. Under the MPC's laser, the residuals, the part of the activity that no model predicted, are replayed unchanged. The MPC's own model never saw a closed-loop trial: it was fitted on spontaneous and open-loop activity only.
 
@@ -297,7 +297,8 @@ We repeated the replay on the sinusoidal session of Figure~\ref{fig:figure5} (Mo
     \textbf{G:} MPC/PI RMSE against the command-smoothness penalty $\lambda$; circle,
     value used.
     \textbf{H:} Prediction $R^2$ against lead time on held-out open-loop trials for the
-    VARX, a univariate autoregressive model (AR) and the last observed value (naive).
+    VARX, the same model given only the controlled site and the laser (site $+$ laser) and
+    the last observed value (naive).
     \textbf{I--M:} Sinusoidal reference, the Mouse~3 session of Fig.~\ref{fig:figure5};
     MPC replayed on the 57 CL$+$p trials. Red, OL; green, CL$+$p.
     \textbf{I:} A trial with a large MPC improvement.
