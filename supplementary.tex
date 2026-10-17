@@ -180,6 +180,42 @@
     \label{fig:f4_exemplars}
 \end{figure}
 
+\begin{figure}
+    \centering
+    %% Assembled by Aditya 2026-10-16 from brain_paper/paper/figures_final/panels/supp_varx/ (varx_A-E;
+    %% the held-out laser-response panel F was dropped). Source PDF: paper/figures_final/varx.pdf.
+    %% Producer: controller-analysis/ctrl_mpc_varx_supp_panels.m (data mpc_varx_supp.py, mpc_varx_lq_sweep.py).
+    \includegraphics[width=\linewidth]{images/supplementary/S_varx.pdf}
+    \caption{\textbf{The model inside the model-predictive controller: how it is built and how
+    well it predicts.} One closed-loop session (Mouse~1, session m4), the session of
+    Fig.~\ref{fig:mpc_direct}A--H.
+    \textbf{A:} Construction. At frame $t$ the model takes the past 35 frames (1\,s) of the
+    controlled (output) site $y$ and of 100 sites over dorsal cortex $x_1,\dots,x_{100}$,
+    stacked into $z_t$, together with the past 35 frames of the laser command $u$ up to the
+    next command, and predicts all 101 channels one frame ahead with a single linear map
+    fitted by ridge regression (a VARX). Applying the map to its own predictions, with the
+    laser commands given, extends the forecast up to 1\,s ahead. The model was fitted on
+    spontaneous and open-loop frames and tested on held-out open-loop trials (five folds);
+    no closed-loop trial was used.
+    \textbf{B:} Each cortical site colored by the size of its weights in the equation for the
+    controlled site (star), normalized to the largest site. The controlled site's own history
+    carries most of the weight and is not drawn on this scale.
+    \textbf{C:} One held-out open-loop trial: recorded controlled-site activity (black) and
+    1\,s forecasts started about once per second (pink, light to dark in time; dot, start of
+    each forecast), each given the recorded laser command (bottom, grey). Grey band,
+    stimulation; scale bars 1\,s, 2\%\,$\Delta F/F$ and 0.5\,mW.
+    \textbf{D:} Validation $R^2$ of the 200\,ms forecast against the history length (the same
+    number of frames for cortex and laser) and the ridge penalty $\lambda$. Square, the setting
+    used (35 frames, $\lambda = 100$; $R^2 = 0.63$). The surface is flat: every setting with
+    $\lambda \le 10^{3}$ lies within $0.025$ of the best.
+    \textbf{E:} Prediction $R^2$ of the controlled site against forecast lead on held-out
+    open-loop trials (92 trials, five folds) for the full model (VARX), the same model given
+    only the controlled site and the laser (site $+$ laser), and the last observed value
+    (naive). Dotted lines, 200\,ms and 1\,s. At 200\,ms, $R^2 = 0.41$, $0.37$ and $0.10$;
+    the cortical sites add most at longer leads, where the naive forecast fails.}
+    \label{fig:supp_varx}
+\end{figure}
+
 %% TABLED (user 2026-10-10: not in the paper for now). Single-trial A-r vs D figure;
 %% producer controller-analysis/f4_supp_reject_trials.m. Uncomment to restore, and
 %% restore the two Discussion cross-references (see brain_paper RESEARCH 2026-10-10).

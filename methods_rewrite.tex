@@ -381,9 +381,12 @@ We simulated a model-predictive controller (MPC) on one closed-loop session
 (Mouse~1, session m4; 108 closed-loop trials). Activity at the controlled site
 and at 100 sites over dorsal cortex, with the laser command as input, was
 modeled as a linear vector autoregressive process with exogenous input (VARX;
-35 lags, 1\,s, of every channel and of the laser command). The 100 sites were an evenly spaced grid of $5 \times 5$
-pixel boxes over the brain mask. The VARX was fitted by ridge regression, with
-the penalty (100) chosen on validation data from the range $1$--$10^{4}$. At
+35 lags, 1\,s, of every channel and of the laser command; construction and
+held-out prediction in Fig.~\ref{fig:supp_varx}). The 100 sites were an evenly
+spaced grid of $5 \times 5$ pixel boxes over the brain mask. The VARX was fitted
+by ridge regression; the penalty (100) and the history length were checked on
+validation data over $10$--$10^{4}$ and 5--35 frames, where prediction was nearly
+flat (Fig.~\ref{fig:supp_varx}D). At
 every frame the MPC chose the laser commands over a 1\,s horizon that minimized
 the squared deviation of the predicted controlled signal from the reference,
 plus a penalty ($\lambda = 0.1$) on command changes and a small penalty pulling
