@@ -164,7 +164,7 @@ The size of the improvement varied across sessions, likely reflecting difference
     \textbf{A:} Representative closed-loop trials, drawn from the 11 motion-tracked sessions, that are high in one state factor: initial deviation (blue), motion (orange), relative 2--4\,Hz power (green) and absolute 1--4\,Hz power (purple). Dashed line, reference; gray shading, stimulation window; grey trace, $z$-scored motion energy.\\
     \textbf{B:} Error-decomposition model: per-trial tracking error (RMSE) regressed on the state factors within each session; colours as in A.\\
     \textbf{C:} Unique $R^2$ of each state factor for closed-loop RMSE in the transient (0--1\,s, light) and steady-state (dark) windows. Relative and absolute power each enter a separate model with initial deviation and motion. Bars, mean over sessions of the adjusted unique $R^2$ fitted within each session; error bars, SEM ($n = 11$ sessions, 613 trials).\\
-    \textbf{D:} Open- and closed-loop steady-state RMSE ($z$-scored within session) by within-session quartile of each state (low~$\rightarrow$~high). Points, mean $\pm$ SEM across sessions ($n = 15$ sessions, 1670 trials; 11 sessions, 1190 trials for motion). P, predictability (open-loop slope); R, regularizability (closed-loop slope), from a session-aware mixed model on raw RMSE; arrows, direction of improvement or degradation. Stars, uncorrected *$p < 0.05$, **$p < 0.01$, ***$p < 0.001$; n.s., $p \ge 0.05$ (Table~\ref{tab:fig4_state_stats}).\\
+    \textbf{D:} Open- and closed-loop steady-state RMSE ($z$-scored within session) by within-session quartile of each state (low~$\rightarrow$~high). Points, mean $\pm$ SEM across sessions ($n = 15$ sessions, 1670 trials; 11 sessions, 1190 trials for motion). P, predictability (open-loop slope); R, regularizability (closed-loop slope); A, attenuation (slope of the log closed-to-open-loop RMSE ratio; up arrow, the loop removes a larger share of the error); all from a session-aware mixed model on raw RMSE; arrows, direction of improvement or degradation. Stars, uncorrected *$p < 0.05$, **$p < 0.01$, ***$p < 0.001$; n.s., $p \ge 0.05$ (Table~\ref{tab:fig4_state_stats}).\\
     \textbf{E:} Ridge weights of the contralateral$\rightarrow$ipsilateral predictor of the control readout (representative session, Mouse~1); black dot, stimulation site.\\
     \textbf{F:} The open-loop trial average $A$ (black; same session) split into the Global component $G$ (blue; predicted from the contralateral hemisphere) and the Local component $L = A - G$ (red shading). Beige shading, stimulation window; $R^2_{\mathrm{te}}$, held-out $R^2$ of the predictor on spontaneous frames.\\
     \textbf{G:} Closed-loop disturbance rejection, $\mathrm{RR} = \|A-r\|^2/\|D\|^2$ over the steady-state window, where $D$ is the contralaterally predicted disturbance; $\mathrm{RR} < 1$ indicates rejection. Dots, per-session geometric mean $\pm$1 SD (log scale); blue line and band, geometric mean and 95\% CI from a session-level mixed model; dashed line, $\mathrm{RR} = 1$. Stars, one-sided test of $\mathrm{RR} < 1$ (***$p < 0.001$; $n = 11$ sessions from 3 mice, 595 trials; inclusion in Results). Labels, mouse (Table~\ref{tab:cohort}) and session letter.}}}
@@ -189,27 +189,23 @@ From 1 to 3\,s, absolute power was therefore the largest unique contributor, and
 
 To see how each state affects open- and closed-loop error, we fit a mixed model to the 1--3\,s RMSE with condition, state and their interaction, and session and mouse as random effects (Figure~\ref{fig:figure4}D; 15 sessions from 4 mice and 1670 trials, or 11 sessions and 1190 trials for motion; Materials and Methods).
 Slopes are in $\%\,\Delta F/F$ of RMSE per within-session standard deviation (SD) of the state.
-We describe each state by two slopes.
+We describe each state by three slopes.
 The open-loop slope measures \emph{predictability}: a positive slope means that the state adds error that a fixed feedforward input cannot anticipate.
 The closed-loop slope measures \emph{regularizability}: a flat slope means that feedback holds activity at the reference regardless of the state.
+Because a closed-loop error that rises with the state could still be a constant fraction of a growing open-loop error, we also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state (log scale): a negative slope means that the loop removes a larger share of the error as the state grows.
 All $p$ values are uncorrected; Table~\ref{tab:fig4_state_stats} lists every estimate and marks those that survive Bonferroni correction.
 
 Closed loop lowered error at every state, by $0.71$--$0.83\,\%\,\Delta F/F$ at the mean state (all $p \le 3.4\times10^{-5}$), and two states stood out.
-Motion is a disturbance that the loop rejects.
-Open-loop error rose with motion ($+0.16\,\%\,\Delta F/F$ per SD, $p = 0.013$; $n = 11$ sessions), but closed-loop error did not ($-0.07$, $p = 0.27$), and the open-loop slope exceeded the closed-loop slope in all 11 sessions.
-Absolute 1--4\,Hz power is a disturbance that the loop reduces but cannot hold: it raised open-loop error ($+0.30$, $p = 6.6\times10^{-4}$; $n = 15$ sessions) and closed-loop error by as much ($+0.36$, $p = 1.6\times10^{-4}$).
+Motion is a disturbance that the loop attenuates: the more the animal moved, the larger the share of the error that feedback removed, with the closed-to-open-loop error ratio falling by 9\% per SD ($p = 0.0048$; $n = 11$ sessions).
+This happened because open-loop error rose with motion ($+0.16\,\%\,\Delta F/F$ per SD, $p = 0.013$) while closed-loop error stayed flat ($-0.07$, $p = 0.27$); the open-loop slope exceeded the closed-loop slope in all 11 sessions.
+Absolute 1--4\,Hz power is a disturbance that the loop reduces but cannot hold: it raised open-loop error ($+0.30$, $p = 6.6\times10^{-4}$; $n = 15$ sessions) and closed-loop error by as much ($+0.36$, $p = 1.6\times10^{-4}$), so the error ratio rose by 8\% per SD ($p = 0.0014$).
 The other two states had weaker effects.
-The initial deviation raised both errors, like absolute power but less ($+0.18$ and $+0.15$; $p = 0.014$ and $0.028$).
-Relative 2--4\,Hz power left open-loop error unchanged ($+0.02$, $p = 0.76$) and raised closed-loop error slightly ($+0.12$, $p = 0.044$), an effect that does not survive correction and that we do not build on.
+The initial deviation raised both errors, like absolute power but less ($+0.18$ and $+0.15$; $p = 0.014$ and $0.028$), and left their ratio unchanged ($p = 0.89$), so the loop removes the same fraction of a large initial deviation as of a small one.
+Relative 2--4\,Hz power left open-loop error unchanged ($+0.02$, $p = 0.76$) and raised closed-loop error and the error ratio slightly ($+0.12$, $p = 0.044$; $+5\%$, $p = 0.027$), effects that do not survive correction and that we do not build on.
 Because the state window spans the stimulation period, here and below the relative-power effects describe power during stimulation, which the loop itself shapes, rather than the state in which the trial began.
 
 Predictability as defined here differs from the trial-to-trial variability of Figure~\ref{fig:figure2}G, which measures how far single impulse responses scatter around their mean; for motion the two diverge, because impulse responses scatter less on movement trials, yet the reference is harder to hit in open loop.
 
-A closed-loop error that rises with the state could still be a constant fraction of a growing open-loop error.
-We therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state (log scale).
-The same two states separated.
-With more motion, closed-loop error fell as a fraction of open-loop error, by 9\% per SD ($p = 0.0048$), whereas with more absolute 1--4\,Hz power it rose, by 8\% per SD ($p = 0.0014$).
-Relative power raised the ratio slightly ($+5\%$, $p = 0.027$), and the initial deviation left it unchanged ($p = 0.89$), so the loop removes the same fraction of a large initial deviation as of a small one.
 Slow, large-amplitude cortical fluctuations therefore carry the largest share of the error from 1 to 3\,s (Figure~\ref{fig:figure4}C), and they are the one state that the loop can neither hold nor attenuate as it grows.
 
 
