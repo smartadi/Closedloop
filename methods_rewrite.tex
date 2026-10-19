@@ -196,10 +196,10 @@ the scalar optogenetic input, $\rho_t$ an unmeasured brain-state variable
 regions, $y_t$ the measured $\Delta F/F$ of \eqref{eq:dff}, and $v_t$
 measurement noise. The functions $f$ and $h$ are unknown.
 
-Because $\rho_t$ is unmeasured, and because physiological limits on input
-amplitude, stimulus duration and trial count rule out frequency sweeps,
-persistent excitation and subspace identification, we did not identify
-\eqref{eq:nl_state}--\eqref{eq:nl_out}. We designed instead against a nominal
+We did not identify \eqref{eq:nl_state}--\eqref{eq:nl_out}: $\rho_t$ is
+unmeasured, and physiological limits on input amplitude, stimulus duration
+and trial count rule out frequency sweeps, persistent excitation and
+subspace identification. We designed instead against a nominal
 linear time-invariant model of the trial-averaged response,
 %
 \begin{align}
@@ -247,7 +247,7 @@ command must rise when activity is above a negative reference. The tracking
 error is
 %
 \begin{equation}
-    e_{t} = y_{t} - y_{\mathrm{ref}} = y,
+    e_{t} = y_{t} - y_{\mathrm{ref}},
     \label{eq:error}
 \end{equation}
 %
@@ -370,7 +370,7 @@ at each sample, averaged over the window. Phase lag is the difference between
 the phases of least-squares fits of $b_{0} + b_{1}\sin(2\pi f t) + b_{2}\cos(2\pi
 f t)$ to the trial-averaged response and to the reference. Per-trial lag is the
 lag of the cross-correlation peak between response and reference, searched
-within half a period. Because the window holds an integer number of cycles,
+within half a period. The window holds an integer number of cycles, so
 1\,Hz falls on a discrete Fourier bin, and Parseval's theorem partitions each
 trial's mean squared error exactly into a constant offset, the 1\,Hz component
 and a broadband remainder. These are averaged within session and then across
@@ -405,7 +405,7 @@ no model of the PI loop. The MPC's own model never saw closed-loop data: it was
 fitted on the session's spontaneous and open-loop frames only, so no closed-loop
 trial, including the one being replayed, entered its training. RMSE was scored
 over the steady-state window (1--3\,s).
-We repeated the replay on the CL$+$p trials of the sinusoidal session
+We repeated the replay on the 57 CL$+$p trials of the representative sinusoidal session
 of Fig.~\ref{fig:figure5} (Mouse~3), with the 1\,Hz reference in the MPC cost over its horizon,
 and scored RMSE over the 4\,s window. Here too the MPC's model was fitted without
 any closed-loop (CL or CL$+$p) trial, on spontaneous and open-loop frames, with the
@@ -497,7 +497,7 @@ identifiability, we refitted 300 bootstrap resamples of trials within amplitude,
 each rebuilding $h(t)$ and refitting at the selected order, and computed the
 fraction of refits whose slowest $\tau$ exceeded the fit window (18 samples,
 0--0.49\,s), counting failed refits (fewer than 3\%) as not exceeding it.
-Because this fraction was large in three of four sessions (Results), we show no
+This fraction was large in three of four sessions (Results), so we show no
 intervals.
 
 % -----------------------------------------------------------------------------
@@ -519,16 +519,11 @@ $e_{i} \in \mathbb{R}^{T}$,
 so values carry the units of $\Delta F/F$, and the cost of a gain pair $K$ is the
 mean of per-trial RMSE over its $N$ trials.
 
-We used three named evaluation windows. The \textbf{full stimulation window},
-$t = 0$ to $+3$\,s, was used for per-trial and cross-session RMSE. Within it,
-the \textbf{transient window}, $t = 0$ to $+1$\,s, covers the approach to the
-reference after the laser-evoked inhibitory deflection, and the
-\textbf{steady-state window}, $t = +1$ to $+3$\,s, the interval over which the
-controller holds the settled response. The 1\,s boundary is a fixed convention,
-about five times the $\sim$200\,ms impulse dip. The steady-state window alone
-was used for disturbance rejection and for every state analysis of
-Fig.~\ref{fig:figure4} (panels D and G; panel C reports both windows), because
-it excludes the laser-evoked transient.
+We used three named evaluation windows.
+The \textbf{full stimulation window}, $t = 0$ to $+3$\,s, was used for per-trial and cross-session RMSE.
+Within it, the \textbf{transient window}, $t = 0$ to $+1$\,s, covers the approach to the reference after the laser-evoked inhibitory deflection, and the \textbf{steady-state window}, $t = +1$ to $+3$\,s, covers the interval over which the controller tracks the reference.
+The 1\,s boundary is a fixed convention, about five times the $\sim$200\,ms impulse dip.
+The steady-state window excludes the laser-evoked transient, and it alone was used for the state dependence and disturbance rejection of Fig.~\ref{fig:figure4} (panels D and G; panel C reports both windows) and for the constant-reference MPC replay.
 
 \emph{Gain grid.} Gradients of the cost require a model, so we mapped the cost
 surface directly. In one session of Mouse~1 the controller cycled
@@ -602,7 +597,10 @@ All exclusions are collected here.
           $\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and we
           excluded a session when the first term, the standing offset, supplied
           more than one third of the total. This removed sessions m2 (Mouse~1) and
-          m15 (Mouse~4; Table~\ref{tab:gains}). We chose the threshold after inspecting the
+          m15 (Mouse~4; Table~\ref{tab:gains}). In these two sessions the closed-loop
+          average sat $2.2$ and $1.4\,\%\,\Delta F/F$ above the reference, and the
+          offset supplied $38\%$ and $59\%$ of the residual energy, against $17\%$ or
+          less in each of the other eleven. We chose the threshold after inspecting the
           sessions; any threshold between 20\% and 37\% selects the same eleven.
 \end{itemize}
 
@@ -802,7 +800,8 @@ where the numerator is the energy of the measured response about the reference
 $r = -5\%\,\Delta F/F$ and the denominator the energy of the disturbance $D$, the
 contralaterally predicted excursion referenced to its own no-laser baseline and
 leak-corrected. Contralateral activity also changes during stimulation, so $G$
-dips with the laser. The leak correction subtracts, from each trial's $G$
+dips with the laser (in open loop by $6$--$42\%$ of the readout's dip over 0--3\,s,
+median $23\%$). The leak correction subtracts, from each trial's $G$
 referenced to the 1\,s before onset, the session's mean open-loop $G$ over the
 same window, so that $D$ keeps only the trial-to-trial excursion. Both terms
 were evaluated over the steady-state window. Referencing the disturbance to its
