@@ -113,8 +113,8 @@ We therefore carry both into the closed-loop analysis, relative power as a candi
     \textbf{E:} Cross-trial variance of $\Delta F/F$ over time, averaged across all 15 sessions, for open-loop and closed-loop conditions.\\
     \textbf{F:} Distribution of per-trial tracking RMSE (over the 3\,s stimulation window) for open-loop and closed-loop trials in the session of A--D. Half-violins, kernel density estimate; asterisks, condition means.\\
     \textbf{G:} Trial-averaged tracking error (RMSE, $\%\,\Delta F/F$) over time. Thin lines, individual sessions (15); bold lines, mean across sessions. Error is defined only within the 3\,s stimulation window and is zero outside it.\\
-    \textbf{H:} Ratio of closed-loop to open-loop tracking RMSE per session (log scale; below one, closed loop tracked better) in four windows: pre-stimulation (3\,s before onset), transient (0--1\,s), steady state (1--3\,s) and post-stimulation (1\,s after offset). Gray lines, sessions; black, geometric mean across sessions with 95\% CI; dashed line, ratio of one; grey band, stimulation windows. Stars, the larger $p$ of the two stimulation windows in a mixed model on the per-session log ratio (***$p < 0.001$; $n = 15$ sessions, 4 mice; Materials and Methods).\\
-    \textbf{I:} As H, for the ratio of across-trial variance; here the post-stimulation window spans 3\,s after offset (**$p < 0.01$).\\
+    \textbf{H:} Ratio of closed-loop to open-loop tracking RMSE per session (log scale; below one, closed loop tracked better) in four windows: pre-stimulation (3\,s before onset), transient (0--1\,s), steady state (1--3\,s) and post-stimulation (1\,s after offset). Gray lines, sessions; black, geometric mean across sessions with 95\% CI; dashed line, ratio of one; grey band, stimulation windows.Stars, larger $p$ of the two stimulation windows, mixed model on the per-session log ratio ($n = 15$ sessions, 4 mice; Materials and Methods)..\\
+    \textbf{I:} As H, for the ratio of across-trial variance; here the post-stimulation window spans 3\,s after offset.\\
     }}
     \label{fig:figure3}
 \end{figure}
@@ -125,8 +125,8 @@ We used the PI controller (Figure~\ref{fig:figure1}E; Materials and Methods) to 
 For each mouse, we first tuned the feedforward gain $K_r$ and the feedback gains $K_p$ and $K_i$ (Materials and Methods), and at the start of each session we adjusted them slightly to account for session specific changes.
 We then ran a validation block with fixed gains, in which closed-loop trials and open-loop trials (feedforward only, no feedback) were randomly interleaved (Table~\ref{tab:gains}).
 Figure~\ref{fig:figure3}A--D and F show one representative session (Mouse10; $K_r = 0.1$, $K_p = 0.07$, $K_i = 0.1$), and Figure~\ref{fig:figure3}E and G--I pool all 15 sessions.
-On single trials, the closed-loop controller adjusted the stimulation as activity changed, whereas the open-loop input was fixed regardless of what the cortical output (Figure~\ref{fig:figure3}A).
-As a result, trial-averaged closed-loop activity stayed close to the reference throughout stimulation, whereas open-loop activity carried the error of the feedforward calibration (Figure~\ref{fig:figure3}B). The trial-averaged stimulation shows adaption learned by closed loop controller compared to open loop, which signify modeling inaccuracies or stimulation related biases (Figure~\ref{fig:figure3}C).
+On single trials, the closed-loop controller adjusted the stimulation as activity changed, whereas the open-loop input was fixed regardless of the cortical output (Figure~\ref{fig:figure3}A).
+As a result, trial-averaged closed-loop activity stayed close to the reference throughout stimulation, whereas open-loop activity carried the error of the feedforward calibration (Figure~\ref{fig:figure3}B). The trial-averaged closed-loop input departed from the fixed open-loop input (Figure~\ref{fig:figure3}C), a correction that reflects errors in the nominal model or stimulation-related biases.
 
 We quantified tracking accuracy on each trial as the root-mean-square error (RMSE) between activity and the reference.
 In the representative session, closed loop lowered both the typical RMSE and its spread across trials (Figure~\ref{fig:figure3}F).
@@ -165,10 +165,10 @@ The size of the improvement varied across sessions, likely reflecting difference
     \textbf{A:} Representative closed-loop trials, drawn from the 11 motion-tracked sessions, that are high in one state factor: initial deviation (blue), motion (orange), relative 2--4\,Hz power (green) and absolute 1--4\,Hz power (purple). Dashed line, reference; gray shading, stimulation window; grey trace, $z$-scored motion energy.\\
     \textbf{B:} Error-decomposition model: per-trial tracking error (RMSE) regressed on the state factors within each session; colours as in A.\\
     \textbf{C:} Unique $R^2$ of each state factor for closed-loop RMSE in the transient (0--1\,s, light) and steady-state (dark) windows. Relative and absolute power each enter a separate model with initial deviation and motion. Bars, mean over sessions of the adjusted unique $R^2$ fitted within each session; error bars, SEM ($n = 11$ sessions, 613 trials).\\
-    \textbf{D:} Open- and closed-loop steady-state RMSE ($z$-scored within session) by within-session quartile of each state (low~$\rightarrow$~high). Points, mean $\pm$ SEM across sessions ($n = 15$ sessions, 1670 trials; 11 sessions, 1190 trials for motion). P, predictability (open-loop slope); R, regularizability (closed-loop slope); A, attenuation (slope of the log closed-to-open-loop RMSE ratio; up arrow, the loop removes a larger share of the error); all from a session-aware mixed model on raw RMSE; arrows, direction of improvement or degradation. Stars, uncorrected *$p < 0.05$, **$p < 0.01$, ***$p < 0.001$; n.s., $p \ge 0.05$ (Table~\ref{tab:fig4_state_stats}).\\
+    \textbf{D:} Open- and closed-loop steady-state RMSE ($z$-scored within session) by within-session quartile of each state (low~$\rightarrow$~high). Points, mean $\pm$ SEM across sessions ($n = 15$ sessions, 1670 trials; 11 sessions, 1190 trials for motion). P, predictability (open-loop slope); R, regularizability (closed-loop slope); A, attenuation (slope of the log closed-to-open-loop RMSE ratio; up arrow, the loop removes a larger share of the error); all from a session-aware mixed model on raw RMSE; arrows, direction of improvement or degradation. Stars, uncorrected $p$ values; Table~\ref{tab:fig4_state_stats} marks those that survive correction for multiple comparisons.\\
     \textbf{E:} Ridge weights of the contralateral$\rightarrow$ipsilateral predictor of the control readout (representative session, Mouse~1); black dot, stimulation site.\\
     \textbf{F:} The open-loop trial average $A$ (black; same session) split into the Global component $G$ (blue; predicted from the contralateral hemisphere) and the Local component $L = A - G$ (red shading). Beige shading, stimulation window; $R^2_{\mathrm{te}}$, held-out $R^2$ of the predictor on spontaneous frames.\\
-    \textbf{G:} \textbf{G:} Closed-loop rejection ratio (RR), the residual energy of the response about the reference divided by the energy of the contralaterally predicted disturbance, over the steady-state window; $\mathrm{RR} < 1$ indicates rejection. Dots, per-session geometric mean $\pm$1 SD (log scale); blue line and band, geometric mean and 95\% CI from a session-level mixed model; dashed line, $\mathrm{RR} = 1$. Stars, one-sided test of $\mathrm{RR} < 1$ (***$p < 0.001$; $n = 11$ sessions from 3 mice, 595 trials; inclusion in Results). Labels, mouse (Table~\ref{tab:cohort}) and session letter.}}}
+    \textbf{G:} \textbf{G:} Closed-loop rejection ratio (RR), the residual energy of the response about the reference divided by the energy of the contralaterally predicted disturbance, over the steady-state window; $\mathrm{RR} < 1$ indicates rejection. Dots, per-session geometric mean $\pm$1 SD (log scale); blue line and band, geometric mean and 95\% CI from a session-level mixed model; dashed line, $\mathrm{RR} = 1$.Stars, one-sided test of $\mathrm{RR} < 1$ ($n = 11$ sessions from 3 mice, 595 trials; inclusion in Results).}}}
     \label{fig:figure4}
 \end{figure}
 % ------------------------------------------------------------
@@ -178,26 +178,27 @@ The size of the improvement varied across sessions, likely reflecting difference
 \subsection*{Controller performance is brain-state dependent}
 % ------------------------------------------------------------
 How well feedback tracked the reference depended on brain state.
-We characterized the state with four quantities: the initial deviation of activity from the reference at onset, motion energy, relative 2--4\,Hz power and absolute 1--4\,Hz power.
+We characterized the state with four state variables: the initial deviation of activity from the reference at onset, motion energy, relative 2--4\,Hz power and absolute 1--4\,Hz power.
 Motion and power were measured over a state window from 2\,s before onset to the end of stimulation at $+3$\,s (Materials and Methods).
 Figure~\ref{fig:figure4}A shows closed-loop trials, each high in one state.
 Face video was available for 11 of the 15 sessions; the other 4 were excluded from all motion analyses.
 
 We first asked how much of the per-trial tracking error (RMSE) each state explained beyond the others, using a linear regression of closed-loop RMSE on the $z$-scored states (Figure~\ref{fig:figure4}B).
 We fit each session separately and computed the unique contribution of each state in the transient (0--1\,s) and steady-state (1--3\,s) windows (Figure~\ref{fig:figure4}C; 11 sessions, 613 closed-loop trials; mean $\pm$ SEM across sessions).
-Each power measure entered a separate model with the initial deviation and motion, as the two are correlated.
+Each power measure used a separate model with the initial deviation and motion, as the two are correlated.
 The initial deviation explained most of the transient error but almost none of the steady-state error (unique $R^2 = 0.53 \pm 0.05$ and $0.03 \pm 0.03$), whereas absolute 1--4\,Hz power explained a similar share of both ($0.11 \pm 0.05$ and $0.11 \pm 0.06$).
 Relative 2--4\,Hz power explained less ($0.05 \pm 0.03$ and $0.03 \pm 0.02$), and motion explained none (unique $R^2 \le 0.001$).
-In the steady-state window, absolute power was the largest unique contributor, and it remained so when relative power was added to the same model ($0.07 \pm 0.04$; Figure~\ref{fig:f4_exemplars}B,C).
+In the steady-state window, absolute power was the largest unique contributor, and it remained so when relative power was added to the same model ($0.07 \pm 0.04$; Figure~\ref{fig:f4_exemplars}B,C). This shows that trials with high motion energy were controllable. Whereas high delta wave concentration led to a lack of controllability. 
 
-We then used these states to compare open- and closed-loop tracking.
+We then used these states to compare open- and closed-loop tracking, to ask the question about how concentration of a state affects controller performance.
 We fit a mixed model to the steady-state RMSE with condition, state and their interaction, and session and mouse as random effects (Figure~\ref{fig:figure4}D; 15 sessions from 4 mice and 1670 trials, or 11 sessions and 1190 trials for motion; Materials and Methods).
 Slopes are in $\%\,\Delta F/F$ of RMSE per within-session standard deviation (SD) of the state.
-We describe each state by three slopes.
-The open-loop slope measures \emph{predictability}: a positive slope means that the state adds error that a fixed feedforward input cannot anticipate, which we interpret as a disturbance.
-The closed-loop slope measures \emph{regularizability}: a flat slope means that feedback tracks the reference regardless of the state.
-A closed-loop error that rises with the state could still be a constant fraction of a growing open-loop error; we therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state (log scale): a negative slope means that the loop removes a larger share of the error as the state grows.
-All $p$ values are uncorrected; Table~\ref{tab:fig4_state_stats} lists every estimate and marks those that survive Bonferroni correction.
+To interpret the effect systematically, we describe each state by three slopes.
+The open-loop slope measures \emph{predictability}, a positive slope means that the state adds error that a fixed feedforward input cannot anticipate, which we interpret as a disturbance.
+The closed-loop slope measures \emph{regularizability}, how well activity can be regulated. A flat slope means that feedback tracks the reference regardless of the state.
+A closed-loop error that grows with the state could still be a disturbance related effect. 
+Therefore also measured \emph{attenuation}, the slope of the closed-to-open-loop error ratio against state where a negative slope means that the loop removes a larger share of the error as the state grows.
+All $p$ values are uncorrected; the effects we build on survive correction for multiple comparisons (Table~\ref{tab:fig4_state_stats}; Materials and Methods).
 
 In all four state models, closed loop lowered error at the mean state by $0.71$--$0.83\,\%\,\Delta F/F$ (all $p \le 3.4\times10^{-5}$), and two states stood out.
 Motion was a disturbance that the loop attenuated: the more the animal moved, the larger the share of the error that feedback removed, with the closed-to-open-loop error ratio falling by 9\% per SD ($p = 0.0048$; $n = 11$ sessions).
