@@ -35,7 +35,7 @@
     \caption{\textbf{Spatial spread of optogenetic inhibition, and the validity of
     trial averaging.}
     \textbf{A:} Suppressed area against stimulation amplitude
-    (Mouse~1). A pixel counts as suppressed if its
+    (Mouse~1b). A pixel counts as suppressed if its
     background-corrected response falls below half the median response within
     $0.2$\,mm of the peak at the strongest amplitude; background is the mean over
     an annulus $0.6$--$0.9$\,mm from that peak. Areas are therefore relative to
@@ -82,7 +82,7 @@
     per-session ratios with their range.
     \textbf{D--F:} Single trials at one stimulation amplitude per session, chosen by a
     fixed rule (each session's second-highest amplitude: Mouse 5a, 0.80\,mW, 59 trials;
-    Mouse 5b, 0.87\,mW, 50; Mouse 1, 1.43\,mW, 82; Mouse 3, 0.33\,mW, 100), one trial
+    Mouse 5b, 0.87\,mW, 50; Mouse 1b, 1.43\,mW, 82; Mouse 3c, 0.33\,mW, 100), one trial
     per row, sorted by the row's state with the lowest at the bottom; horizontal lines,
     quartile boundaries. Activity, $\Delta F/F$ from 0.2\,s before to 0.49\,s after
     onset (dashed line), blue negative to red positive over $\pm 5\%$. $|$Dev.$|$, the
@@ -96,8 +96,7 @@
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=\linewidth]{images/supplementary/S2.pdf}
-    \caption{\textbf{Controller gain tuning.} All panels are from Mouse~1: the grid sweep and, in a
-    second session, the online gain search.
+    \caption{\textbf{Controller gain tuning.} All panels are from Mouse~1: the grid sweep (Mouse~1g) and the online gain search (Mouse~1i).
     \textbf{A:} Empirical cost surface $\hat{J}(K)$ over the grid of fixed PI
     gains, interpolated between the occupied nodes (circles); star, the final
     gains accepted in the auto-tuning session (as in \textbf{B}).
@@ -123,32 +122,32 @@
 \begin{table}[!ht]
     \centering
     \small
-    \begin{tabular}{llclcccrr}
+    \begin{tabular}{lclcccrr}
         \hline
-        ID & Mouse & Exp. & Date & $K_{r}$ & $K_{p}$ & $K_{i}$ & OL & CL \\
+        Session & Exp. & Date & $K_{r}$ & $K_{p}$ & $K_{i}$ & OL & CL \\
         \hline
-        m1 & 1 & 3 & 2025-01-20 & 0.175 & 0.1 & 0.1 & 56 & 64 \\
-        m2 & 1 & 2 & 2025-02-12 & 0.25 & 0.1 & 0.25 & 97 & 103 \\
-        m3 & 1 & 2 & 2025-02-24 & 0.22 & 0.075 & 0.01 & 101 & 99 \\
-        m4 & 1 & 2 & 2025-02-26 & 0.16--0.17 & 0.1--0.2 & 0.002--0.005 & 92 & 108 \\
-        m5 & 1 & 1 & 2025-03-04 & 0.18 & 0.125 & 0.075 & 36 & 24 \\
-        m6 & 1 & 2 & 2025-03-05 & 0.15 & 0.15 & 0.1 & 14 & 16 \\
-        m7 & 1 & 4 & 2025-03-20 & 0.15 & 0.06 & 0.01 & 46 & 54 \\
-        m8 & 1 & 2 & 2025-04-15 & 0.15 & 0.05 & 0.1 & 38 & 22 \\
-        m9 & 2 & 1 & 2025-04-20 & 0.07 & 0.05 & 0.1 & 50 & 50 \\
-        m10 & 2 & 1 & 2025-04-19 & 0.1 & 0.07 & 0.1 & 48 & 52 \\
-        m11 & 2 & 3 & 2025-04-30 & 0.05 & 0.05 & 0.2 & 50 & 50 \\
-        m12 & 1 & 1 & 2025-04-19 & 0.1 & 0.05 & 0.1 & 35 & 65 \\
-        m13 & 2 & 2 & 2025-04-20 & 0.07 & 0.07 & 0.1 & 55 & 45 \\
-        m14 & 3 & 2 & 2026-07-29 & 0.05 & 0.075 & 0.01 & 45 & 55 \\
-        m15 & 4 & 2 & 2026-07-29 & 0.075 & 0.1 & 0.05 & 55 & 45 \\
+        1a & 3 & 2025-01-20 & 0.175 & 0.1 & 0.1 & 56 & 64 \\
+        1c & 2 & 2025-02-12 & 0.25 & 0.1 & 0.25 & 97 & 103 \\
+        1d & 2 & 2025-02-24 & 0.22 & 0.075 & 0.01 & 101 & 99 \\
+        1e & 2 & 2025-02-26 & 0.16--0.17 & 0.1--0.2 & 0.002--0.005 & 92 & 108 \\
+        1f & 1 & 2025-03-04 & 0.18 & 0.125 & 0.075 & 36 & 24 \\
+        1h & 2 & 2025-03-05 & 0.15 & 0.15 & 0.1 & 14 & 16 \\
+        1j & 4 & 2025-03-20 & 0.15 & 0.06 & 0.01 & 46 & 54 \\
+        1k & 2 & 2025-04-15 & 0.15 & 0.05 & 0.1 & 38 & 22 \\
+        1l & 1 & 2025-04-19 & 0.1 & 0.05 & 0.1 & 35 & 65 \\
+        2a & 1 & 2025-04-19 & 0.1 & 0.07 & 0.1 & 48 & 52 \\
+        2b & 1 & 2025-04-20 & 0.07 & 0.05 & 0.1 & 50 & 50 \\
+        2c & 2 & 2025-04-20 & 0.07 & 0.07 & 0.1 & 55 & 45 \\
+        2d & 3 & 2025-04-30 & 0.05 & 0.05 & 0.2 & 50 & 50 \\
+        3e & 2 & 2026-07-29 & 0.05 & 0.075 & 0.01 & 45 & 55 \\
+        4 & 2 & 2026-07-29 & 0.075 & 0.1 & 0.05 & 55 & 45 \\
         \hline
     \end{tabular}
     \caption{\textbf{Controller gains and trial counts for all 15 closed-loop
         sessions.} Gains are those logged on the closed-loop trials of each
         session's validation block, the trials that enter every analysis; OL and
         CL are the open- and closed-loop trial counts in that block. Gains were
-        held fixed within a block in 14 of the 15 sessions; m4 interleaved three
+        held fixed within a block in 14 of the 15 sessions; session 1e interleaved three
         $K_p$ values and is given as a range. $K_r$ (V per $\%\,\Delta F/F$)
         scales the feedforward term, and $K_p$ (V per $\%\,\Delta F/F$) and $K_i$
         (V per $\%\,\Delta F/F$ per s) the feedback terms of Equation~\eqref{eq:pi}.
@@ -187,7 +186,7 @@
     %% Producer: controller-analysis/ctrl_mpc_varx_supp_panels.m (data mpc_varx_supp.py, mpc_varx_lq_sweep.py).
     \includegraphics[width=\linewidth]{images/supplementary/S_varx.pdf}
     \caption{\textbf{The model inside the model-predictive controller: how it is built and how
-    well it predicts.} One closed-loop session (Mouse~1, session m4), the session of
+    well it predicts.} One closed-loop session (Mouse~1e), the session of
     Fig.~\ref{fig:mpc_direct}A--H.
     \textbf{A:} Construction. At frame $t$ the model takes the past 35 frames (1\,s) of the
     controlled (output) site $y$ and of 100 sites over dorsal cortex $x_1,\dots,x_{100}$,

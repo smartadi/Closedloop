@@ -42,28 +42,27 @@ contributed to. All counts in the Results refer to this table.
 \begin{table}[h]
     \centering
     \small
-    \begin{tabular}{llllcll}
+    \begin{tabular}{lllll}
         \hline
-        Mouse & Sex & Indicator & Sessions & Dates & Trials/session & Contributes to \\
+        Mouse & Sex & Indicator & Sessions & Dates \\
         \hline
-        1 & M & GCaMP8s & 9 & 2025-01-20 to 2025-04-19 & 30--200 & Closed- vs open-loop \\
-        2 & F & GCaMP8s & 4 & 2025-04-19 to 2025-04-30 & 100 & Closed- vs open-loop \\
-        3 & M & GCaMP8s & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
-        4 & F & GCaMP8s & 1 & 2026-07-29 & 100 & Closed- vs open-loop \\
-        5 & F & GCaMP8s & 2 & 2025-12-02 & 208--260 & Impulse characterization only \\
+        1 & M & GCaMP8s & 12 (1a--1l) & 2025-01-20 to 2025-04-19 \\
+        2 & F & GCaMP8s & 4 (2a--2d) & 2025-04-19 to 2025-04-30 \\
+        3 & M & GCaMP8s & 5 (3a--3e) & 2026-07-01 to 2026-07-29 \\
+        4 & F & GCaMP8s & 1 & 2026-07-29 \\
+        5 & F & GCaMP8s & 2 (5a, 5b) & 2025-12-02 \\
         \hline
     \end{tabular}
-    \caption{Animals and sessions. The mouse numbers are used in every figure; a
-        letter marks a session when a mouse contributes more than one. The closed- versus open-loop comparison rests on 15 sessions from
-        4 mice; trials per session count the validation block (for Mouse 5,
-        impulse trials at nonzero amplitudes). Mouse 5 contributed only to
-        input--output characterization. The following sessions are in addition to
-        those counted above. Gain grid and online gain search
-        (Fig.~\ref{fig:cost_landscape}): two sessions of Mouse 1.
-        Impulse responses (Fig.~\ref{fig:figure2}): two sessions of Mouse 5 (5a and
-        5b) and one each of Mice 1 and 3. Sinusoidal reference
-        (Fig.~\ref{fig:figure5}): three sessions of Mouse 3 (one at $A = 3$, two at
-        $A = 2$).}
+    \caption{Animals and sessions. A session is one experiment, and two can share a recording
+        day (1g and 1h, 2b and 2c). A session is named by its mouse number, followed by a letter
+        when that mouse contributed more than one session to the paper. Letters run in date
+        order over all of a mouse's sessions, so each session keeps one label in every figure
+        and table. Closed- versus open-loop comparison (Figs.~\ref{fig:figure3}
+        and~\ref{fig:figure4}): 15 sessions from 4 mice, 1a, 1c--1f, 1h, 1j--1l, 2a--2d, 3e
+        and 4 (Table~\ref{tab:gains}). Impulse responses (Fig.~\ref{fig:figure2}): 1b, 3c, 5a
+        and 5b. Sinusoidal reference (Fig.~\ref{fig:figure5}): 3a, 3b and 3d (one at $A = 3$,
+        two at $A = 2$). Gain grid and online gain search (Fig.~\ref{fig:cost_landscape}): 1g
+        and 1i.}
     \label{tab:cohort}
 \end{table}
 
@@ -172,7 +171,7 @@ began with a tuning phase (\nameref{sec:gain_opt}), followed by a validation
 block of 30--200 trials (Table~\ref{tab:gains}). On each validation trial the
 condition was drawn independently with probability one half, so open- and
 closed-loop trials were interleaved in random order, balanced only
-approximately, and sampled the same distribution of brain states. In Mice 3
+approximately, and sampled the same distribution of brain states. In Mice 3e
 and 4 the tuning phase swept $K_p$, and only the final 100 trials, with
 $K_p$ held fixed, entered the comparison. Sessions lasted about one hour.
 
@@ -320,15 +319,8 @@ at these gains. We therefore treat the closed loop as stable over the operating
 range used here, rather than certifying gain and phase margins: with a
 saturating, one-sided actuator and a finite-window integral, margins from a
 linear nominal model would describe a controller other than the one that ran.
-
-The structure of the controller nonetheless rests on a standard result for the nominal, trial-averaged plant.
-
-\begin{rem}[Low-gain integral tracking through a monotone actuator]
-\label{rem:lowgain}
-Write the nominal plant from drive to suppression $s = -y$ as a linear time-invariant system $G$ driven through a static nonlinearity $\phi$ of the integrator state $u$. With $K_p = 0$ and $u = K_i\bar e$, the controller of Eq.~\eqref{eq:pi} is the loop below with $k = K_i$, provided $\phi$ absorbs the feedforward offset $\bar u$, the clamp of the integral term to $[-q, q]$, the clipping of the command to $[0, u_{\max}]$ and the relation between command and effective drive. Suppose that (i) $G$ is exponentially stable, possibly with an input delay; (ii) its steady-state gain is positive, $G(0) > 0$; (iii) $\phi$ is nondecreasing and globally Lipschitz with constant $\lambda$ (we ignore the 0.01\,V quantization of the command, a staircase that is not Lipschitz); and (iv) the reference is feasible, that is, $|y_{\mathrm{ref}}|/G(0)$ lies in the range of $\phi$, which with the clamps above is the drive delivered by commands between $\max(0, \bar u - q)$ and $\min(u_{\max}, \bar u + q)$; if the unstimulated output carries a constant offset $y_0$, $|y_{\mathrm{ref}}|$ is replaced by $|y_{\mathrm{ref}}| + y_0$. Then there is a $K > 0$, depending only on $G$, such that for every integral gain $0 < k < K/\lambda$ the integral loop $\dot{u} = k\,e$, with $e = |y_{\mathrm{ref}}| - s = y - y_{\mathrm{ref}}$ as in Eq.~\eqref{eq:error}, tracks the reference: $\phi(u(t)) \to |y_{\mathrm{ref}}|/G(0)$, $u(t)$ converges, the error is square-integrable, and $e(t) \to 0$ under a regularity condition that is mild for a finite-dimensional plant with input delay \citep[Theorem~4.1(a),(c),(d),(f) and Remark~4.2(b)]{logemann2000absolute}. A gain below which tracking is guaranteed, that is, a lower bound on $K/\lambda$, can be computed from open-loop step- or frequency-response data \citep{logemann1999integral}; analogous results hold in discrete time \citep{fliegner2001discrete} and, for proportional--integral control, for nonlinear plants whose steady-state input--output map is an increasing bijection with slope bounded away from zero, a condition that a saturating actuator violates \citep{desoer1985tracking}.
-\end{rem}
-
-The trial-averaged impulse-response models (Fig.~\ref{fig:figure2}), recorded in separate sessions and in two of the four controller mice, are stable, satisfying (i). They do not by themselves fix the sign of $G(0)$, the integral of the impulse response over all time, because their slowest mode exceeded the 0.5\,s fit window in three of four sessions. That the response keeps its suppressive sign over a trial, which is what (ii) requires on our time scale, is shown instead by the open-loop trials, in which a constant command held activity below baseline for the whole trial (Fig.~\ref{fig:figure3}B). Evoked suppression grew monotonically with laser power (Fig.~\ref{fig:figure2}B); although it is a transient measure, it makes the steady-state map monotone through the structure of the nominal model, a static actuator map feeding linear dynamics, given (ii). The clipping, the clamp on the integral term and this monotone dose--response make $\phi$ nondecreasing, satisfying (iii), and (iv) requires the reference, plus any standing offset of the unstimulated activity, to lie within the suppression attainable with the commands the clamps allow. The controller that ran departs from the remark in four further ways: it had a proportional term, its integral was a 3\,s trailing window rather than an unbounded sum (Eq.~\eqref{eq:integral}), it ran in discrete time at 35\,Hz, and each trial lasted 3\,s (4\,s with the sinusoidal reference) with the integrator reset between trials, whereas the remark is asymptotic and concerns the nominal plant, not one that varies with brain state. The remark therefore motivates the controller's structure rather than certifying the loop that ran. That loop's stability rests on the observation that no session showed sustained oscillation; with a stable plant and a bounded command the output cannot diverge, so oscillation is the instability the data could have shown.
+With a stable plant and a bounded command the output cannot diverge, so
+oscillation is the instability the data could have shown.
 
 \subsubsection*{Sinusoidal reference and preview}
 
@@ -382,7 +374,7 @@ sessions.
 % -----------------------------------------------------------------------------
 
 We simulated a model-predictive controller (MPC) on one closed-loop session
-(Mouse~1, session m4; 108 closed-loop trials). Activity at the controlled site
+(Mouse~1e; 108 closed-loop trials). Activity at the controlled site
 and at 100 sites over dorsal cortex, with the laser command as input, was
 modeled as a linear vector autoregressive process with exogenous input (VARX;
 35 lags, 1\,s, of every channel and of the laser command; construction and
@@ -406,7 +398,7 @@ fitted on the session's spontaneous and open-loop frames only, so no closed-loop
 trial, including the one being replayed, entered its training. RMSE was scored
 over the steady-state window (1--3\,s).
 We repeated the replay on the 57 CL$+$p trials of the representative sinusoidal session
-of Fig.~\ref{fig:figure5} (Mouse~3), with the 1\,Hz reference in the MPC cost over its horizon,
+of Fig.~\ref{fig:figure5} (Mouse~3b), with the 1\,Hz reference in the MPC cost over its horizon,
 and scored RMSE over the 4\,s window. Here too the MPC's model was fitted without
 any closed-loop (CL or CL$+$p) trial, on spontaneous and open-loop frames, with the
 replayed trial's fold (one of five) also held out. All MPC results are descriptive.
@@ -463,11 +455,11 @@ poles, 0--4 zeros (strictly proper, so $h(0) = 0$) and 0--3 samples of pure
 delay (0--85.7\,ms), and selected the order by the Akaike Information Criterion.
 When the selected model reproduced $h(t)$ with $R^{2} < 0.98$, we instead took
 the model with the fewest parameters among those within 0.002 of the best
-$R^{2}$. In one session (Mouse 3), whose onset-referenced response stayed offset
+$R^{2}$. In one session (Mouse 3c), whose onset-referenced response stayed offset
 from zero, no order fitted well from the default initialization (best
 $R^2 = 0.94$). We therefore added, in every session, one candidate initialized
 from a fit to the baseline-referenced response plus one pole near the origin.
-It was selected only in Mouse 3 (five poles, four zeros, $R^{2} = 0.99$). The
+It was selected only in Mouse 3c (five poles, four zeros, $R^{2} = 0.99$). The
 near-origin pole contributes less than 0.2\% of the response and is not
 interpreted. Held-out refits rebuilt this initialization from training trials
 only.
@@ -478,7 +470,7 @@ span the full dose range. We rebuilt $h(t)$ on one half, refitted the model at
 the session's selected order, and scored its prediction against the other half,
 in both directions (200 folds). The prediction carries the model's own gain, so
 a gain mismatch counts against it. We report the median and interquartile range
-of held-out $R^{2}$ over the folds whose refit succeeded (90\% in Mouse 3, at
+of held-out $R^{2}$ over the folds whose refit succeeded (90\% in Mouse 3c, at
 least 98\% elsewhere); the pooled value is the median over all such folds of the
 four sessions. Model order was selected once on all trials and is not itself
 cross-validated.
@@ -526,7 +518,7 @@ The 1\,s boundary is a fixed convention, about five times the $\sim$200\,ms impu
 The steady-state window excludes the laser-evoked transient, and it alone was used for the state dependence and disturbance rejection of Fig.~\ref{fig:figure4} (panels D and G; panel C reports both windows) and for the constant-reference MPC replay.
 
 \emph{Gain grid.} Gradients of the cost require a model, so we mapped the cost
-surface directly. In one session of Mouse~1 the controller cycled
+surface directly. In one session (Mouse~1g) the controller cycled
 through 10 fixed PI gain pairs, and we estimated $\hat{J}(K)$ at each node over
 the full window (Fig.~\ref{fig:cost_landscape}A,D). The minimum fell at
 $(K_p, K_i) = (0.05,\,0.10)$, with $\hat{J} = 16.1$. We read the grid as showing
@@ -596,8 +588,8 @@ All exclusions are collected here.
           steady-state window the residual energy splits exactly into
           $\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and we
           excluded a session when the first term, the standing offset, supplied
-          more than one third of the total. This removed sessions m2 (Mouse~1) and
-          m15 (Mouse~4; Table~\ref{tab:gains}). In these two sessions the closed-loop
+          more than one third of the total. This removed sessions 1c and 4
+          (Table~\ref{tab:gains}). In these two sessions the closed-loop
           average sat $2.2$ and $1.4\,\%\,\Delta F/F$ above the reference, and the
           offset supplied $38\%$ and $59\%$ of the residual energy, against $17\%$ or
           less in each of the other eleven. We chose the threshold after inspecting the
@@ -864,19 +856,8 @@ confidence interval and as a percentage reduction, $100\,(1 - r)$. The random
 mouse intercept treats the sessions of one mouse as correlated. For the full 0--3\,s window the mouse variance was
 non-zero and the degrees of freedom collapsed toward the number of mice, so we
 base inference on the transient and steady-state windows, which together span
-it. As corroboration, the condition effect was also fitted to per-trial values,
-\begin{equation*}
-    \mathrm{RMSE} \sim \mathrm{condition}
-    + \left(1 + \mathrm{condition} \mid \mathrm{session}\right)
-    + \left(1 \mid \mathrm{mouse}\right),
-\end{equation*}
-so that each session contributes its own open-to-closed-loop gap. The same model
-was applied to the log of each trial's mean squared deviation from its
-condition's trial-averaged trace, the per-trial contribution to across-trial
-variance. The comparisons are pre-specified, one per metric and window, and are
-not corrected for multiple comparisons. Paired across-session comparisons used
-the two-sided Wilcoxon signed-rank test, applied to the per-session log ratios
-as a check on the mixed model.
+it. The comparisons are pre-specified, one per metric and window, and are
+not corrected for multiple comparisons.
 
 \emph{State dependence} (Fig.~\ref{fig:figure4}D). For each state we fitted, to
 steady-state RMSE,
