@@ -27,7 +27,7 @@ That range, unmeasured here, loosely bounds the design model's error.
 Averages therefore need enough trials, and in three sessions the cross-trial variance of spontaneous activity changed by only 1--2\% with the number of trials averaged (Figure~\ref{fig:spatial_spread}C).
 A nonlinear model is the usual alternative, but linear ones often predict brain activity, including responses to stimulation, about as well~\citep{Nozari2024,sani2024dissociative,Yang2021}, and the richer the model of the dynamics, the more must be known to control with it.
 Both kinds forecast ongoing activity only briefly, and stimulus-blind, univariate forecasts of spontaneous mouse wide-field activity stay informative for about 1.5\,s, with deep models modestly ahead of a linear autoregressive one~\citep{lu2025benchmarking}.
-Authors of a zebrafish whole-brain benchmark expect an irreducible error floor~\citep{lueckmann2025zapbench}.
+Part of this limit cannot be removed, because brain activity has random sources and depends on unobserved processes such as neuromodulation, so even a perfect forecasting model would leave some error~\citep{lueckmann2025zapbench}.
 Feedback partly opposes such unforecastable inputs through the error they cause.
 A model for feedback design need only capture how the laser moves the readout~\citep{gevers2005identification}, and a low-order linear model makes stability, gain limits and bandwidth computable~\citep{astrom2008feedback}.
 
