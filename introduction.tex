@@ -1,63 +1,55 @@
 \section*{Introduction}
 
-The same stimulus delivered to cortex rarely evokes the same response twice. Evoked activity adds to, and is scaled by,
-ongoing fluctuations present at the moment of stimulation~\citep{Arieli1996, Petersen2003, Goris2014}. In awake mice
-these fluctuations track movement and arousal~\citep{Niell2010, McGinley2015, Vinck2015, musall2019single,
-stringer2019spontaneous, Salkoff2020}, alternate with slow, synchronized rhythms during quiet
-wakefulness~\citep{Crochet2006, Poulet2008, Reimer2014}, and are shared across the two
-hemispheres~\citep{Mohajerani2010, Shimaoka2019, Ye2026}. Responses to optogenetic and magnetic stimulation also change
-with brain state~\citep{Mateo2011, Massimini2005, bryan2025temporal}, so a fixed stimulation protocol delivers a
-different effective perturbation on every trial, which limits both the precision of causal manipulations and their
-interpretation~\citep{Harris2011, Wolff2018}.
+Establishing what a neural population contributes to behavior, or which pathways carry its influence, requires modulating its activity.
+The efficacy of such a modulation depends on how precisely it can shape the activity.
+Yet modulation, whether optical, electrical or magnetic, is often delivered open loop, with the input chosen in advance regardless of the activity it acts upon.
+The response to any input depends on the circuit's current state, that is, its ongoing pattern of activity, as has been shown for sensory, optogenetic and magnetic stimulation~\citep{Arieli1996, Petersen2003, Goris2014, Mateo2011, Massimini2005}.
+In awake mice, brain state follows movement and arousal~\citep{Niell2010, McGinley2015, Vinck2015, musall2019single, stringer2019spontaneous, Salkoff2020}, alternates with slow, synchronized rhythms during quiet wakefulness~\citep{Crochet2006, Poulet2008, Reimer2014}, and is shared across the two hemispheres~\citep{Mohajerani2010, Shimaoka2019, Ye2026}.
+The same input therefore creates variable responses from trial to trial.
+Not only the known states but also inputs we cannot measure, including subcortical ones, drive the activity.
 
-At the mesoscale, these fluctuations are directly observable. Wide-field calcium imaging resolves population activity
-across the dorsal cortex of behaving mice~\citep{allen2017global, makino2017transformation, musall2019single,
-Peters2021}, and has been combined with spatially targeted optogenetic stimulation to map and silence cortical
-areas~\citep{Lim2012, ZatkaHaas2021}, now in awake mice over months~\citep{Matveev2024}. These experiments have been
-open loop: the stimulus is fixed in advance, and the variability it meets is averaged away afterwards.
+One way to handle this variability is to model it.
+Switching linear dynamical systems treat the state as a parameter that changes the dynamics~\citep{linderman2017rslds}, other models isolate the dynamics relevant to a behavior~\citep{sani2021modeling}, and cortical state can be estimated in real time~\citep{weiss2024realtime}.
+Such models, however, do not observe the movements and the input from other areas that also drive a region~\citep{musall2019single, stringer2019spontaneous, zagha2013motor}, and even the best current models forecast spontaneous wide-field activity informatively only about 1.5\,s ahead~\citep{lu2025benchmarking}.
+A stimulus planned in advance would need a model that identifies and forecasts each trial's state precisely.
+Closed-loop control, which adjusts the input continuously from a real-time measurement of the activity it is meant to control, can in principle correct for such differences, provided the activity can be read out fast enough and the input acts on that same activity.
+Because it acts on each trial's measured deviation, feedback needs no model of what caused that deviation, so state-dependent activity that adds to the response becomes a disturbance to reject rather than a confound to average.
 
-One way to tame this variability is to model it. Switching linear dynamical systems treat brain state as a parameter
-that changes the dynamics~\citep{linderman2017rslds}, other approaches isolate the dynamics relevant to a
-behavior~\citep{sani2021modeling}, and cortical state can now be decoded in real time~\citep{weiss2024realtime}. Yet
-cortical activity also follows uninstructed movements and drive from other areas that a model of one region does not
-observe~\citep{musall2019single, stringer2019spontaneous, zagha2013motor}, and univariate forecasts of spontaneous
-wide-field activity stay informative for only about 1.5\,s~\citep{lu2025benchmarking}. A stimulation protocol that
-anticipated each trial's state would need a model that identifies and forecasts it precisely.
+Mesoscale activity is the combined activity of local neural populations across millimeters of cortex, between the scale of single neurons and that of the whole brain.
+Its spontaneous spatial patterns follow the axonal projections between regions~\citep{mohajerani2013spontaneous}, and it is closely tied to behavior, carrying task variables, learning-related change and movement~\citep{allen2017global, makino2017transformation, musall2019single}.
+We read it out as fluorescence across a field about 10\,mm wide.
+Wide-field imaging samples the field at 35\,Hz, and the latency, the delay from a camera exposure to the light it triggers, has a median of 24\,ms, about a fifth of the 0.11\,s timescale on which light moves the activity.
+Spatially targeted optogenetic stimulation has been combined with wide-field imaging to map and silence cortical areas~\citep{Lim2012, ZatkaHaas2021, Matveev2024, Ambrosone2025}, but open loop: the stimulus is fixed in advance, and the variability it meets is averaged away afterwards.
+In our setup, the light suppresses the cortex around the stimulated spot, including the region we read out.
+Mesoscale activity is therefore a convenient scale at which to test closed-loop control, though not the only one.
 
-Feedback needs much less. A controller that adjusts its input from a real-time measurement compensates for disturbances
-it does not model~\citep{astrom1995pid}, so state-dependent variability becomes a disturbance to reject rather than a
-confound to average~\citep{grosenick2015closed, RittChing2015}. Integral action, an internal model of a constant
-signal, drives a constant offset toward zero~\citep{francis1976internal}, and at low gain it does so for an
-exponentially stable linear plant despite actuator saturation and input delay, given only the sign of the plant's
-steady-state gain~\citep{logemann2000absolute}. Closed-loop optogenetic control has held the firing rates of neurons at a
-target in culture and in rodent thalamus~\citep{newman2015optogenetic, bolus2018design, bolus2021state}, clamped the
-calcium signals of single neurons~\citep{Zhang2018}, and timed light to ongoing oscillations in rodents and
-primates~\citep{Siegle2014, nicholson2018analogue, kanta2019closed, Zaaimi2022}. Input--output models of multiregional
-responses to electrical stimulation have been proposed for model-based control, so far tested in closed loop only in
-simulation~\citep{Yang2018, Yang2021}. At the mesoscale, real-time wide-field signals have closed the loop only through
-behavior, as neurofeedback that animals learn to modulate~\citep{clancy2014volitional, Neely2018, Gupta2026}.
+Closed-loop stimulation has revealed what particular rhythms contribute to behavior: optogenetic stimulation triggered at chosen phases of hippocampal theta, or by bursts of amygdala gamma, showed their roles in encoding, retrieving and consolidating memories~\citep{Siegle2014, kanta2019closed}.
+Closed-loop optogenetic feedback has also reshaped ongoing oscillations, in brain slices and in anesthetized monkeys~\citep{nicholson2018analogue, Zaaimi2022}.
+Continuous control, which adjusts the input at every update instead of delivering a preset one, has held neuronal firing at a chosen level in culture and in vivo~\citep{newman2015optogenetic}.
+Controllers designed from a model of the plant, the system the controller acts on, fitted to its responses to light, made thalamic firing track time-varying targets and reject unmeasured disturbances, and changed its trial-to-trial variability~\citep{bolus2018design, bolus2021state}.
+For electrical stimulation, input--output models of multiregional responses have been built for model-based control~\citep{Yang2018, Yang2021} and tested in closed loop in simulation~\citep{Yang2018}.
+All-optical loops have tailored two-photon stimulation to activity imaged in real time~\citep{Zhang2018, Zhang2025}.
+Activity has also been fed back to animals as sound, from cortical neurons~\citep{clancy2014volitional, Neely2018} to mesoscale regions~\citep{Gupta2026}, but there the loop closes through the animal learning to change its activity for reward, not through a stimulus to the cortex.
 
-Two questions decide whether closed-loop control of mesoscale cortical activity is feasible and what it can reveal.
-First, is the response to stimulation simple enough to design a controller around? Population dynamics are often well
-captured by low-dimensional, linear descriptions~\citep{Churchland2012, vyas2020computation}, and linear models predict
-resting-state human brain activity at the macroscale as well as nonlinear ones~\citep{Nozari2024}, but whether
-optogenetic drive of a mesoscale signal is monotonic and approximately linear on average has not been tested. Second,
-what does the error left by feedback reveal? A controller designed on the average response is not designed for
-single-trial deviations, so relating the error it leaves to measured state can indicate which fluctuations lie beyond
-its reach.
+Closed-loop stimulation of mesoscale activity thus remains largely unexplored: to our knowledge, a framework for closed-loop all-optical control of cortex-wide activity has so far appeared only in a conference abstract~\citep{deAlteriis2026}.
+Three questions remain open.
+First, is the response of a mesoscale signal to optogenetic input close enough to linear and time-invariant to design a controller from it?
+Open-loop work shows that suppression of wide-field activity deepens with laser power~\citep{Ambrosone2025}, but a controller also needs the time course of the response.
+A linear description is plausible, because linear models often predict brain activity about as well as nonlinear ones~\citep{Nozari2024}.
+Control theory suggests it would also be enough, because low-gain integral control of a stable linear plant needs only the sign of its steady-state gain~\citep{logemann2000absolute}, which a monotonic response supplies.
+Second, does feedback make the signal less variable from trial to trial than open-loop input?
+Third, how does the error that feedback leaves depend on the circuit's state, which makes open-loop responses vary?
+A controller designed on the average response is not designed for single-trial deviations, so relating the error it leaves to the measured state can show which fluctuations lie beyond its reach.
+The answers decide whether closed-loop control can set mesoscale activity precisely enough to test what it contributes to behavior, and whether a controller should take the state into account.
 
-Here we establish closed-loop optogenetic control of mesoscale cortical activity in awake, head-fixed mice. We read out
-regional $\Delta F/F$ in real time with wide-field calcium imaging and used it to set the power of inhibitory
-optogenetic stimulation through a proportional--integral controller with feedforward compensation. Trial-averaged
-suppression grew monotonically with stimulation power and was predicted by a low-order linear model, whereas single
-trials varied with brain state about as much as ongoing activity did without stimulation. Across 15 sessions in four
-mice, closed-loop control tracked a target activity level more accurately than open-loop stimulation in every session,
-and with lower trial-to-trial variability on average. Against a disturbance predicted from the contralateral
-hemisphere, feedback lowered residual error in 11 sessions, mostly by removing the offset left by open-loop
-calibration. The error it left was larger on trials with more 1--4\,Hz power around stimulation, but not on trials with
-more movement. In one mouse, adding a preview of the reference cancelled the phase lag in tracking a sinusoidal target,
-and in a simulated replay of one session a model-predictive controller lowered the error left by feedback. These results
-outline a procedure that does not depend on the readout or the stimulus: characterize the input--output relationship,
-check that the average response is monotonic and approximately linear, and tune a proportional--integral controller to
-the experiment. The error such a controller leaves then indicates which components of ongoing variability lie beyond a
-fixed linear design, a starting point for context-dependent models and controllers.
+Here we close the loop on mesoscale activity in awake, head-fixed mice.
+A camera images calcium-dependent fluorescence across the dorsal cortex at 35\,Hz, and on every frame a controller compares the activity of a 0.17\,mm patch of somatosensory cortex with a reference level below baseline and sets the power of a laser aimed next to the patch.
+The light excites inhibitory neurons that express an opsin, so it can only lower the activity.
+We first characterized how the activity responds to pulses of light of different amplitudes and, on that basis, built a proportional--integral controller with feedforward compensation, tuned to the experiment, which we compared with open-loop stimulation within each session.
+Trial-averaged suppression deepened with laser power, as in open-loop silencing~\citep{Ambrosone2025}, and was approximately linear and time-invariant within a session, so a low-order linear model predicted it, in four sessions from three mice.
+Single responses, however, varied from trial to trial about as much as ongoing activity did without stimulation, and both changed together with the state.
+Closed loop held the activity at the reference more accurately than open loop in all 15 sessions from four mice, and reduced its trial-to-trial variability.
+Power at 1--4\,Hz, which marks large, slow fluctuations, raised the error of both by similar amounts, so the fraction of the error that feedback left grew with it, whereas feedback removed more of the error that accompanied movement.
+These results outline a procedure: characterize the input--output relationship, check that the average response is monotonic and approximately linear, and tune a proportional--integral controller to the experiment.
+It assumes only a readout that is fast relative to the response and an input whose effect is close to linear, so it is not tied to wide-field imaging or optogenetics, although we test it here with one readout and one input.
+The error that such a controller leaves then carries information about the state: it shows which components of ongoing variability lie beyond a fixed linear design, a starting point for controllers that take the state into account.
