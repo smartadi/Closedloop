@@ -1,5 +1,5 @@
 % =============================================================================
-% Materials and Methods (live file; main.tex inputs this one).
+% Materials and Methods. The only Methods file (main.tex inputs it); one sentence per line.
 % Labels cited from other files: eq:pi, eq:kr, eq:nl_state, eq:nl_out,
 % assm:trial_avg, sec:pi_controller_design (discussion.tex); tab:cohort
 % (results.tex); sec:stats (stat_tables.tex); sec:mpc. tab:gains lives in
@@ -16,7 +16,8 @@
 
 All procedures were approved by the Institutional Animal Care and Use Committee at the University of Washington and followed NIH guidelines for the care and use of laboratory animals.
 %% FILL: IACUC protocol number.
-Animals, surgery and the imaging and stimulation system were as described by \citet{Matveev2024}; we give in full only what differs from, or adds to, that system.
+Animals, surgery and the imaging and stimulation system were as described by \citet{Matveev2024}.
+We give in full only what differs from, or adds to, that system.
 We used CaMKII-tTA;tetO-GCaMP8s mice, which express the calcium indicator in excitatory cortical neurons.
 To express the opsin, we injected mice retro-orbitally at P28--42 with ChrimsonR-tdTomato under the DLX2.0 promoter, packaged in a PHP.eB-serotype AAV \citep{Matveev2024}.
 DLX2.0 restricts expression to forebrain inhibitory interneurons, so red light suppressed local excitatory activity.
@@ -45,16 +46,15 @@ All counts in the Results refer to this table.
         5 & F & GCaMP8s & 2 (5a, 5b) & 2025-12-02 \\
         \hline
     \end{tabular}
-    \caption{Animals and sessions. A session is one experiment, and two can share a recording
-        day (1g and 1h, 2b and 2c). Mice 1--4, which contributed closed-loop sessions, are numbered in order of their first session, and Mouse 5 contributed only impulse sessions. A session is named by its mouse number, followed by a letter
-        when that mouse contributed more than one session to the paper. Letters run in date
-        order over all of a mouse's sessions, so each session keeps one label in every figure
-        and table. Closed- versus open-loop comparison (Figs.~\ref{fig:figure3}
-        and~\ref{fig:figure4}): 15 sessions from 4 mice, 1a, 1c--1f, 1h, 1j--1l, 2a--2d, 3e
-        and 4 (Table~\ref{tab:gains}). Impulse responses (Fig.~\ref{fig:figure2}): 1b, 3c, 5a
-        and 5b. Sinusoidal reference (Fig.~\ref{fig:figure5}): 3a, 3b and 3d (one at $A = 3$,
-        two at $A = 2$). Gain grid and online gain search (Fig.~\ref{fig:cost_landscape}): 1g
-        and 1i.}
+    \caption{Animals and sessions.
+        A session is one experiment, and two can share a recording day (1g and 1h, 2b and 2c).
+        Mice 1--4, which contributed closed-loop sessions, are numbered in order of their first session, and Mouse 5 contributed only impulse sessions.
+        A session is named by its mouse number, followed by a letter when that mouse contributed more than one session to the paper.
+        Letters run in date order over all of a mouse's sessions, so each session keeps one label in every figure and table.
+        Closed- versus open-loop comparison (Figs.~\ref{fig:figure3} and~\ref{fig:figure4}): 15 sessions from 4 mice, 1a, 1c--1f, 1h, 1j--1l, 2a--2d, 3e and 4 (Table~\ref{tab:gains}).
+        Impulse responses (Fig.~\ref{fig:figure2}): 1b, 3c, 5a and 5b.
+        Sinusoidal reference (Fig.~\ref{fig:figure5}): 3a, 3b and 3d (one at $A = 3$, two at $A = 2$).
+        Gain grid and online gain search (Fig.~\ref{fig:cost_landscape}): 1g and 1i.}
     \label{tab:cohort}
 \end{table}
 
@@ -71,10 +71,11 @@ Illumination was as in \citet{Matveev2024}, where it did not detectably activate
 The controller received only the blue frames and fed back on the blue-channel signal without hemodynamic correction, which needs both channels and cannot be done within one control interval.
 Offline, we removed hemodynamic signals by regressing the violet- on the blue-channel signal, compressed the movies by singular value decomposition and registered them to the atlas \citep{Matveev2024}.
 The impulse analysis (Fig.~\ref{fig:figure2}) used the corrected signal.
-Every closed-loop analysis (Figs.~\ref{fig:figure3}--\ref{fig:figure5}), including the band-power state measures, used the uncorrected signal the controller fed back on (see Discussion).
+Every closed-loop analysis (Figs.~\ref{fig:figure3}--\ref{fig:figure5}), including the band-power state measures, used the uncorrected signal the controller fed back on.
 
 Stimulation used the 638\,nm galvanometer-steered laser of \citet{Matveev2024}, delivered through the imaging objective.
-The target was fixed within a session and placed adjacent to the readout site; suppression spread beyond the stimulation spot (Fig.~\ref{fig:spatial_spread}A,B) and lowered $\Delta F/F$ at the readout.
+The target was fixed within a session and placed adjacent to the readout site.
+Suppression spread beyond the stimulation spot (Fig.~\ref{fig:spatial_spread}A,B) and lowered $\Delta F/F$ at the readout.
 Stimulation targets were about 2\,mm lateral and 1\,mm posterior to bregma ($(x, y) \approx (+2, -1)$\,mm), varying slightly between mice.
 Laser power was calibrated at the focal plane once a month, as described by \citet{Matveev2024}.
 
@@ -112,7 +113,8 @@ This length is the controller's horizon parameter and was the same in all 15 ses
 No filtering was applied to $y_t$.
 The baseline was frozen at trial onset and resumed updating at trial end.
 Otherwise the evoked suppression would enter $\bar F$, compress $y_t$ toward zero over repeated trials, and change the meaning of the reference from trial to trial.
-Offline, we re-extracted this signal from the compressed movie; it matched the logged online signal ($r = 0.995$) and did not depend on region size between $10 \times 10$ and $21 \times 21$ pixels.
+Offline, we re-extracted this signal from the compressed movie.
+It matched the logged online signal ($r = 0.995$) and did not depend on region size between $10 \times 10$ and $21 \times 21$ pixels.
 
 \emph{Two $\Delta F/F$ normalizations.} Equation~\eqref{eq:dff} is the signal the controller computed online, and every closed-loop analysis (Figs.~\ref{fig:figure3}--\ref{fig:figure5}) uses it unchanged.
 The loop could use only past samples, so re-normalizing these data by a retrospective whole-session mean would describe a signal the controller never had.
@@ -121,7 +123,8 @@ They are normalized by a fixed denominator, $\Delta F/F = 100 \times F / \bar{F}
 The state analysis of Fig.~\ref{fig:figure2}G is invariant to any constant rescaling of $\Delta F/F$ (its quartiles are rank-based and its dependent variable is scaled within amplitude), so it does not depend on this choice.
 
 \emph{Trial structure.} Stimulation was delivered in 3\,s trials.
-Inter-trial intervals were 15\,s plus a uniform random jitter of up to 1\,s, so that laser onset times were not predictable and did not entrain adaptation; no light was applied between trials.
+Inter-trial intervals were 15\,s plus a uniform random jitter of up to 1\,s, so that laser onset times were not predictable and did not entrain adaptation.
+No light was applied between trials.
 The reference was held at $y_{\mathrm{ref}} = -5\%\,\Delta F/F$ throughout the stimulation window, a suppression of five percentage points below the running baseline.
 Each session began with a tuning phase (\nameref{sec:gain_opt}), followed by a validation block of 30--200 trials (Table~\ref{tab:gains}).
 On each validation trial the condition was drawn independently with probability one half, so open- and closed-loop trials were interleaved in random order, balanced only approximately, and sampled the same distribution of brain states.
@@ -168,7 +171,8 @@ where $Y_{0:T}$ is the output trajectory of the true system under input $U_{0:T-
 We take $x_0$, $d$, and $\rho$ to be drawn from stationary distributions with $\mathbb{E}[d_t] = 0$.
 \end{assumption}
 
-Equation~\eqref{eq:trial_avg} is an approximation, since $\mathbb{E}[f(x)] \neq f(\mathbb{E}[x])$ for nonlinear $f$; it asserts that the residual is small and close enough to zero mean for a controller designed on $(\bar A, \bar B, C)$ to work.
+Equation~\eqref{eq:trial_avg} is an approximation, since $\mathbb{E}[f(x)] \neq f(\mathbb{E}[x])$ for nonlinear $f$.
+It assumes that the residual is small and close enough to zero mean for a controller designed on $(\bar A, \bar B, C)$ to work.
 Trial-to-trial departures from the averaged response are then treated as zero-mean disturbances.
 Two observations support it.
 First, the cross-trial variance of spontaneous $\Delta F/F$ is estimated consistently: its mean is flat in trial count to within 1--2\%, while its SEM falls roughly as $N^{-1/2}$ (Fig.~\ref{fig:spatial_spread}C).
@@ -209,7 +213,8 @@ It was fit on the impulse-response signal, whose $\Delta F/F$ uses a constant ba
 Learning it precisely would have needed open-loop trials at several powers in every session, which the session time did not allow next to the controller experiments.
 $K_r$ was instead carried over between sessions and adjusted by hand at the start of each session (\nameref{sec:gain_opt}), and feedback corrected the remaining error.
 Open- and closed-loop trials within a session share the same $K_r$, so open-loop error includes the error of this calibration.
-To separate the two, we compared closed loop with the best fixed input (\nameref{sec:stats}), which was a median of 1.29 times the feedforward input we used (interquartile range 1.06--1.40, Figure~\ref{fig:best_fixed}).
+To separate the two, we compared closed loop with the best fixed input (\nameref{sec:stats}), which was a median of 1.29 times the feedforward input we used (interquartile range 1.06--1.40, Fig.~\ref{fig:best_fixed}).
+
 \subsubsection*{Proportional--integral feedback}
 \label{sec:pi_controller_design}
 
@@ -287,7 +292,8 @@ These are averaged within session and then across sessions.
 We simulated a model-predictive controller (MPC) on one closed-loop session (Mouse~1e; 108 closed-loop trials).
 Activity at the controlled site and at 100 sites over dorsal cortex, with the laser command as input, was modeled as a linear vector autoregressive process with exogenous input (VARX; 35 lags, 1\,s, of every channel and of the laser command; construction and held-out prediction in Fig.~\ref{fig:supp_varx}).
 The 100 sites were an evenly spaced grid of $5 \times 5$ pixel boxes over the brain mask.
-The VARX was fitted by ridge regression; the penalty (100) and the history length were checked on validation data over $10$--$10^{4}$ and 5--35 frames, where prediction was nearly flat (Fig.~\ref{fig:supp_varx}D).
+The VARX was fitted by ridge regression.
+The penalty (100) and the history length were checked on validation data over $10$--$10^{4}$ and 5--35 frames, where prediction was nearly flat (Fig.~\ref{fig:supp_varx}D).
 At every frame the MPC chose the laser commands over a 1\,s horizon that minimized the squared deviation of the predicted controlled signal from the reference, plus a penalty ($\lambda = 0.1$) on command changes and a small penalty pulling the command toward the median recorded closed-loop command.
 Commands were bounded between 0 and the largest command the rig delivered.
 The MPC applied the first command and planned again at the next frame.
@@ -348,7 +354,8 @@ Held-out refits rebuilt this initialization from training trials only.
 For each of 100 random splits, trials were divided in half within each amplitude, so that both halves span the full dose range.
 We rebuilt $h(t)$ on one half, refitted the model at the session's selected order, and scored its prediction against the other half, in both directions (200 folds).
 The prediction carries the model's own gain, so a gain mismatch counts against it.
-We report the median and interquartile range of held-out $R^{2}$ over the folds whose refit succeeded (90\% in Mouse 3c, at least 98\% elsewhere); the pooled value is the median over all such folds of the four sessions.
+We report the median and interquartile range of held-out $R^{2}$ over the folds whose refit succeeded (90\% in Mouse 3c, at least 98\% elsewhere).
+The pooled value is the median over all such folds of the four sessions.
 Model order was selected once on all trials and is not itself cross-validated.
 
 \emph{Cross-session model swap} (Fig.~\ref{fig:figure2}E).
@@ -437,14 +444,17 @@ Motion enters the analyses only as a state variable.
 \item \emph{Behavioral video.}
 Motion analyses used the 11 of 15 sessions with a usable motion trace (1190 trials).
 \item \emph{Predictor availability.}
-The disturbance analysis (Fig.~\ref{fig:figure4}E--G) needs a contralateral predictor, which could be fitted in 13 of the 15 sessions; two sessions lacked a usable full-frame recording aligned to the control readout.
-No session was excluded on predictor quality; we report the predictor's held-out performance instead.
+The disturbance analysis (Fig.~\ref{fig:figure4}E--G) needs a contralateral predictor, which could be fitted in 13 of the 15 sessions.
+The other two lacked a usable full-frame recording aligned to the control readout.
+No session was excluded on predictor quality.
+We report the predictor's held-out performance instead.
 \item \emph{Standing setpoint offset.}
 For the disturbance-rejection analysis only, we excluded sessions whose closed-loop response stayed above the reference throughout stimulation, because the rejection ratio would count that standing offset as unrejected disturbance.
 Over the steady-state window the residual energy splits exactly into $\overline{(A-r)^{2}} = (\bar{A}-r)^{2} + \mathrm{var}(A)$, and we excluded a session when the first term, the standing offset, supplied more than one third of the total.
 This removed sessions 1c and 4 (Table~\ref{tab:gains}).
 In these two sessions the closed-loop average sat $2.2$ and $1.4\,\%\,\Delta F/F$ above the reference, and the offset supplied $38\%$ and $59\%$ of the residual energy, against $17\%$ or less in each of the other eleven.
-We chose the threshold after inspecting the sessions; any threshold between 20\% and 37\% selects the same eleven.
+We chose the threshold after inspecting the sessions.
+Any threshold between 20\% and 37\% selects the same eleven.
 \end{itemize}
 
 % -----------------------------------------------------------------------------
@@ -466,7 +476,8 @@ We report it alongside the relative measure because a factor that acts through t
 \emph{Windows.} In Fig.~\ref{fig:figure2}G, motion, relative and absolute power are taken over the same strictly pre-stimulus window, $[-1, 0)$\,s, the 35 samples before onset.
 An impulse is a single brief input, so the question there is how the state in which the stimulus arrives alters its response, and a pre-stimulus window measures that state without overlapping the 0--200\,ms response.
 In Fig.~\ref{fig:figure4} all three are taken over one common window, $[-2, +3)$\,s, the 175 samples from 2\,s before onset to the end of stimulation, because tracking performance depends both on the state a trial begins in and on activity that develops while the controller acts.
-These measures therefore describe concurrent activity rather than a pre-stimulus state; the effect of feedback is assessed through the open- versus closed-loop contrast, in which both conditions are measured identically.
+These measures therefore describe concurrent activity rather than a pre-stimulus state.
+The effect of feedback is assessed through the open- versus closed-loop contrast, in which both conditions are measured identically.
 
 \emph{Spectral estimation.} In Fig.~\ref{fig:figure2}G each 35-sample segment was mean-subtracted and Hann-tapered, and band power was the sum of the one-sided periodogram over the native 1\,Hz bins inside the band, edges inclusive.
 In Fig.~\ref{fig:figure4} each 175-sample segment $x$ was linearly detrended, Hann-tapered with window $w$ and zero-padded to at least 8192 points, giving the one-sided spectral density
@@ -504,7 +515,8 @@ For each session and window we fitted ordinary least-squares models with an inte
 for a model with $p$ factors fitted to $n$ trials.
 Adjusted $R^2$ removes the positive floor that in-sample $R^2$ differences have at these trial counts.
 Relative and absolute power are correlated, and in one four-factor model one would absorb the variance the other shares with it.
-In Fig.~\ref{fig:figure4}C each power measure therefore enters its own three-factor model on the same base, $\{\text{initial deviation}, \text{motion}, \text{relative}\}$ and $\{\text{initial deviation}, \text{motion}, \text{absolute}\}$; the unique $R^2$ of initial deviation and motion are taken from the first.
+In Fig.~\ref{fig:figure4}C each power measure therefore enters its own three-factor model on the same base, $\{\text{initial deviation}, \text{motion}, \text{relative}\}$ and $\{\text{initial deviation}, \text{motion}, \text{absolute}\}$.
+The unique $R^2$ of initial deviation and motion are taken from the first.
 We report the mean and SEM over sessions.
 Fig.~\ref{fig:f4_exemplars}B--D repeats the decomposition with both power terms in one model, and with each alone.
 
@@ -531,7 +543,8 @@ Only nonzero amplitudes were analyzed (1516 trials in four sessions).
 To pool amplitudes we scaled the error by its within-amplitude root mean square, $z_{j} = e_{j} / \mathrm{RMS}_{s,a}(e)$.
 
 Each state measure ($[-1, 0)$\,s window) was converted to a within-session percentile, and trials were binned into quartiles of that percentile.
-We summarize the pattern as the ratio of variability in the top to the bottom quartile, computed in each session and reported as the geometric mean of the four per-session ratios with their range; with four sessions we attach no confidence intervals.
+We summarize the pattern as the ratio of variability in the top to the bottom quartile, computed in each session and reported as the geometric mean of the four per-session ratios with their range.
+With four sessions we attach no confidence intervals.
 This analysis is descriptive: it sets up the pattern that the closed-loop experiments then test (Fig.~\ref{fig:figure4}), and the Results draw no inference from it.
 For completeness, Table~\ref{tab:stat_fig2g} lists a supporting test: within each session, the ordinary least-squares slope of $z$ on state (standardized within session), and a one-sample $t$-test of the four slopes against zero (three degrees of freedom).
 Two of the four sessions come from one mouse.
@@ -582,15 +595,19 @@ For that comparison the numerator was split into the standing offset $(\bar{A}-r
 \emph{Design.} Every closed-loop experiment is a within-session comparison: open- and closed-loop trials, with the same reference and feedforward term, were interleaved at random by the control software, so each session is its own control.
 Sample sizes are 15 closed-loop sessions from 4 mice (2 male, 2 female; 1670 trials) for Figs.~\ref{fig:figure3} and~\ref{fig:figure4}, four impulse-response sessions from three mice for Fig.~\ref{fig:figure2}, and three sinusoidal-tracking sessions from one mouse for Fig.~\ref{fig:figure5} (Table~\ref{tab:cohort}).
 The unit of replication for every between-condition claim is the session, and we state $n$ with its unit for every test.
-No statistical method was used to predetermine sample size; we recorded as many sessions per animal as window clarity and opsin expression allowed.
-Analyses were not blinded to condition; all analyses were automated and applied identically to every condition.
+No statistical method was used to predetermine sample size.
+We recorded as many sessions per animal as window clarity and opsin expression allowed.
+Analyses were not blinded to condition.
+All analyses were automated and applied identically to every condition.
 
 \emph{Software and inference.} Analyses were performed in MATLAB R2025b.
 Mixed models were fitted by restricted maximum likelihood.
-Fixed effects were tested with Satterthwaite degrees of freedom, capped at $n_{\mathrm{sessions}} - 1$ so that no test borrows trial-level degrees of freedom; the cap can only make a test more conservative.
+Fixed effects were tested with Satterthwaite degrees of freedom, capped at $n_{\mathrm{sessions}} - 1$ so that no test borrows trial-level degrees of freedom.
+The cap can only make a test more conservative.
 Confidence intervals are $t$-based on the same degrees of freedom.
 Significance was taken at $\alpha = 0.05$, two-sided unless stated.
-We report each effect as an estimate with its 95\% confidence interval, the test statistic with its degrees of freedom, the exact $p$-value and $n$ with its unit; signed-rank tests are reported with their $V$ statistic.
+We report each effect as an estimate with its 95\% confidence interval, the test statistic with its degrees of freedom, the exact $p$-value and $n$ with its unit.
+Signed-rank tests are reported with their $V$ statistic.
 Every test is listed in full in the Statistical tables (Tables~\ref{tab:stat_counts}--\ref{tab:stat_fig4g}).
 Fig.~\ref{fig:figure2}G is descriptive, with its supporting tests in Table~\ref{tab:stat_fig2g} (\nameref{sec:imp_state}).
 Fig.~\ref{fig:figure5} rests on three sessions in one mouse, too few for a session-level test, so it is reported descriptively: the per-session direction of each effect and the pooled mean $\pm$ SD, with no significance tests.
@@ -622,11 +639,13 @@ For each state we fitted, to steady-state RMSE,
     + (1 \mid \mathrm{mouse}),
 \end{equation*}
 with the state centered within session and scaled by its pooled standard deviation, so every slope is in $\%\,\Delta F/F$ of RMSE per within-session standard deviation of the state.
-The term $(\mathrm{state} - 1 \mid \mathrm{session})$ gives each session its own uncorrelated state slope, so state effects are tested against between-session variation; without it, the false-positive rate in simulations of our design was 0.12--0.65 instead of 0.03--0.05 at $\alpha = 0.05$.
+The term $(\mathrm{state} - 1 \mid \mathrm{session})$ gives each session its own uncorrelated state slope, so state effects are tested against between-session variation.
+Without it, the false-positive rate in simulations of our design was 0.12--0.65 instead of 0.03--0.05 at $\alpha = 0.05$.
 This model tests two properties of each state.
 \emph{Predictability} is the slope of open-loop error against state (open loop as the reference level): a positive slope means the uncontrolled disturbance grows with the state, so a fixed feedforward input anticipates the trial less well.
 \emph{Regularizability} is the slope of closed-loop error against state (the same model with closed loop as the reference level): a slope indistinguishable from zero means the loop keeps the output regulated as the state changes, and a positive slope means it loses it.
-The condition main effect, the open-minus-closed-loop gap at mean state, is reported separately and is neither property; the condition-by-state interaction (gap trend) is listed in Table~\ref{tab:fig4_state_stats} but not interpreted, because the gap can widen through a rising open loop as much as through a holding closed loop.
+The condition main effect, the open-minus-closed-loop gap at mean state, is reported separately and is neither property.
+The condition-by-state interaction (gap trend) is listed in Table~\ref{tab:fig4_state_stats} but not interpreted, because the gap can widen through a rising open loop as much as through a holding closed loop.
 \emph{Attenuation} is the same model fitted to $\log \mathrm{RMSE}$, whose condition-by-state interaction is the slope of $\log(\mathrm{RMSE}_{\mathrm{CL}}/\mathrm{RMSE}_{\mathrm{OL}})$ against state: how the fraction of open-loop error left by the loop, the empirical counterpart of the sensitivity function, changes with state.
 As corroboration, per-session ordinary least-squares slopes of RMSE on motion energy were summarized across sessions with the Wilcoxon signed-rank test (Table~\ref{tab:fig4_state_stats}).
 The error decomposition of Fig.~\ref{fig:figure4}C is descriptive and carries no test.
@@ -634,18 +653,23 @@ The error decomposition of Fig.~\ref{fig:figure4}C is descriptive and carries no
 \emph{Disturbance rejection} (Fig.~\ref{fig:figure4}G).
 We tested $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{session})$, one-sided on the intercept, and report the geometric mean of $\mathrm{RR}$ with its 95\% confidence interval, corroborated by a one-sided signed-rank test on the per-session median ratios.
 Tests of $\mathrm{RR} < 1$, and of closed- below open-loop $\mathrm{RR}$, were one-sided because the hypothesis was directional and fixed before the analysis.
-We report the mouse-nested model, $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{mouse}) + (1 \mid \mathrm{mouse}\!:\!\mathrm{session})$, alongside as the mouse-level result; with three mice, one contributing a single session, its degrees of freedom are ${\approx}1.2$ and the mouse and session variances cannot be separated.
+We report the mouse-nested model, $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{mouse}) + (1 \mid \mathrm{mouse}\!:\!\mathrm{session})$, alongside as the mouse-level result.
+With three mice, one contributing a single session, its degrees of freedom are ${\approx}1.2$ and the mouse and session variances cannot be separated.
 
-\emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D reads two properties for each of four states, eight tests in all; attenuation is a separate family of four.
-We report these $p$-values uncorrected and state the size of each family; the Bonferroni thresholds are $0.05/8 = 0.0063$ and $0.05/4 = 0.0125$, and Table~\ref{tab:fig4_state_stats} marks each effect that clears its threshold.
-Each claim rests on one primary test; the corroborating tests listed in the Statistical tables agreed with it.
-In figures, *, ** and *** denote $p < 0.05$, $0.01$ and $0.001$, and n.s.\ denotes $p \ge 0.05$; each legend names the test, and the tables give exact $p$ values.
+\emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D reads two properties for each of four states, eight tests in all.
+Attenuation is a separate family of four.
+We report these $p$-values uncorrected and state the size of each family.
+The Bonferroni thresholds are $0.05/8 = 0.0063$ and $0.05/4 = 0.0125$, and Table~\ref{tab:fig4_state_stats} marks each effect that clears its threshold.
+Each claim rests on one primary test, and the corroborating tests listed in the Statistical tables agreed with it.
+In figures, *, ** and *** denote $p < 0.05$, $0.01$ and $0.001$, and n.s.\ denotes $p \ge 0.05$.
+Each legend names the test, and the tables give exact $p$ values.
 
 % -----------------------------------------------------------------------------
 \subsection*{Data and code availability}
 % -----------------------------------------------------------------------------
 
-Acquisition and control software and analysis code are available at [repository URL]; each session records the exact revision of the acquisition software that ran it.
+Acquisition and control software and analysis code are available at [repository URL].
+Each session records the exact revision of the acquisition software that ran it.
 The processed per-trial data behind each figure will be deposited in a public repository on acceptance.
 Raw wide-field imaging data are available from the corresponding author on request.
 %% FILL: repository URL (replace the bracketed placeholder above).
