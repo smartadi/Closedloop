@@ -6,7 +6,8 @@ Replayed on one session's trials, a model-predictive controller that forecast th
 
 The impulse experiments set our design choices.
 The trial-averaged response grew monotonically with laser power, and a low-order linear model fitted each session's average (Figure~\ref{fig:figure2}B--D), so the controller assumed linearity.
-The fitted models transferred only inconsistently between sessions (Figure~\ref{fig:figure2}E), so we recalibrated the feedforward gain in every session.
+The fitted models transferred only inconsistently between sessions (Figure~\ref{fig:figure2}E), so we used them only for a rough feedforward gain, carried it over between sessions with small adjustments, and let feedback correct the rest.
+Against the best fixed input this gain was a median of 29\% too low, and the closed-loop command moved toward that input on its own (Figure~\ref{fig:best_fixed}D).
 
 Single trials also varied with state (Figure~\ref{fig:figure2}G), but what counts as brain state differs between studies.
 It can be the activity at stimulus onset, which shaped optogenetic responses in macaque sensorimotor cortex~\citep{bryan2025temporal} and enters our analysis as the initial deviation.
@@ -35,11 +36,11 @@ The simplest optimal regulator of a system must model it~\citep{conant1970every}
 The feedforward gain approximately inverted the average response, and the integrator, an internal model of a constant signal rather than of cortex, drives a constant offset toward zero within its clamp~\citep{francis1976internal}.
 Monotonicity gives each attainable reference one steady-state light drive, which low-gain integral control of an exponentially stable linear plant reaches despite a saturating actuator and input delay~\citep{logemann2000absolute}.
 Session-to-session variability therefore limits the gains, not whether some correctly signed gain stabilizes the loop~\citep{morari1985robust}.
-With this minimal model, feedback lowered error in every session and, on average, trial-to-trial variability (Figure~\ref{fig:figure3}H,I).
+With this minimal model, feedback lowered error in every session and, on average, trial-to-trial variability (Figure~\ref{fig:figure3}H,I), and about half of the error reduction remained against the best fixed input.
 Against the contralaterally predicted disturbance~\citep{Shimaoka2019,Ye2026}, feedback lowered residual energy in all 11 retained sessions (two excluded for large closed-loop offsets), mostly by shrinking the standing offset left by open-loop calibration, while fluctuations fell less (Figure~\ref{fig:figure4}G; Table~\ref{tab:stat_fig4g}).
 
 Earlier closed-loop optogenetic controllers held neuronal firing rates in culture and in rodent thalamus~\citep{newman2015optogenetic,bolus2018design,bolus2021state}, clamped single-neuron calcium signals~\citep{Zhang2018} or phase-locked light to oscillations~\citep{nicholson2018analogue,kanta2019closed,Zaaimi2022}.
-In anesthetized rat thalamus, proportional--integral feedback held firing rates although its fitted model predicted open-loop responses poorly, lowered Fano factors below open loop in five cells, and could not lower rates above target with an excitatory opsin~\citep{bolus2018design}, the mirror image of our one-sided limit.
+In anesthetized rat thalamus, proportional--integral feedback held firing rates although its fitted model predicted open-loop responses poorly, lowered Fano factors below open loop in five cells, and could not lower rates above target with an excitatory opsin~\citep{bolus2018design}, the mirror image of our one-sided limit. Closest to our readout, on/off two-photon feedback in awake mouse cortex held the calcium signal of single neurons near set levels, with a mean absolute error of about 5\%\,$\Delta F/F$, and made optogenetic responses more uniform across cells and trials~\citep{Zhang2018}, whereas our controller graded the light continuously and regulated a mesoscale signal.
 Changing brain state was anticipated as a disturbance~\citep{bolus2021state} or a change in the plant~\citep{grosenick2015closed}, whereas here we related residual closed-loop error to measured state.
 
 Poorly regulated trials may reflect activity outside the controller's model, so per-trial error probes brain state: slow 1--4\,Hz power explained part of the 1--3\,s error, and movement none (Figure~\ref{fig:figure4}B,C).
@@ -66,19 +67,12 @@ A live controller should keep integral action~\citep{pannocchia2003disturbance}.
 The data comprise four impulse sessions in three mice, 15 separate controller sessions in four mice (11 in the disturbance analysis) and three sinusoidal sessions in one mouse.
 In every impulse session the average response grew monotonically with power and was predicted by a linear model (Figure~\ref{fig:figure2}B--D), so with a comparable preparation it should be predictable enough for control.
 All sessions inhibited one somatosensory site in awake, head-fixed mice, leaving excitation, other areas and task performance untested, though the preparation reaches all dorsal cortex~\citep{Matveev2024}.
-The loop fed back on fluorescence without hemodynamic correction, which cannot run within one control interval, so closed-loop measures describe the regulated signal rather than purely neural activity~\citep{valley2020separation}.
-Inhibition spreads toward the adjacent readout (Figure~\ref{fig:spatial_spread}A,B;~\citealp{li2019spatiotemporal}), so the loop holds a readout kernel, not a whole area, and partly regulates that spread.
+Inhibition spreads toward the adjacent readout (Figure~\ref{fig:spatial_spread}A,B;~\citealp{li2019spatiotemporal}), in this setup though we only show control over the kernel, extension to wide bran activity can be derived in future work.
 Interleaved trials limit, but cannot remove, drift in brain state between conditions.
-Gains were tuned empirically, and the low-gain guarantee assumes a fixed plant, so stability rests on the observation that no session showed sustained oscillation.
-There was no sham, opsin-free light-only, random-timing or proportional-only condition.
-Opsin-independent light effects would therefore enter the identified plant, and proportional action also shrinks an offset, so the role of integral action in removing it is inferred, not isolated.
+Gains were tuned empirically, and the low-gain guarantee is asymptotic and assumes a fixed plant, whereas our integrator ran over 3\,s trials and was reset between them, so the theory motivates the design and stability rests on the observation that no session showed sustained oscillation.
 
-We present a procedure for precise feedback control that makes cortical activity follow a chosen reference without an explicit model of its dynamics.
-Characterize the input--output relationship with brief stimuli at several intensities and check that the average response is monotonic.
-If a low-order linear model fits that average and the trial average is stable in the number of trials (Assumption~\ref{assm:trial_avg}), proportional--integral control with feedforward compensation, tuned to the experiment, can be used.
-Nothing in this procedure is specific to wide-field imaging or optogenetics, as it requires only a graded stimulus that moves the readout monotonically and stable trial averages.
-It should therefore carry over to two-photon imaging, electrophysiology, electrocorticography or functional MRI, and to electrical stimulation, within each readout's bandwidth.
+We present a procedure for precise feedback control that makes cortical activity follow a chosen reference without an explicit model of its dynamics: if brief stimuli at several intensities evoke a monotonic average response that a low-order linear model fits, and the trial average is stable in the number of trials (Assumption~\ref{assm:trial_avg}), proportional--integral control with feedforward compensation, tuned to the experiment, can be used.
+Nothing in it is specific to wide-field imaging or optogenetics, so it should carry over to two-photon imaging, electrophysiology, electrocorticography or functional MRI, and to electrical stimulation, within each readout's bandwidth.
 Model-predictive control may add precision where the disturbance is partly predictable.
 A site that tracks a chosen reference also lets its influence on dorsal cortex, striatum~\citep{Peters2021} or behavior~\citep{ZatkaHaas2021} be tested at defined activity levels.
 As in the voltage clamp and the optoclamp~\citep{newman2015optogenetic}, the laser command needed to track the reference should then report the drive that the loop opposes, a prediction we did not test.
-The linear design is also an investigative tool, as the error it leaves shows which brain states its model misses and so guides context-dependent models and switching controllers.

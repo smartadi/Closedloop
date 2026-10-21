@@ -54,7 +54,7 @@ contributed to. All counts in the Results refer to this table.
         \hline
     \end{tabular}
     \caption{Animals and sessions. A session is one experiment, and two can share a recording
-        day (1g and 1h, 2b and 2c). A session is named by its mouse number, followed by a letter
+        day (1g and 1h, 2b and 2c). Mice 1--4, which contributed closed-loop sessions, are numbered in order of their first session, and Mouse 5 contributed only impulse sessions. A session is named by its mouse number, followed by a letter
         when that mouse contributed more than one session to the paper. Letters run in date
         order over all of a mouse's sessions, so each session keeps one label in every figure
         and table. Closed- versus open-loop comparison (Figs.~\ref{fig:figure3}
@@ -123,10 +123,9 @@ between consecutive frames, and z-scored it within session.
 \subsection*{Real-time control}
 % -----------------------------------------------------------------------------
 
-The control loop ran as a dedicated real-time process, woken by each blue frame
-and kept separate from display and disk writing. End-to-end latency, from camera
-exposure to stimulation command, was measured over 200 loop cycles
-(Fig.~\ref{fig:figure1}F).
+The control loop ran as a dedicated real-time process, triggered by each blue frame and managed separately from display and disk writing.
+End-to-end latency, from camera exposure to stimulation command, was measured over 200 loop cycles (Fig.~\ref{fig:figure1}F).
+Over a whole session (Mouse~4; 3539 closed-loop laser updates, timed from the exposure start of the source frame to the laser edge recorded on the Timeline), latency had a median of 24.0\,ms, a 99th percentile of 40.0\,ms and a maximum of 43.5\,ms, and 12.6\% of updates arrived after the next blue frame.
 
 \emph{Online signal.} The feedback signal was the mean fluorescence in a
 $10 \times 10$ pixel square (0.173\,mm on a side) centered on the readout site
@@ -272,11 +271,18 @@ corresponding trial-averaged output deviations from the reference. Then
 %
 where $Y^{\dagger}$ is the Moore--Penrose pseudoinverse. This regresses amplitude
 on measured output, the direction an actuator command needs, and so is not the
-reciprocal of the forward dose--response slope. $K_r$ was then adjusted by hand
-at the start of each session (\nameref{sec:gain_opt}). Open- and closed-loop
-trials within a session share the same $K_r$, so the comparison between them
-does not depend on its value.
-
+reciprocal of the forward dose--response slope. $K_r$ is a rough calibration by
+design. It was fit on the impulse-response signal, whose $\Delta F/F$ uses a
+constant baseline, rather than on the trailing-baseline signal the controller
+fed back on. Learning it precisely would have needed open-loop trials at several
+powers in every session, which the session time did not allow next to the
+controller experiments. $K_r$ was instead carried over between sessions and
+adjusted by hand at the start of each session (\nameref{sec:gain_opt}), and
+feedback corrected the remaining error. Open- and closed-loop trials within a
+session share the same $K_r$, so open-loop error includes the error of this
+calibration. To separate the two, we compared closed loop with the best fixed
+input (\nameref{sec:stats}), which was a median of 1.29 times the feedforward
+input we used (interquartile range 1.06--1.40, Figure~\ref{fig:best_fixed}).
 \subsubsection*{Proportional--integral feedback}
 \label{sec:pi_controller_design}
 
@@ -560,8 +566,9 @@ feasibility demonstration, not as a reliable optimizer.
 
 \emph{Gains used for validation.} For each mouse, initial gains were set by hand
 within the range the grid had explored, starting from the least-squares $K_r$
-of Eq.~\eqref{eq:kr}. Later sessions started from the gains of earlier sessions,
-with small adjustments at the start of each session. Gains were then held fixed
+of Eq.~\eqref{eq:kr}. Later sessions, including the first sessions of Mice 2 and 4, which had no
+impulse session, started from the gains of earlier sessions, with small
+adjustments at the start of each session. Gains were then held fixed
 for the validation block (Table~\ref{tab:gains}).
 
 % -----------------------------------------------------------------------------
@@ -858,6 +865,19 @@ non-zero and the degrees of freedom collapsed toward the number of mice, so we
 base inference on the transient and steady-state windows, which together span
 it. The comparisons are pre-specified, one per metric and window, and are
 not corrected for multiple comparisons.
+
+\emph{Best fixed input.} To separate the error that feedback removes from the
+error of the rough feedforward calibration, we compared closed loop with the best
+fixed input that each session's open-loop trials allow. Under the trial-averaged
+model with an additive disturbance, an open-loop trial is
+$y_i(t) = b + h(t) + n_i(t)$, where $b$ is the trial-averaged level over the
+1\,s before onset, $h$ the trial-averaged effect of the open-loop command and
+$n_i$ the trial's deviation from the trial average. A command scaled by $c$
+would give $b + c\,h(t) + n_i(t)$. We chose $c$ to minimize the squared error to
+the reference over the 0--3\,s stimulation window on the same open-loop trials,
+which favors open loop, and capped it at the command limit. We then compared
+closed-loop RMSE with the RMSE of these rescaled trials, as above. Under this
+model the across-trial variance does not depend on $c$.
 
 \emph{State dependence} (Fig.~\ref{fig:figure4}D). For each state we fitted, to
 steady-state RMSE,
