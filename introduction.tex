@@ -4,13 +4,12 @@ Precisely modulating the activity of a neuronal population can establish how it 
 Yet modulation, whether optical, electrical or magnetic, is often delivered open loop, with a model-dependent input chosen in advance without feedback from ongoing neuronal activity.
 The response to any input depends on the circuit's current state, that is, its ongoing pattern of activity, as has been shown for sensory, optogenetic and magnetic stimulation~\citep{Arieli1996, Petersen2003, Goris2014, Mateo2011, Massimini2005}.
 In the cortex of awake mice, brain state, measured from single neurons to the mesoscale, follows movement and arousal~\citep{Niell2010, McGinley2015, Vinck2015, musall2019single, stringer2019spontaneous, Salkoff2020}, alternates with slow, synchronized rhythms during quiet wakefulness~\citep{Crochet2006, Poulet2008, Reimer2014}, and is shared across the two hemispheres~\citep{Mohajerani2010, Shimaoka2019, Ye2026}.
-Not only the known states but unobservable states,  unmeasurable stimulus and interactions from other brain regions drive the activity.
-Therefore at trial-to-trial scale activity seems highly variable, specially the measured response to a known stimulus also becomes variable.
+Not only the known states but also unobservable states,  unmeasurable stimuli, and interactions from other brain regions drive the activity.
+Therefore, at the trial-to-trial scale, activity seems highly variable; especially, the measured response to a known stimulus also becomes variable.
 
-
-One way to handle this variability is to model it.
+One way to handle this variability is to adequately model it such that factors contributing to variability can be determined. In literature several approaches have been explored, where the activity can be modeled through a dynamical systems.
 Switching linear dynamical systems treat the state as a parameter that changes the dynamics~\citep{linderman2017rslds}, other models isolate the dynamics relevant to a behavior~\citep{sani2021modeling}, and cortical state can be estimated in real time~\citep{weiss2024realtime}.
-Such models, however, do not observe the movements and the input from other areas that also drive a region~\citep{musall2019single, stringer2019spontaneous, zagha2013motor}, and even the best current models forecast spontaneous wide-field activity informatively only about 1.5\,s ahead~\citep{lu2025benchmarking}.
+Such models, however, do not observe the movements and the input from other areas that also drive a region~\citep{musall2019single, stringer2019spontaneous, zagha2013motor}, and even the best current models forecast spontaneous wide-field activity informatively only about 1.5\,s ahead~\citep{lu2025benchmarking} with considerable amount of uncertainty.
 A stimulus planned in advance would need a model that identifies and forecasts each trial's state precisely.
 Closed-loop control, which adjusts the input continuously from a real-time measurement of the activity it is meant to control, can in principle correct for such differences, provided the activity can be read out fast enough and the input acts on that same activity.
 Because it acts on each trial's measured deviation, feedback needs no model of what caused that deviation, so state-dependent activity that adds to the response becomes a disturbance to reject rather than a confound to average.
