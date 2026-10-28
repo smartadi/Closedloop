@@ -2,12 +2,12 @@
 A cortical region's response to local optogenetic inhibition was approximately linear and time-invariant on average, but single trials varied with brain state and ongoing activity.
 A proportional--integral controller that assumed this linear, time-invariant model tracked the reference and reduced trial-to-trial variability on average by correcting deviations from it.
 Its single-trial performance depended on brain state, consistent with disturbances that vary with state.
-Replayed on one session's trials, a model-predictive controller that forecast the disturbance lowered the error further.
+Replayed on recorded trials, a model-predictive controller that forecast the disturbance lowered the error further.
 
 The impulse experiments set our design choices.
 The trial-averaged response grew monotonically with laser power, and a low-order linear model fitted each session's average (Figure~\ref{fig:figure2}B--D), so the controller assumed linearity.
 The fitted models transferred only inconsistently between sessions (Figure~\ref{fig:figure2}E), so we used them only for a rough feedforward gain, carried it over between sessions with small adjustments, and let feedback correct the rest.
-Against the best fixed input this gain was a median of 29\% too low, and the closed-loop command moved toward that input on its own (Figure~\ref{fig:best_fixed}D).
+The best fixed input was a median of 1.28 times the command this gain produced, and the closed-loop command moved toward that input on its own (Figure~\ref{fig:best_fixed}D).
 
 Single trials also varied with state (Figure~\ref{fig:figure2}G), but what counts as brain state differs between studies.
 It can be the activity at stimulus onset, which shaped optogenetic responses in macaque sensorimotor cortex~\citep{bryan2025temporal} and enters our analysis as the initial deviation.

@@ -92,10 +92,10 @@ Here we show that closed-loop optogenetic inhibition can steer cortical activity
 The trial-averaged response of a cortical readout next to the stimulated site is approximately linear and, within a session, time-invariant.
 On this basis, we design a linear feedback controller that tracks a reference.
 It holds activity at the reference more accurately than open-loop stimulation in all 15 sessions from 4 mice and reduces trial-to-trial variability, consistent with disturbance rejection.
-Controller performance depends on brain state: relative to open loop, it improves with movement and degrades with slow-wave-like delta-band (1--4\,Hz) activity.
+Controller performance depends on brain state: feedback removes more of the error that accompanies movement, whereas its error grows with slow-wave-like delta-band (1--4\,Hz) activity.
 Predicting the disturbance on each trial from the opposite hemisphere, we show that feedback partially rejects it.
 In one mouse tracking a time-varying reference, preview cancels the phase lag of the cortical response, whereas feedback reduces error and variability.
-Finally, in a simulated replay of recorded trials, a model-predictive controller using a linear model of cortex and the laser lowers the error left by feedback by about 40\%.
+Finally, in a simulated replay of recorded trials with a constant reference, a model-predictive controller using a linear model of cortex and the laser lowers the error left by feedback by about 40\%.
 Together, these results show that approximately linear, time-invariant trial-averaged dynamics can be used to control regional cortical activity, and that the error left under control is informative about brain state.
 \end{abstract}
 

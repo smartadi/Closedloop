@@ -610,14 +610,14 @@ All analyses were automated and applied identically to every condition.
 
 \emph{Software and inference.} Analyses were performed in MATLAB R2025b.
 The statistics of Figs.~\ref{fig:figure3} and~\ref{fig:figure4}D were reproduced independently in Python (SciPy 1.18) from the stored session data; per-trial RMSE agreed to within $10^{-6}$ and every state slope to four decimals.
-Each between-condition test is on one number per session.
+Except for the disturbance-rejection model of Fig.~\ref{fig:figure4}G (below), each between-condition test is on one number per session.
 The primary test is a two-sided one-sample $t$-test of these session values ($n_{\mathrm{sessions}} - 1$ degrees of freedom), with a $t$-based 95\% confidence interval.
 The exact Wilcoxon signed-rank test on the same values is reported alongside, as a check that does not assume normality.
-We did not model mouse as a random effect: with four mice, two of which contributed one session each, the mouse variance cannot be estimated, and in our data its degrees of freedom fell below one.
+We did not base inference on a model with mouse as a random effect: with four mice, two of which contributed one session each, the mouse variance cannot be estimated, and in our data its degrees of freedom were close to one or below.
 Instead we report the mouse level directly, as the number of mice whose mean agrees in sign with the overall effect, and as the largest $p$ obtained when each mouse is left out in turn.
 Significance was taken at $\alpha = 0.05$, two-sided unless stated.
-We report each effect as an estimate with its 95\% confidence interval, the test statistic with its degrees of freedom, the exact $p$-value and $n$ with its unit.
-Signed-rank tests are reported with their $V$ statistic.
+The Statistical tables give each effect as an estimate with its 95\% confidence interval, the test statistic with its degrees of freedom, the exact $p$-value and $n$ with its unit; the text gives the estimate and $p$.
+Signed-rank tests are reported with their $V$ statistic for Fig.~\ref{fig:figure4}G and by their exact $p$ elsewhere.
 Every test is listed in full in the Statistical tables (Tables~\ref{tab:stat_counts}--\ref{tab:stat_fig4g}).
 Fig.~\ref{fig:figure2}G is descriptive, with its supporting tests in Table~\ref{tab:stat_fig2g} (\nameref{sec:imp_state}).
 Fig.~\ref{fig:figure5} rests on three sessions in one mouse, too few for a session-level test, so it is reported descriptively: the per-session direction of each effect and the pooled mean $\pm$ SD, with no significance tests.
