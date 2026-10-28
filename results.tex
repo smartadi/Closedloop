@@ -251,9 +251,9 @@ B--H, Mouse~3b; I--K, sessions 3a, 3b and 3d of Mouse~3. Modes: OL, open loop (r
 \textbf{C:} Trial average $\pm$ SD ($n = 51, 46, 46, 57$ trials for OL, OL$+$p, CL, CL$+$p).
 \textbf{D:} Trial-average laser power $\pm$ SD (mW); panels B--D share the time axis carried by D.\\
 \textbf{E:} Across-trial variance over time. \textbf{F:} RMSE over time, mean $\pm$ SEM of the squared error, square-rooted after averaging (so the bands are asymmetric).\\
-\textbf{G:} Per-trial RMSE by mode, sample-normalised over the full 4\,s stimulation window. Half-violins, full distribution (density estimated in log space); dots, individual trials; bars, median and interquartile range; logarithmic axis. Per-trial RMSE SD: OL $1.85$, OL$+$p $2.75$, CL $2.19$, CL$+$p $1.57$.\\
+\textbf{G:} Per-trial RMSE by mode, sample-normalised over the full 4\,s stimulation window. Half-violins, full distribution (density estimated in log space); dots, individual trials; bars, median and interquartile range; logarithmic axis. Per-trial RMSE SD: OL $1.22$, OL$+$p $1.64$, CL $0.99$, CL$+$p $1.01$.\\
 \textbf{H:} Phase lag relative to the reference from a 1\,Hz fundamental fit to the trial average; dashed line, preview lookahead ($51^\circ$ at 1\,Hz).\\
-\textbf{I--K:} Per-session values for the three sessions: per-trial RMSE (I), phase lag (J) and across-trial variance (K). One point per session per mode, joined by faint lines; bold bar, across-session mean; horizontal line in J, zero lag. Controller gains, reference amplitude and delivered optical power differ between sessions. No significance tests are reported for this figure ($n = 3$ sessions). Pooled per-trial RMSE, mean $\pm$ SD: OL $4.58 \pm 1.77$ ($n = 136$ trials), OL$+$p $4.47 \pm 2.22$ ($n = 110$), CL $3.83 \pm 1.94$ ($n = 100$), CL$+$p $3.95 \pm 1.58$ ($n = 132$).\\
+\textbf{I--K:} Per-session values for the three sessions: per-trial RMSE (I), phase lag (J) and across-trial variance (K). One point per session per mode, joined by faint lines; bold bar, across-session mean; horizontal line in J, zero lag. Controller gains, reference amplitude and delivered optical power differ between sessions. No significance tests are reported for this figure ($n = 3$ sessions). Pooled per-trial RMSE, mean $\pm$ SD: OL $4.08 \pm 1.40$ ($n = 136$ trials), OL$+$p $3.77 \pm 1.38$ ($n = 110$), CL $3.00 \pm 1.12$ ($n = 100$), CL$+$p $3.08 \pm 1.11$ ($n = 132$).\\
 }}
     \label{fig:figure5}
 \end{figure}
@@ -261,17 +261,17 @@ The open loop the response followed the reference in shape but lagged it and var
 The trial average kept the sinusoid in every mode, and the across-trial spread was widest under open loop (Figure~\ref{fig:figure5}C).
 
 Feedback reduced both the trial-to-trial spread and the error.
-From OL to CL, across-trial variance fell from $17.9$ to $14.8\,(\%\,\Delta F/F)^2$ (Figure~\ref{fig:figure5}E), the time-resolved error fell with it (Figure~\ref{fig:figure5}F), and median per-trial RMSE fell from $3.82$ to $2.80$\,\%\,$\Delta F/F$ (Figure~\ref{fig:figure5}G).
+From OL to CL, across-trial variance fell from $11.8$ to $5.8\,(\%\,\Delta F/F)^2$ (Figure~\ref{fig:figure5}E), the time-resolved error fell with it (Figure~\ref{fig:figure5}F), and median per-trial RMSE fell from $3.59$ to $2.26$\,\%\,$\Delta F/F$ (Figure~\ref{fig:figure5}G).
 
 Preview corrected the lag, the delay of the response behind the reference.
-The response lagged the reference by $60^\circ$ under OL and $36^\circ$ under CL, and preview moved both close to zero, with or without feedback ($5^\circ$ and $-9^\circ$; Figure~\ref{fig:figure5}H).
-The open-loop shift matched the five-sample lookahead, as the design predicts; pooled over the three sessions, the median per-trial shift was $5.0$ samples.
-Preview did not lower the error as feedback did: median RMSE changed little from OL to OL$+$p ($3.82$ and $3.55$), and adding preview to closed loop did not improve it (CL $2.80$, CL$+$p $3.30$; Figure~\ref{fig:figure5}G).
+The response lagged the reference by $71^\circ$ under OL and $46^\circ$ under CL, and preview moved both close to zero, with or without feedback ($16^\circ$ and $2^\circ$; Figure~\ref{fig:figure5}H).
+The open-loop shift ($55^\circ$) was close to the five-sample lookahead ($51^\circ$), as the design predicts; pooled over the three sessions, the per-trial lag fell by $5.7$ samples on average (6 in the median).
+Preview did not lower the error as feedback did: median RMSE changed little from OL to OL$+$p ($3.59$ and $3.58$), and adding preview to closed loop did not improve it (CL $2.26$, CL$+$p $3.00$; Figure~\ref{fig:figure5}G).
 
 With three sessions we report no significance tests and take the direction of each effect and its consistency across sessions as the result.
 In each session, per-trial RMSE (Figure~\ref{fig:figure5}I) and across-trial variance (Figure~\ref{fig:figure5}K) were lower under closed loop than open loop, and preview canceled the lag (Figure~\ref{fig:figure5}J).
-Pooled over sessions, mean per-trial RMSE fell from $4.58$ under OL to $3.83$ under CL, with no comparable change from preview (OL$+$p $4.47$, CL$+$p $3.95$).
-CL$+$p, the controller with both feedback and preview, therefore removed the lag while keeping its error below open loop, and it had the narrowest spread of per-trial RMSE of the four modes, in the detailed session and pooled over sessions (SD $1.57$ and $1.58$).
+Pooled over sessions, mean per-trial RMSE fell from $4.08$ under OL to $3.00$ under CL, with a smaller change from preview (OL$+$p $3.77$, CL$+$p $3.08$).
+CL$+$p, the controller with both feedback and preview, therefore removed the lag while keeping its error below open loop, and its per-trial RMSE was as tightly spread as under closed loop (SD $1.01$ and $0.99$ in the detailed session, $1.11$ and $1.12$ pooled over sessions).
 
 % ------------------------------------------------------------
 \subsection*{A model-predictive controller optimizes reference tracking on data replay}
