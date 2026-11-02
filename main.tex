@@ -66,6 +66,14 @@
 \newcommand{\aditya}[1]{\textcolor{blue}{\textbf{[aditya:} #1\textbf{]}}}
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[NOTE:} #1\textbf{]}}}
 
+% \ai{...}: text first written by AI and not yet rewritten or critically read by a person (maroon).
+% People: delete the wrapper once you have rewritten or vetted the sentence.
+% AI tools: do not rewrite anything outside \ai{...}. Clean build: \renewcommand{\ai}[1]{#1}
+\usepackage{xcolor}
+\definecolor{aimaroon}{RGB}{128,0,0}
+\DeclareRobustCommand{\ai}[1]{\textcolor{aimaroon}{\hypersetup{citecolor=aimaroon,linkcolor=aimaroon}#1}}
+
+
 \onehalfspacing
 
 \title{\textbf{Real-time Feedback Control of Mesoscopic Cortical Dynamics in Mice }}

@@ -9,9 +9,9 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We built a closed-loop optogenetic system that precisely regulates (i.e., steers) the activity of a cortical region, monitored with wide-field calcium imaging in mice.
-The evoked responses to stimulation scaled monotonically with stimulus amplitude, and a linear time-invariant model captured their dynamics, which gave us an empirical basis for designing a controller.
-We then show that this controller holds cortical activity at a target level and its regulation performance is informative about brain states.
+%We built a closed-loop optogenetic system that precisely regulates (i.e., steers) the activity of a cortical region, monitored with wide-field calcium imaging in mice.
+%The evoked responses to stimulation scaled monotonically with stimulus amplitude, and a linear time-invariant model captured their dynamics, which gave us an empirical basis for designing a controller.
+%We then show that this controller holds cortical activity at a target level and its regulation performance is informative about brain states.
 % ------------------------------------------------------------
 \subsection*{Experimental setup and closed-loop control architecture}
 % ------------------------------------------------------------
@@ -37,8 +37,11 @@ In a subset of experiments, we also recorded video of the face and computed its 
 \end{figure}
 
 We built an end-to-end software system for real-time closed-loop control  (Figure~\ref{fig:figure1}D).
-At each imaging frame acquisition, the software collects the frame data, computes the error between the measured output and a reference $\Delta F/F$ value, and computes the required optogenetic stimulus amplitude. The system has a measured end-to-end loop delay of XX.X ms on average (mean; YY.Y-ZZ.Z range; Figure~\ref{fig:figure1}F).
-This delay, together with the kinetics of the indicator and the opsin, limits the bandwidth over which feedback can act (see Discussion).
+At each imaging frame acquisition, the software collects the frame data, computes the error between the measured output and a reference $\Delta F/F$ value, and computes the required optogenetic stimulus amplitude. The system has a measured end-to-end loop delay of 29.0 ms on average (mean; 14.0-47.0 range; Figure~\ref{fig:figure1}F).
+This delay, together with the kinetics of the indicator and the opsin, limits the bandwidth over which feedback reject disturbances effectively, 
+(see Discussion).
+This delay, combined with the kinetics of the indicator and the opsin (peak response $\sim$100\,ms after a 35\,ms light pulse), sets an effective limit for disturbance rejection of approximately 1.5\,Hz; under linear time-invariant assumptions, disturbances above this frequency are poorly rejected and may be slightly amplified (see Discussion).
+
 
 The controller combines a proportional--integral (PI) feedback term with open-loop (feedforward) compensation (Figure~\ref{fig:figure1}E).
 The feedforward term supplies the nominal stimulus needed to reach the reference, scaled by a gain calibrated from open-loop stimulation experiments.
@@ -46,9 +49,8 @@ The PI term corrects the remaining error in real time as the brain state changes
 % ------------------------------------------------------------
 \subsection*{Trial-averaged cortical dynamics are well approximated by a linear system}
 % ------------------------------------------------------------
-To characterize the input--output relationship, we delivered brief optogenetic impulses at discrete amplitudes, randomly interleaved across trials, in four sessions from three mice.
-Figure~\ref{fig:figure2}A shows the trial-averaged responses to three of these amplitudes in one session.
-
+To characterize the input--output relationship, we delivered brief optogenetic impulses at discrete amplitudes, randomly interleaving across trials. We collect this impulse response data in four sessions from three mice.
+Figure~\ref{fig:figure2}A shows the trial-averaged responses  of these amplitudes in one session. 
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\linewidth]{images/Figure2.pdf}
