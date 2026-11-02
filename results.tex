@@ -9,24 +9,24 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section*{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We built a closed-loop optogenetic system that precisely regulates the activity of a cortical region, monitored with wide-field calcium imaging in mice.
-Evoked responses to stimulation scaled monotonically with stimulus amplitude, and a linear time-invariant model captured their dynamics well, which gave us an empirical basis for designing a controller.
-We then show that this controller holds cortical activity at a target level and that how well it performs depends on brain state.
+We built a closed-loop optogenetic system that precisely regulates (i.e., steers) the activity of a cortical region, monitored with wide-field calcium imaging in mice.
+The evoked responses to stimulation scaled monotonically with stimulus amplitude, and a linear time-invariant model captured their dynamics, which gave us an empirical basis for designing a controller.
+We then show that this controller holds cortical activity at a target level and its regulation performance is informative about brain states.
 % ------------------------------------------------------------
 \subsection*{Experimental setup and closed-loop control architecture}
 % ------------------------------------------------------------
 We performed closed-loop experiments in head-fixed transgenic mice co-expressing GCaMP and an inhibitory opsin.
-Each mouse sat in a behavioral chamber~\citep{Matveev2024} facing a blank screen, with its forelimbs resting on a freely moving wheel, and was not engaged in any task, so all recordings captured spontaneous activity.
-We recorded cortical activity at 35\,Hz with wide-field calcium imaging (Figure~\ref{fig:figure1}A) and delivered spatially targeted optogenetic stimulation to a fixed cortical spot, which suppressed activity in the surrounding cortex (Figure~\ref{fig:spatial_spread}A,B).
-We refer to the controlled signal as the output, or simply activity: the fractional change in fluorescence relative to its mean ($\Delta F/F$), averaged over a kernel of pixels adjacent to the stimulation spot (Figure~\ref{fig:figure1}B,C; see Materials and Methods).
-In a subset of experiments, we also recorded video of the face and computed motion energy, the squared pixel change per unit time (see Materials and Methods).
+Each mouse sat in a behavioral chamber facing a blank screen, with its forelimbs resting on a freely moving wheel, and was not engaged in any task, so all recordings captured spontaneous activity.
+We recorded cortical activity at 35\,Hz with wide-field calcium imaging (Figure~\ref{fig:figure1}A) and delivered spatially targeted optogenetic stimulation to a fixed cortical spot, which suppressed activity in the surrounding cortex (\citep{Matveev2024} ; Figure~\ref{fig:spatial_spread}A,B).
+We quantified cortical activity as the fractional change in fluorescence relative to its mean ($\Delta F/F$), averaged over pixels near the stimulation spot (Figure~\ref{fig:figure1}B,C; see Materials and Methods), and take this signal, which we call the 'output', as the quantity to be controlled.
+In a subset of experiments, we also recorded video of the face and computed its motion energy as a behavioral co-variate.
 
 
 \begin{figure}[!t]
     \centering    \includegraphics[width=\linewidth]{images/Figure1.pdf}
     \caption{\textbf{Experimental setup and closed-loop control architecture.}\\
     \small{
-    \textbf{A:} Optical path of the wide-field microscope. Blue (470\,nm) and violet (405\,nm) LEDs illuminate the dorsal cortex, and the camera collects emitted green light through two dichroics. A red (638\,nm) galvanometer-steered laser passes through both dichroics for spatially targeted optogenetic stimulation.\\
+    \textbf{A:} Optical path of the wide-field microscope \citep{Matveev2024}. Blue (470\,nm) and violet (405\,nm) LEDs illuminate the dorsal cortex, and the camera collects emitted green light through two dichroics. A red (638\,nm) galvanometer-steered laser passes through both dichroics for spatially targeted optogenetic stimulation.\\
     \textbf{B:} Optogenetic stimulation target (red) and the adjacent $\Delta F/F$ output region (blue box).\\
     \textbf{C:} Representative wide-field frame with the stimulation spot (red) and the adjacent spatial kernel used as the closed-loop feedback output (blue box). Markers are not to scale.\\
     \textbf{D:} Hardware and software layers of the closed-loop pipeline. The blue-light exposure trigger starts each frame. The imaging API passes the frame to signal processing ($\Delta F/F$) and to the controller, and the command drives the optogenetic stimulator through a microcontroller. The bracket on the trigger trace marks the loop latency.\\
@@ -36,8 +36,8 @@ In a subset of experiments, we also recorded video of the face and computed moti
     \label{fig:figure1}
 \end{figure}
 
-We built an end-to-end system for real-time closed-loop control of mesoscale activity (Figure~\ref{fig:figure1}D).
-In real time, software computes the error between the measured output and a reference $\Delta F/F$ value and computes the required optogenetic stimulus, which drives the cortical dynamics with a loop delay of at most 47\,ms and about half that on average (Figure~\ref{fig:figure1}E,F).
+We built an end-to-end software system for real-time closed-loop control  (Figure~\ref{fig:figure1}D).
+At each imaging frame acquisition, the software collects the frame data, computes the error between the measured output and a reference $\Delta F/F$ value, and computes the required optogenetic stimulus amplitude. The system has a measured end-to-end loop delay of XX.X ms on average (mean; YY.Y-ZZ.Z range; Figure~\ref{fig:figure1}F).
 This delay, together with the kinetics of the indicator and the opsin, limits the bandwidth over which feedback can act (see Discussion).
 
 The controller combines a proportional--integral (PI) feedback term with open-loop (feedforward) compensation (Figure~\ref{fig:figure1}E).
@@ -73,9 +73,8 @@ The spread of held-out $R^2$ within each session reflects trial-to-trial variabi
 We allowed up to five poles and four zeros, selected the order once per session on all trials, and held it fixed when scoring held-out trials (Mouse 5a, three poles and one zero; Mice 5b and 1b, four poles and three zeros; Mouse 3c, five poles and four zeros).
 A two-pole model predicted held-out trials almost as well (pooled held-out $R^2 = 0.81$ against $0.85$; $0.87$ against $0.85$ in Mouse 3c).
 
-A model fit in one session described the responses of other sessions only inconsistently (Figure~\ref{fig:figure2}E): although the cross-session $R^2$ was moderate on average ($0.69$, against $0.99$ in sample), it ranged from $0.97$ for some session pairs to $0.12$ for others.
-We therefore used the fitted models only to set a rough feedforward gain and relied on feedback to correct its error.
-The partial similarity of the dynamics across sessions made this rough gain easy to maintain as the gains carried over from earlier sessions with small adjustments (Table~\ref{tab:gains}, Materials and Methods).
+A model fit in one session described the responses of other sessions inconsistently (Figure~\ref{fig:figure2}E): although the cross-session $R^2$ was moderate on average ($0.69$, against $0.99$ within session), it ranged from $0.97$ for some session pairs to $0.12$ for others.
+We conclude that we can use linear models for open loop gain design but cant reuse them across sessions. Since we have some level of similarity between sessions, we calibrate the open loop gains we can adjust them per session to fine tune using observations of trail activity (Table~\ref{tab:gains}, Materials and Methods).
 
 The fitted poles yield two timescales (Figure~\ref{fig:figure2}F). The two modes overlap in time, so neither maps onto one feature of the response alone (in Mice 5b and 1b the slower mode contributes $60$--$68\%$ of the trough).
 The dip timescale, the decay of the fastest mode (a damped 2.4--4.2\,Hz oscillation that shapes the initial suppression), was consistent across sessions (median $0.113$\,s; $0.106$--$0.114$\,s in Mice 5a, 5b and 1b, and $0.14$\,s in Mouse 3c; Materials and Methods), although it depends on model order: the one other model fitting almost as well ($R^2$ within $0.005$) gave $0.117$ instead of $0.106$\,s in Mouse 5a and $0.154$ instead of $0.114$\,s in Mouse 1b.
@@ -199,7 +198,7 @@ We then compared open- and closed-loop tracking across the range of each state, 
 We summarized each state with three slopes, each per within-session standard deviation (SD) of the state.
 The open-loop slope measures \emph{predictability}: a positive slope means that error rises with the state in a way a fixed feedforward input cannot anticipate, which we treat as a disturbance.
 The closed-loop slope measures \emph{regularizability}: a flat slope means that feedback tracks the reference regardless of the state.
-Closed-loop error can rise with a state and still be a fixed fraction of a rising open-loop error.
+Closed-loop alone cannot characterize the effect of state on improvement of ability to control over open loop, as the open-loop could also be just as effective if disturbances are perturbing the trial. 
 We therefore also measured \emph{attenuation}, the change with state in the error ratio, the fraction of open-loop error left under feedback; a falling ratio means that feedback removes proportionally more error as the state grows.
 Each slope is its own question; Table~\ref{tab:fig4_state_stats} gives every estimate with its $p$ value and, as a check, a Holm-adjusted value, under which the motion attenuation and the closed-loop slope on absolute power remain significant.
 
