@@ -473,13 +473,22 @@ Any threshold between 20\% and 37\% selects the same eleven.
 We characterized cortical state on each trial with up to four quantities.
 The impulse analysis (Fig.~\ref{fig:figure2}G) and the controller analysis (Fig.~\ref{fig:figure4}) measure them over different windows, deliberately, because they ask different questions.
 
-The \emph{initial deviation} (Fig.~\ref{fig:figure4} only) is the absolute distance of the readout from the reference at the onset sample, $\lvert y(t_{\mathrm{on}}) - r \rvert$, with $r = -5\%\,\Delta F/F$.
-It measures how far from target a trial starts.
-\emph{Motion energy} is the mean over the window of the z-scored motion signal (Behavioral monitoring): the mean, not the mean square, of the z-score, because the square is smallest for trials near the session mean and would rank unusually still trials alongside active ones.
-\emph{Relative 2--4\,Hz power} is the ratio of band power in 2--4\,Hz, the sub-band least attenuated by the controller, to total power in 0.4--10\,Hz.
-The ratio avoids the confound that any absolute spectral measure co-varies with the overall magnitude of the signal, which differs between conditions by construction.
-\emph{Absolute low-frequency power} is band power without that normalization: 2--4\,Hz in Fig.~\ref{fig:figure2}G and $\log_{10}$ of 1--4\,Hz power in Fig.~\ref{fig:figure4}.
-We report it alongside the relative measure because a factor that acts through the amplitude of ongoing activity shows in the absolute measure only.
+\ai{The \emph{initial deviation} (Fig.~\ref{fig:figure4} only) is the absolute distance of the readout from the target level at the onset sample, $\lvert y(t_{\mathrm{on}}) - r \rvert$, with $r = -5\%\,\Delta F/F$.}
+\ai{It measures how far from the target level a trial started.}
+\ai{\emph{Motion energy} is the mean over the window of the z-scored motion signal (Behavioral monitoring): the mean, not the mean square, of the z-score, because the square is smallest for trials near the session mean and would rank unusually still trials alongside active ones.}
+\ai{\emph{Relative 2--4\,Hz power} is the ratio of band power in 2--4\,Hz to total power in 0.4--10\,Hz.}
+\ai{\emph{Absolute low-frequency power} is band power without that normalization: 2--4\,Hz in Fig.~\ref{fig:figure2}G and $\log_{10}$ of 1--4\,Hz power in Fig.~\ref{fig:figure4}.}
+\ai{The two measure different things.}
+\ai{Absolute power increases with the amplitude of ongoing fluctuations, which add to an evoked response~\citep{Arieli1996,Shimaoka2019}.}
+\ai{It also increases with anything that scales the whole signal, such as indicator expression, illumination or hemoglobin absorption, which act multiplicatively on wide-field fluorescence~\citep{Ma2016}, and in Fig.~\ref{fig:figure4} with the difference in signal magnitude between open and closed loop.}
+\ai{Relative power cancels such multiplicative factors and describes how activity is distributed across frequencies, although, like any band ratio, it also follows changes in the aperiodic slope of the spectrum~\citep{Donoghue2020eNeuro}.}
+
+\ai{\emph{Bands.} Power below about 4\,Hz is high in synchronized cortical states and decreases with whisking, locomotion and arousal~\citep{Crochet2006,Poulet2008,Vinck2015}.}
+\ai{In wide-field calcium imaging, the indicator's kinetics attenuate faster rhythms; earlier work measured cortical synchrony from wide-field GCaMP power at 3--6\,Hz~\citep{Jacobs2020}, and quiet wakefulness shows a spontaneous wide-field mode near 2.6\,Hz~\citep{Vanni2017}.}
+\ai{Hemodynamic signals are slower: GCaMP--hemoglobin coherence peaks near 0.2\,Hz~\citep{Wright2017}.}
+\ai{The 2--4\,Hz band is therefore within the low-frequency activity that indicates state, above most of the hemodynamic signal and within the range that the indicator follows; we used it for relative power in both figures so that they measure the same quantity.}
+\ai{The 0.4--10\,Hz denominator is below the 17.5\,Hz Nyquist frequency of the 35\,Hz signal and excludes drifts slower than 0.4\,Hz.}
+\ai{In Fig.~\ref{fig:figure2}G the 1\,s window gives 1\,Hz resolution, so the denominator is in practice 1--10\,Hz and the absolute band starts at 2\,Hz; the 5\,s window of Fig.~\ref{fig:figure4} resolves the conventional 1--4\,Hz band, which its absolute measure uses.}
 
 \emph{Windows.} In Fig.~\ref{fig:figure2}G, motion, relative and absolute power are taken over the same strictly pre-stimulus window, $[-1, 0)$\,s, the 35 samples before onset.
 An impulse is a single brief input, so the question there is how the state in which the stimulus arrives alters its response, and a pre-stimulus window measures that state without overlapping the 0--200\,ms response.
@@ -525,7 +534,7 @@ Adjusted $R^2$ removes the positive floor that in-sample $R^2$ differences have 
 Relative and absolute power are correlated, and in one four-factor model one would absorb the variance the other shares with it.
 In Fig.~\ref{fig:figure4}C each power measure therefore enters its own three-factor model on the same base, $\{\text{initial deviation}, \text{motion}, \text{relative}\}$ and $\{\text{initial deviation}, \text{motion}, \text{absolute}\}$.
 The unique $R^2$ of initial deviation and motion are taken from the first.
-We report the mean and SEM over sessions.
+We report the mean and SEM over sessions\ai{; excluding the two sessions with fewer than 30 trials changes no mean by more than 0.03.}
 Fig.~\ref{fig:f4_exemplars}B--D repeats the decomposition with both power terms in one model, and with each alone.
 
 The exemplar trials (Fig.~\ref{fig:figure4}A) illustrate each state as cleanly as the data allow.
@@ -638,16 +647,16 @@ We then compared closed-loop RMSE with the RMSE of these rescaled trials, as abo
 Under this model the across-trial variance does not depend on $c$.
 To ask whether feedback moved the command toward this input on its own, we correlated across sessions (Spearman) the best $c$ with the mean closed-loop command over 1--3\,s divided by the open-loop command.
 
-\emph{State dependence} (Fig.~\ref{fig:figure4}D).
-Within each session we standardized each state over that session's trials (open and closed loop together), so every slope is in $\%\,\Delta F/F$ of steady-state RMSE per within-session standard deviation of the state.
-In each session we fitted ordinary least-squares lines of steady-state RMSE on the standardized state, separately for open- and closed-loop trials, and tested each slope across sessions as above.
-This gives three properties of each state.
-\emph{Predictability} is the open-loop slope: a positive slope means the uncontrolled disturbance grows with the state, so a fixed feedforward input anticipates the trial less well.
-\emph{Regularizability} is the closed-loop slope: a slope indistinguishable from zero means the loop keeps the output regulated as the state changes, and a positive slope means it loses it.
-\emph{Attenuation} is the closed- minus the open-loop slope of $\log \mathrm{RMSE}$, that is, the slope of $\log(\mathrm{RMSE}_{\mathrm{CL}}/\mathrm{RMSE}_{\mathrm{OL}})$ against state: how the fraction of open-loop error left by the loop, the empirical counterpart of the sensitivity function, changes with state.
-We report it as the percentage change of that fraction per standard deviation.
-The open-minus-closed-loop gap in mean RMSE, and the open- minus the closed-loop slope (gap trend), are listed in Table~\ref{tab:fig4_state_stats} but not interpreted: the gap is the result of Fig.~\ref{fig:figure3}, and the gap can widen through a rising open loop as much as through a holding closed loop.
-The error decomposition of Fig.~\ref{fig:figure4}C is descriptive and carries no test.
+\ai{\emph{State dependence} (Fig.~\ref{fig:figure4}D).}
+\ai{Within each session we standardized each state over that session's trials (open and closed loop together), $z = (x - \bar{x})/\sigma_x$, so that slopes are per within-session standard deviation (SD) of the state and can be compared across states and sessions.}
+\ai{In each session we fitted ordinary least-squares lines of steady-state RMSE on $z$, separately for open- and closed-loop trials, and tested each slope across sessions as above; the open-loop (OL) and closed-loop (CL) slopes are in $\%\,\Delta F/F$ of RMSE per SD.}
+\ai{For the CL/OL ratio we fitted $\log \mathrm{RMSE}$ on $z$ in each condition and took the difference of the two slopes, $A = b_{\mathrm{CL}} - b_{\mathrm{OL}}$, which we tested across sessions in the same way.}
+\ai{$A$ is the slope of the log ratio of fitted (geometric-mean) closed- to open-loop RMSE, the fraction of open-loop error left by the loop and the empirical counterpart of the sensitivity function.}
+\ai{We report $100\,(e^{\bar{A}} - 1)$, the percentage change in the CL/OL ratio per SD, with its 95\% confidence interval transformed the same way.}
+\ai{We call a state more controllable when it increased open-loop error but not closed-loop error, so that the CL/OL ratio decreased; this is an empirical property of the loop, not controllability in the state-space sense of control theory.}
+\ai{As a control for the power measures, which span the stimulation period, we repeated the fits with power measured over the 5\,s before onset, with the laser off, the same length as the main window; these fits are outside the Holm families below.}
+\ai{The open-minus-closed-loop gap in mean RMSE, and the open- minus the closed-loop slope (gap trend), are listed in Table~\ref{tab:fig4_state_stats} but not interpreted: the gap is the result of Fig.~\ref{fig:figure3}, and the gap can widen through an increasing open-loop error as much as through a constant closed-loop error.}
+\ai{The error decomposition of Fig.~\ref{fig:figure4}C is descriptive and carries no test.}
 
 \emph{Disturbance rejection} (Fig.~\ref{fig:figure4}G).
 We tested $\log \mathrm{RR} \sim 1 + (1 \mid \mathrm{session})$, one-sided on the intercept, and report the geometric mean of $\mathrm{RR}$ with its 95\% confidence interval, corroborated by a one-sided signed-rank test on the per-session median ratios.
@@ -658,7 +667,7 @@ With three mice, one contributing a single session, its degrees of freedom are $
 
 \emph{Multiple comparisons.} The state analysis of Fig.~\ref{fig:figure4}D asks three questions of each of four states.
 Each is a separate, pre-specified question, and the stars in Fig.~\ref{fig:figure4}D give its uncorrected $p$.
-As a check, Table~\ref{tab:fig4_state_stats} also gives Holm-adjusted $p$-values within two families: predictability and regularizability (eight tests), and attenuation (four tests).
+As a check, Table~\ref{tab:fig4_state_stats} also gives Holm-adjusted $p$-values within two families: \ai{the OL and CL slopes (eight tests), and the CL/OL ratio (four tests).}
 Each claim rests on one primary test; the Statistical tables also give the Wilcoxon test on the same session values.
 In figures, *, ** and *** denote $p < 0.05$, $0.01$ and $0.001$, and n.s.\ denotes $p \ge 0.05$.
 Each legend names the test, and the tables give exact $p$ values.
