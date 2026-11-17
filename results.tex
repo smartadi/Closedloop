@@ -125,7 +125,7 @@ The dip, consistent across sessions, therefore sets how quickly stimulation can 
     \label{fig:figure3}
 \end{figure}
 % --------------------------------% ------------------------------------------------------------
-\subsection*{\ai{Closed-loop control tracks the target level more accurately than open-loop stimulation}}
+\subsection*{Closed-loop control tracks the target level more accurately than open-loop stimulation}
 % ------------------------------------------------------------
 \aditya{We used the PI controller to control the local activity to a target level of $-5\%\,\Delta F/F$ for 3\,s on each trial (Figure~\ref{fig:figure1}E; Materials and Methods).}
 \aditya{For each mouse, we first tuned the feedforward gain $K_r$ and the feedback gains $K_p$ and $K_i$ (Materials and Methods) and adjusted them slightly at the start of each session to account for changes between sessions.}
@@ -230,7 +230,7 @@ Closed-loop alone cannot characterize the effect of state on improvement of abil
 \aditya{On a stimulation window of trials, the prediction gave the \emph{Global} component $G$, an estimate of the activity the site would have shown without controller input(Figure~\ref{fig:figure4}F).}
 % \aditya{On a stimulation window of trials, the prediction gave the \emph{Global} component $G$, an estimate of the activity the site would have shown without controller input, and the remainder of the measured response $A$ gave the \emph{Local} component $L = A - G$, the part added by the laser and the controller (Figure~\ref{fig:figure4}F).}
 % \aditya{The split is a linear projection, not a causal decomposition.}
-\aditya{Although the predictor did not use the laser command, contralateral activity also changed during stimulation, so $G$ contained part of the laser response (median $23\%$ of the open-loop dip of the controlled activity over 0--3\,s).}
+\aditya{Although the predictor did not use the laser command, contra lateral activity also changed during stimulation, so $G$ contained part of the laser response (median $23\%$ of the open-loop dip of the controlled activity over 0--3\,s).}
 \aditya{After subtracting this average contribution of the laser in each session and referencing $G$ to its pre-onset baseline, we took the remaining trial-to-trial variation in $G$ as the disturbance $D$ (Materials and Methods).}
 
 \aditya{We quantified disturbance rejection with a rejection ratio (RR), the residual energy (the energy of the deviation of activity from the target level) divided by the energy of $D$, both over the steady-state window; an RR below one indicates rejection.}
