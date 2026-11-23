@@ -186,7 +186,7 @@ The dip, consistent across sessions, therefore sets how quickly stimulation can 
 \subsection*{Controller performance is brain-state dependent}
 % ------------------------------------------------------------
 \aditya{The internal model principle states that a feedback controller can robustly and fully reject a disturbance only if it contains a model of the process that generates it~\citep{francis1976internal}.
-The PI controller in our setup modelled the average response and a constant offset, its RMSE performance on a given trial can help show which disturbances it did not account for. 
+The PI controller in our setup modeled the average response and a constant offset, its RMSE performance on a given trial can help show which disturbances it did not account for. 
 We show that these disturbances and the controller's performance are state dependent.}
 \ai{To test this, we described each trial with four state variables: the initial deviation of activity from the target level at onset, motion energy, 2--4\,Hz power relative to 0.4--10\,Hz power, and absolute 1--4\,Hz power (Figure~\ref{fig:figure4}A).}
 \ai{Absolute power measures the amplitude of ongoing activity, which adds to the response as a disturbance~\citep{Arieli1996,Shimaoka2019}, whereas relative power measures spectral state regardless of amplitude; the two were correlated but not redundant (within-session Spearman $\rho$, median $0.42$, range $0.07$--$0.77$ over 15 sessions).}
